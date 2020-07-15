@@ -1,0 +1,88 @@
+.mapContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.mapControls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.mapControlBox button {
+    display: block;
+    font-size: 1em;
+    height: 4em;
+    width: 4em;
+    padding: 0.5em 0;
+}
+
+.mapRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.mapCell {
+    width: 2rem;
+    height: 2rem;
+    background: rgb(62,54,48);
+    background: radial-gradient(circle, rgba(62,54,48,1) 40%, rgba(98,89,83,1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+}
+
+.cellIcon {
+    font-size: 1.75em;
+    color: white;
+    font-weight: 900;
+    width: 100%;
+    
+    text-align: center;
+
+    img {
+        width: 100%;
+    }
+}
+
+.cellPlayer {
+    color: #fff92f
+}
+
+.cellForest {
+    color: #3e8340;
+    background-color: #21482266;
+}
+
+.cellPlains {
+    color: #93CD56;
+    background-color: #4e653799;
+}
+
+.cellSwamp {
+    color: #5a5a5a;
+}
+
+.cellBeach {
+    color: #faffb9;
+    background-color: #75775399;
+}
+
+.cellMountain {
+    color: #b56e18;
+    background-color: #653f1166;
+}
+
+.cellWater {
+    color: #4679c2;
+    background-color: #4679c266;
+}
+
+.cellTown {
+    color: #ffff00;
+    background-color: #ffff0044;
+}

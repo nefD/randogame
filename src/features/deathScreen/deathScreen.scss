@@ -1,0 +1,24 @@
+.skullContainer {
+  position: relative;
+  font-size: 10rem;
+  z-index: 2;
+
+  .skull {
+    animation: 1s cubic-bezier(0.37, 0, 0.63, 1) 0s infinite alternate move_skull;
+  }
+
+  &:before {
+    content: '💀';
+    position: absolute;
+    z-index: -1;
+    font-size: 0.9em;
+    text-shadow: 0 0 10px rgba(0,0,0,0.25);
+    color: transparent;
+    transform: scaleY(0.3) skew(36deg) translateY(0);
+    transform-origin: 0% 100%;
+    animation: 1s cubic-bezier(0.37, 0, 0.63, 1) 0s infinite alternate move_shadow;
+  }
+}
+
+@keyframes move_shadow { from { transform: scaleY(0.3) scaleX(1) skew(36deg) translateY(0); } to { transform: scaleY(0.35) scaleX(1.2) skew(36deg) translateY(-25px); } }
+@keyframes move_skull { from { transform: translateY(0px); } to { transform: translateY(-25px) } };
