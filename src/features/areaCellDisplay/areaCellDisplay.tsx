@@ -1,9 +1,6 @@
 import React from 'react';
 import 'features/areaCellDisplay/areaCellDisplay.scss';
-import {
-  AREA_CELL_TYPES,
-  AreaCellDisplayDefs,
-} from 'data/areas.consts';
+import { AreaCellDisplayDefs } from 'data/areas.consts';
 import {
   useDispatch,
   useSelector,
@@ -26,12 +23,11 @@ import {
   getCurrentCellType,
   getEnemiesAtPlayerPos,
   getItemsAtPlayerPos,
+  getResourceNodesAtPlayerPos,
   getTownAtPlayerPos,
 } from 'redux/mapAreas/mapAreas.selectors';
-
-export interface AreaCellDisplayProps {
-  // areaCell?: AreaCell,
-}
+import { ItemIcon } from 'features/common/itemIcon/itemIcon';
+import { ResourceIcon } from 'features/common/resourceIcon/resourceIcon';
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();
@@ -41,6 +37,7 @@ export const AreaCellDisplay = () => {
   const enemies = useSelector(getEnemiesAtPlayerPos);
   const playerPos = useSelector(getPlayerMapPos);
   const town = useSelector(getTownAtPlayerPos);
+  const resourceNodes = useSelector(getResourceNodesAtPlayerPos);
 
   const itemClicked = (item: Item) => {
     dispatch(pickUpItemFromCurrentMapCell(item));
@@ -67,9 +64,21 @@ export const AreaCellDisplay = () => {
       </Box>
 
       <Stack p={4} spacing={1} h='15rem' overflowY="auto">
+        {resourceNodes.map((node, nodeIdx) =>
+          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
+            <ResourceIcon resourceNode={node} />
+            <Box flex="1" color="white">
+              {node.name}
+            </Box>
+            <Button size='sm'>Harvest</Button>
+          </Flex>
+        )}
         {items.map(item =>
-          <Flex className="areaCellEntity" p={2} direction="row" key={item.id} onClick={() => itemClicked(item)}>
-            <Box flex="1" color="white">{item.name}</Box>
+          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
+            <ItemIcon item={item}/>
+            <Box flex="1" color="white">
+              {item.name}
+            </Box>
             <Button size='sm'>Pick Up</Button>
           </Flex>
         )}

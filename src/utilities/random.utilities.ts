@@ -2,6 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const uuid = uuidv4;
 
+/**
+ * Returns a random number between 0 and outOf (non-inclusive)
+ * @param outOf
+ */
 export const rng = (outOf = 1) => Math.floor(Math.random() * outOf);
 
 export const randomKeyFromObj = (obj: Object) => {

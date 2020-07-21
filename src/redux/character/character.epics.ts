@@ -12,7 +12,7 @@ import {
   playerMovingEast,
   playerMovingWest,
   pickUpItemFromCurrentMapCell,
-  addToInventory,
+  inventoryAdded,
   dropItemFromInventory,
   removeFromInventory,
   playerAttacked,
@@ -22,10 +22,14 @@ import {
   playerUsedInn,
   playerHealthModified,
   playerLeavingFacility,
+  playerGoldModified,
+  addToInventory,
+  buyItemFromShop,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject,
   getCurrentMapId,
+  getPlayerGold,
   getPlayerLocation,
   getPlayerMapPos,
   getPlayerStats,
@@ -35,6 +39,9 @@ import { Epic } from 'redux-observable';
 import {
   getCurrentMapAreaHeight,
   getCurrentMapAreaWidth,
+  getPlayerInnCost,
+  getPlayersCurrentFacility,
+  getPlayerTavernCost,
 } from '../mapAreas/mapAreas.selectors';
 import {
   NullAction,
@@ -43,7 +50,9 @@ import {
 import {
   removeItemFromMapCell,
   addItemToMapCell,
+  removeItemFromShop,
 } from 'redux/mapAreas/mapAreas.slice';
+import { FACILITY_TYPE } from 'data/areas.consts';
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),
@@ -119,10 +128,10 @@ export const playerMoved$: Epic<Action, Action, RootState> = (actions$, state$) 
     state$.pipe(select(getPlayerStats)),
   ),
   map(([action, stats]) => {
-    if (stats.hunger - 10 <= 0) {
+    if (stats.hunger - 1 <= 0) {
       console.log(`player starved to death!`);
     }
-    return playerHungerModified(-10);
+    return playerHungerModified(-1);
   }),
 );
 
@@ -169,9 +178,11 @@ export const playerUsedTavern$: Epic<Action, Action, RootState> = (actions$, sta
   filter(playerUsedTavern.match),
   withLatestFrom(
     state$.pipe(select(getCharacterObject)),
+    state$.pipe(select(getPlayerTavernCost)),
   ),
-  mergeMap(([action, character]) => [
+  mergeMap(([action, character, cost]) => [
     playerHungerModified(character.stats.hungerMax),
+    playerGoldModified(-cost),
     playerLeavingFacility(),
   ]),
 );
@@ -180,9 +191,44 @@ export const playerUsedInn$: Epic<Action, Action, RootState> = (actions$, state$
   filter(playerUsedInn.match),
   withLatestFrom(
     state$.pipe(select(getCharacterObject)),
+    state$.pipe(select(getPlayerInnCost)),
   ),
-  mergeMap(([action, character]) => [
+  mergeMap(([action, character, cost]) => [
     playerHealthModified(character.stats.healthMax),
+    playerGoldModified(-cost),
     playerLeavingFacility(),
+  ]),
+);
+
+export const addToInventory$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(addToInventory.match),
+  withLatestFrom(
+    state$.pipe(select(getCharacterObject)),
+  ),
+  map(([action, character]) => {
+    if (character.inventory.length >= character.inventoryMax) {
+      return addItemToMapCell(character.location.mapId, character.location.coords.x, character.location.coords.y, action.payload);
+    }
+    return inventoryAdded(action.payload);
+  }),
+);
+
+export const buyItemFromShop$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(buyItemFromShop.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerLocation)),
+    state$.pipe(select(getPlayersCurrentFacility)),
+    state$.pipe(select(getPlayerGold)),
+  ),
+  filter(([action,, facility, playerGold]) => !!(
+    facility
+    && facility.type === FACILITY_TYPE.Shop
+    && facility.shopItems.includes(action.payload.id)
+    && playerGold >= action.payload.value
+  )),
+  mergeMap(([action, playerLocation, facility]) => [
+    addToInventory(action.payload),
+    playerGoldModified(-action.payload.value),
+    removeItemFromShop(playerLocation.mapId, facility!.id, action.payload.id),
   ]),
 );

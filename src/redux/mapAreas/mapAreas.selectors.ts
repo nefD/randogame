@@ -3,6 +3,7 @@ import {
   getCurrentMapId,
   getPlayerMapLocation,
   getPlayerMapPos,
+  getPlayerRace,
 } from '../character/character.selectors';
 import { createSelector } from 'reselect';
 import {
@@ -10,7 +11,10 @@ import {
   getItemsState,
   getMapAreasState,
 } from 'app/baseSelectors';
-import { AREA_CELL_TYPES } from 'data/areas.consts';
+import {
+  AREA_CELL_TYPES,
+  FACILITY_TYPE,
+} from 'data/areas.consts';
 import { fromXY } from 'utilities/mapAreas.utilities';
 import { itemSelectors } from '../items/items.selectors';
 import { Item } from 'redux/items/items.slice';
@@ -53,10 +57,14 @@ export const getMapViewBounds = createSelector(
     let bottom = 0;
 
     if (mapArea) {
-      left = Math.min(mapArea.width - 11, Math.max(0, playerPos.x - 5));
-      right = Math.max(11, Math.min(mapArea.width, playerPos.x + 6));
-      top = Math.min(mapArea.height - 11, Math.max(0, playerPos.y - 5));
-      bottom = Math.max(11, Math.min(mapArea.height, playerPos.y + 6));
+      // left = Math.min(mapArea.width - 11, Math.max(0, playerPos.x - 5));
+      // right = Math.max(11, Math.min(mapArea.width, playerPos.x + 6));
+      // top = Math.min(mapArea.height - 11, Math.max(0, playerPos.y - 5));
+      // bottom = Math.max(11, Math.min(mapArea.height, playerPos.y + 6));
+      left = playerPos.x - 4;
+      right = playerPos.x + 5;
+      top = playerPos.y - 4;
+      bottom = playerPos.y + 5;
     }
 
     return { left, right, top, bottom };
@@ -75,8 +83,12 @@ export const getCurrentMapCells = createSelector(
     for (let x = bounds.left; x < bounds.right; x++) {
       column = [];
       for (let y = bounds.top; y < bounds.bottom; y++) {
-        n = fromXY(x, y, mapArea);
-        column.push(mapArea.cellTypes[n]);
+        if (x < 0 || x > mapArea.width - 1 || y < 0 || y > mapArea.height - 1) {
+          column.push(AREA_CELL_TYPES.None);
+        } else {
+          n = fromXY(x, y, mapArea);
+          column.push(mapArea.cellTypes[n]);
+        }
       }
       cellTypes.push(column);
     }
@@ -109,6 +121,12 @@ export const getEnemiesAtPlayerPos = createSelector(
       .reduce((list: Enemy[], id: string) => list.concat(enemiesSelectors.selectById(enemiesState, id) || []), []),
 );
 
+export const getResourceNodesAtPlayerPos = createSelector(
+  getCurrentMapArea,
+  getPlayerMapPos,
+  (mapArea, playerPos) => mapArea?.resourceNodes[fromXY(playerPos.x, playerPos.y, mapArea)] || [],
+);
+
 export const getTownAtPlayerPos = createSelector(
   getCurrentMapArea,
   getPlayerMapPos,
@@ -119,4 +137,25 @@ export const getPlayersCurrentFacility = createSelector(
   getTownAtPlayerPos,
   getPlayerMapLocation,
   (town, location) => town?.facilities.find(f => f.id === location.facilityId),
+);
+
+export const getCurrentShopInventory = createSelector(
+  getPlayersCurrentFacility,
+  getItemsState,
+  (facility, itemsState) =>
+    (facility && facility.type === FACILITY_TYPE.Shop)
+      ? facility.shopItems.reduce((list: Item[], id: string) => list.concat(itemSelectors.selectById(itemsState, id) || []), [])
+      : null,
+);
+
+export const getPlayerInnCost = createSelector(
+  getTownAtPlayerPos,
+  getPlayerRace,
+  (town, race) => 50,
+);
+
+export const getPlayerTavernCost = createSelector(
+  getTownAtPlayerPos,
+  getPlayerRace,
+  (town, race) => 50,
 );

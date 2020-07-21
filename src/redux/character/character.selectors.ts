@@ -36,14 +36,19 @@ export const getPlayerIsDead = createSelector(
   stats => stats.health <= 0 || stats.hunger <= 0,
 );
 
-export const getCharacterRace = createSelector(
+export const getPlayerRace = createSelector(
   getCharacter,
   state => state.race,
 );
 
-export const getCharacterClass = createSelector(
+export const getPlayerClass = createSelector(
   getCharacter,
   state => state.class,
+);
+
+export const getPlayerGold = createSelector(
+  getCharacter,
+  state => state.gold,
 );
 
 export const getPlayerLocation = createSelector(

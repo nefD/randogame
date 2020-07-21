@@ -22,7 +22,11 @@ export const CharacterOverview = ({
     <Stack direction="column" spacing={2}>
       <Flex bg="panelBackground" borderWidth="1px" p={1} direction="row" justifyContent="space-between" color="white">
         <Box>{character.name} - Level {character.level} {character.race} {character.class}</Box>
-        <Box>Atk: {character.stats.attack}, Def: {character.stats.defense}</Box>
+        <Stack direction="row">
+          <Box>Gold: {character.gold}</Box>
+          <Box>Atk: {character.stats.attack}</Box>
+          <Box>Def: {character.stats.defense}</Box>
+        </Stack>
       </Flex>
 
       <Stack direction="row" spacing={2}>

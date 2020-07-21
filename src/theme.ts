@@ -19,6 +19,7 @@ export default {
     },
     deathBackground: 'rgba(0,0,0,0.5)',
     panelBackground: theme.colors.gray['700'],
+    shopItemBackground: theme.colors.gray['600'],
     enemyBackground: {
       50: '#ffe3e9',
       100: '#ffb3bf',

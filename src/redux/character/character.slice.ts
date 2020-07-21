@@ -31,9 +31,11 @@ export interface CharacterState {
   level: number;
   xp: number;
   age: number;
+  gold: number;
   stats: Stats;
   location: MapLocation;
   inventory: string[];
+  inventoryMax: number;
   gameState: CharacterGameState;
   combatState: CombatState;
 }
@@ -45,6 +47,7 @@ const initialState: CharacterState = {
   level: 1,
   xp: 0,
   age: 0,
+  gold: 100,
   stats: StatsFactory({
     health: 10, healthMax: 10,
     hunger: 100, hungerMax: 100,
@@ -57,6 +60,7 @@ const initialState: CharacterState = {
     facilityId: null,
   },
   inventory: [],
+  inventoryMax: 15,
   gameState: CharacterGameState.Travel,
   combatState: {
     enemy: '',
@@ -74,7 +78,7 @@ const characterSlice = createSlice({
       state.age += 1;
       state.location = { ...action.payload };
     },
-    addToInventory(state, action: PayloadAction<Item>) {
+    inventoryAdded(state, action: PayloadAction<Item>) {
       state.inventory.push(action.payload.id);
     },
     removeFromInventory(state, action: PayloadAction<Item>) {
@@ -97,13 +101,14 @@ const characterSlice = createSlice({
     playerHungerModified(state, action: PayloadAction<number>) {
       state.stats.hunger = clamp(state.stats.hunger + action.payload, 0, state.stats.hungerMax);
     },
+    playerGoldModified(state, action: PayloadAction<number>) {
+      state.gold = Math.max(state.gold + action.payload, 0);
+    },
     playerEnteringFacility(state, action: PayloadAction<string>) {
-      console.log(`player entering facility`);
       state.location.facilityId = action.payload;
       state.gameState = CharacterGameState.Facility;
     },
     playerLeavingFacility(state, action: PayloadAction) {
-      console.log(`player leaving facility`);
       state.location.facilityId = null;
       state.gameState = CharacterGameState.Travel;
     },
@@ -112,7 +117,7 @@ const characterSlice = createSlice({
 
 export const createCharacter = characterSlice.actions.createCharacter;
 export const playerMoved = characterSlice.actions.playerMoved;
-export const addToInventory = characterSlice.actions.addToInventory;
+export const inventoryAdded = characterSlice.actions.inventoryAdded;
 export const removeFromInventory = characterSlice.actions.removeFromInventory;
 export const playerStartCombat = characterSlice.actions.playerStartCombat;
 export const playerExitCombat = characterSlice.actions.playerExitCombat;
@@ -121,11 +126,13 @@ export const playerHungerModified = characterSlice.actions.playerHungerModified;
 export const playerEnteringFacility = characterSlice.actions.playerEnteringFacility;
 export const playerLeavingFacility = characterSlice.actions.playerLeavingFacility;
 export const playerHealthModified = characterSlice.actions.playerHealthModified;
+export const playerGoldModified = characterSlice.actions.playerGoldModified;
 export const playerMovingNorth = createAction('character/movingNorth');
 export const playerMovingEast = createAction('character/movingEast');
 export const playerMovingSouth = createAction('character/movingSouth');
 export const playerMovingWest = createAction('character/movingWest');
 export const pickUpItemFromCurrentMapCell = createAction<Item>('character/pickUpItemFromCurrentMapCell');
+export const addToInventory = createAction<Item>('character/addToInventory');
 export const dropItemFromInventory = createAction<Item>('character/dropItemFromInventory');
 export const playerAttacked = createAction(
   'character/playerAttacked',
@@ -133,5 +140,6 @@ export const playerAttacked = createAction(
 );
 export const playerUsedInn = createAction('character/playerUsedInn');
 export const playerUsedTavern = createAction('character/playerUsedTavern');
+export const buyItemFromShop = createAction<Item>('character/buyItemFromShop');
 
 export default characterSlice.reducer;

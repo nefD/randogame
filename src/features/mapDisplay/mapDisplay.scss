@@ -41,7 +41,7 @@
     color: white;
     font-weight: 900;
     width: 100%;
-    
+
     text-align: center;
 
     img {
@@ -56,11 +56,49 @@
 .cellForest {
     color: #3e8340;
     background-color: #21482266;
+    &.cellIcon > * {
+        display: inline-block;
+        transform-origin: 50% 100%;
+        animation: treesway 2s infinite alternate ease-in-out;
+    }
+    img {
+        filter: invert(46%) sepia(12%) saturate(2012%) hue-rotate(72deg) brightness(91%) contrast(88%);
+    }
+}
+@keyframes treesway {
+    //0% { transform: rotateX(-15deg) skewX(-10deg) }
+    //100% { transform: rotateX(15deg) skewX(10deg) }
+    0% { transform: rotateX(-2deg) skewX(-3deg) }
+    100% { transform: rotateX(2deg) skewX(3deg) }
+}
+
+.cellEmpty {
+    color: #2b5187;
+    background-color: rgba(43, 73, 119, 0.4);
 }
 
 .cellPlains {
     color: #93CD56;
     background-color: #4e653799;
+    &.cellIcon > * {
+        display: inline-block;
+        transform-origin: 50% 100%;
+        animation: plainsSway 5s infinite alternate ease-in-out;
+    }
+}
+@keyframes plainsSway {
+    //0% { transform: rotateZ(-6deg)  }
+    //15% { transform: rotateZ(4deg)  }
+    //30% { transform: rotateZ(-3deg)  }
+    //60% { transform: rotateZ(9deg)  }
+    //90% { transform: rotateZ(-5deg)  }
+    //100% { transform: rotateZ(2deg)  }
+    0% { transform: rotateZ(-2deg)  }
+    15% { transform: rotateZ(1deg)  }
+    30% { transform: rotateZ(-1deg)  }
+    60% { transform: rotateZ(2deg)  }
+    90% { transform: rotateZ(-2deg)  }
+    100% { transform: rotateZ(1deg)  }
 }
 
 .cellSwamp {
@@ -75,12 +113,27 @@
 .cellMountain {
     color: #b56e18;
     background-color: #653f1166;
+
+    img {
+        filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
+    }
 }
 
 .cellWater {
     color: #4679c2;
     background-color: #4679c266;
-}
+    &.cellIcon > * {
+        display: inline-block;
+        transform-origin: 50% 50%;
+        animation: waterSway 2s infinite alternate ease-in-out;
+    }
+}@keyframes waterSway {
+     //0% { transform: rotateX(-15deg) skewX(-10deg) }
+     //100% { transform: rotateX(15deg) skewX(10deg) }
+     0% { transform: skewY(-10deg) translateY(-2px) }
+     50% { transform: translateY(2px)}
+     100% { transform: skewY(10deg) translateY(-2px) }
+ }
 
 .cellTown {
     color: #ffff00;

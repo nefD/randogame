@@ -8,5 +8,6 @@ export const EnemyFactory = (config?: Partial<Enemy>): Enemy => ({
   location: MapLocationFactory(),
   health: 1,
   maxHealth: 1,
+  lootTables: [],
   ...config,
 });

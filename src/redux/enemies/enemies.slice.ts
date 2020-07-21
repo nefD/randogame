@@ -3,7 +3,8 @@ import {
   createEntityAdapter,
   createSlice,
 } from '@reduxjs/toolkit';
-import { MapLocation } from '../../data/commonTypes';
+import { MapLocation } from 'data/commonTypes';
+import { LootTableKey } from 'data/loot.consts';
 
 export interface Enemy {
   id: string;
@@ -11,6 +12,7 @@ export interface Enemy {
   location: MapLocation;
   health: number;
   maxHealth: number;
+  lootTables: LootTableKey[];
 }
 
 export const enemiesAdapter = createEntityAdapter<Enemy>({
@@ -23,16 +25,17 @@ const enemiesSlice = createSlice({
   reducers: {
     enemyCreated: enemiesAdapter.addOne,
     enemyUpdated: enemiesAdapter.upsertOne,
-    enemyKilled: enemiesAdapter.removeOne,
+    enemyDeleted: enemiesAdapter.removeOne,
   },
 });
 
 export const enemyCreated = enemiesSlice.actions.enemyCreated;
 export const enemyUpdated = enemiesSlice.actions.enemyUpdated;
-export const enemyKilled = enemiesSlice.actions.enemyKilled;
+export const enemyDeleted = enemiesSlice.actions.enemyDeleted;
 export const enemyAttacked = createAction(
   'enemy/enemyAttacked',
   (enemy: Enemy, damage: number) => ({ payload: { enemy, damage }}),
 );
+export const enemyKilled = createAction<Enemy>('enemy/enemyKilled');
 
 export default enemiesSlice.reducer;

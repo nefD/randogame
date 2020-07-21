@@ -2,11 +2,11 @@ import {
   Facility,
   MapArea,
   Town,
-} from '../redux/mapAreas/mapAreas.slice';
+} from 'redux/mapAreas/mapAreas.slice';
 import {
   AREA_CELL_TYPES,
   FACILITY_TYPE,
-} from '../data/areas.consts';
+} from 'data/areas.consts';
 import {
   rng,
   shuffleArray,
@@ -41,6 +41,7 @@ export const MapAreaFactory = (config?: Partial<MapArea>): MapArea => ({
   items: {},
   enemies: {},
   towns: {},
+  resourceNodes: {},
   ...config,
 });
 
@@ -48,6 +49,7 @@ export const FacilityFactory = (config?: Partial<Facility>): Facility => ({
   id: uuid(),
   name: 'Unknown Facility',
   type: FACILITY_TYPE.Inn,
+  shopItems: [],
   ...config,
 });
 
@@ -205,6 +207,7 @@ export const generateMapArea = (
     const town = TownFactory();
     town.facilities.push(FacilityFactory({ name: 'Inn', type: FACILITY_TYPE.Inn }));
     town.facilities.push(FacilityFactory({ name: 'Tavern', type: FACILITY_TYPE.Tavern }));
+    town.facilities.push(FacilityFactory({ name: 'General Store', type: FACILITY_TYPE.Shop }));
     towns[fromXY(site!.x, site!.y, width)] = town;
   }
 
@@ -230,3 +233,8 @@ export const MapLocationFactory = (mapId = '', x = 0, y = 0, facilityId: string 
   coords: { x, y},
   facilityId,
 });
+
+export const findFacilityInMapArea = (mapArea: MapArea, facilityId: string) =>
+  Object.values(mapArea.towns)
+    .reduce((list: Facility[], town: Town) => list.concat(town.facilities), [])
+    .find(facility => facility.id === facilityId);

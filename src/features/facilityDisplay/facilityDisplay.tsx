@@ -15,6 +15,7 @@ import "./facilityDisplay.scss";
 import { FACILITY_TYPE } from 'data/areas.consts';
 import { TavernDisplay } from 'features/facilityDisplay/tavernDisplay';
 import { InnDisplay } from 'features/facilityDisplay/innDisplay';
+import { ShopDisplay } from 'features/facilityDisplay/shopDisplay';
 
 export const FacilityDisplay = () => {
   const dispatch = useDispatch();
@@ -23,14 +24,9 @@ export const FacilityDisplay = () => {
 
   let facilityContent;
   switch (facility?.type) {
-    case FACILITY_TYPE.Tavern: {
-      facilityContent = (<TavernDisplay />);
-      break;
-    }
-    case FACILITY_TYPE.Inn: {
-      facilityContent = (<InnDisplay />);
-      break;
-    }
+    case FACILITY_TYPE.Tavern: facilityContent = (<TavernDisplay />); break;
+    case FACILITY_TYPE.Inn: facilityContent = (<InnDisplay />); break;
+    case FACILITY_TYPE.Shop: facilityContent = (<ShopDisplay />); break;
   }
 
   return (

@@ -13,7 +13,7 @@ import { ItemFactory } from 'utilities/item.utilities';
 import { ItemDefs } from 'data/item.consts';
 import { itemCreated } from 'redux/items/items.slice';
 import {
-  addToInventory,
+  inventoryAdded,
   CharacterGameState,
 } from 'redux/character/character.slice';
 import {
@@ -44,7 +44,7 @@ function App() {
     dispatch(generateMap());
     const item = ItemFactory(ItemDefs.TestItem);
     dispatch(itemCreated(item));
-    dispatch(addToInventory(item));
+    dispatch(inventoryAdded(item));
   }
 
   useEffect(() => {
@@ -81,7 +81,7 @@ function App() {
 
   return (
     <ThemeProvider theme={customTheme}>
-        <CSSReset />
+      <CSSReset />
       {playerIsDead &&
         <Flex
           p={4}

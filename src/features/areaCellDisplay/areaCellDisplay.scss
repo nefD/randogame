@@ -18,4 +18,8 @@
     }
 
     &__action {}
+
+    .itemIcon {
+        margin-right: var(--spacing-small);
+    }
 }

@@ -2,11 +2,9 @@ import { Epic } from 'redux-observable';
 import { Action } from 'redux';
 import { RootState } from 'app/rootReducer';
 import {
-  combineAll,
   filter,
   map,
   mergeMap,
-  mergeMapTo,
   withLatestFrom,
 } from 'rxjs/operators';
 import {
@@ -25,10 +23,8 @@ import {
 } from 'redux/character/character.selectors';
 import { enemyAttacked } from 'redux/enemies/enemies.slice';
 import {
-  NullAction,
   select,
 } from 'utilities/redux.utilities';
-import { forkJoin } from 'rxjs';
 
 export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(combatPlayerFleeing.match),
