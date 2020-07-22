@@ -44,7 +44,7 @@ import {
 } from 'redux/mapAreas/mapAreas.selectors';
 import { getPlayerMapLocation } from 'redux/character/character.selectors';
 import {
-  AREA_RESOURCE_TYPE,
+  NODE_KEYS,
   ResourceNodeDefs,
 } from 'data/resources.consts';
 import { rng } from 'utilities/random.utilities';
@@ -68,38 +68,26 @@ export const spawnMapCell$: Epic<Action, Action, RootState> = (actions$, state$)
     const cellType = mapArea?.cellTypes[fromXY(playerLoc.coords.x, playerLoc.coords.y, mapArea.width)];
     if (mapArea && cellType) {
       const resourceDefs = AreaCellResourceDefs[cellType] || [];
-      resourceDefs.forEach(def => {
-        if (def.type === AREA_RESOURCE_TYPE.Sand) {
-          if (cellItems.filter(i => i.key === 'Sand').length >= def.max) return;
-          if (rng(100) < def.chance) {
-            const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand]);
+      resourceDefs.forEach(resourceDef => {
+
+        if (resourceDef.itemKey) {
+          if (cellItems.filter(i => i.key === resourceDef.itemKey).length > resourceDef.max) return;
+          if (rng(100) < resourceDef.chance) {
+            const item = ItemFactory(ItemDefs[resourceDef.itemKey]);
             actions.push(itemCreated(item));
             actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
           }
-        } else if (def.type === AREA_RESOURCE_TYPE.Stick) {
-          if (cellItems.filter(i => i.key === 'Stick').length >= def.max) return;
-          if (rng(100) < def.chance) {
-            const item = ItemFactory(ItemDefs[ITEM_KEYS.Stick]);
-            actions.push(itemCreated(item));
-            actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
-          }
-        } else if (def.type === AREA_RESOURCE_TYPE.Plant) {
-          if (cellItems.filter(i => i.key === 'Plant').length >= def.max) return;
-          if (rng(100) < def.chance) {
-            const item = ItemFactory(ItemDefs[ITEM_KEYS.Plant]);
-            actions.push(itemCreated(item));
-            actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
-          }
-        } else if (def.type === AREA_RESOURCE_TYPE.Tree) {
-          if (resourceNodes.filter(n => n.key === 'Tree').length >= def.max) return;
-          if (rng(100) < def.chance) {
+        }
+
+        if (resourceDef.nodeKey) {
+          if (resourceNodes.filter(n => n.key === resourceDef.nodeKey).length >= resourceDef.max) return;
+          if (rng(100) < resourceDef.chance) {
             const node = ResourceNodeFactory(ResourceNodeDefs.Tree);
             actions.push(addResourceNodeToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, node));
           }
         }
       });
     }
-    console.log(`spawn actions:`, actions);
     return actions;
   }),
 )

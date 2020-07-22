@@ -15,13 +15,13 @@ import {
   fromXY,
 } from 'utilities/mapAreas.utilities';
 import { CHARACTER_RACE } from 'data/races.consts';
-import { AREA_RESOURCE_TYPE } from 'data/resources.consts';
+import { NODE_KEYS } from 'data/resources.consts';
 
 export interface ResourceNode {
   id: string;
   name: string;
   key: string;
-  type: AREA_RESOURCE_TYPE;
+  type: NODE_KEYS;
   // remaining uses/remaining resources
   remainingResources: number;
 }

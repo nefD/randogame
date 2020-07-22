@@ -65,7 +65,7 @@ import {
   toolUsed,
 } from 'redux/items/items.slice';
 import {
-  AREA_RESOURCE_TYPE,
+  NODE_KEYS,
   ResourceNodeDefs,
 } from 'data/resources.consts';
 import {
@@ -286,19 +286,17 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
   }),
   mergeMap(([action, resourceNodes,,inventory]) => {
     const node = resourceNodes.find(n => n.id === action.payload);
+    if (!node) return [];
     const actions: Action[] = [];
 
-    switch (node!.type) {
-      case (AREA_RESOURCE_TYPE.Tree): {
-        const item = inventory.find(i => i.key === ITEM_KEYS.WoodAxe);
-        if (!item) return [];
-        actions.push(toolUsed(item));
-        break;
-      }
-      default: return [];
+    const nodeDef = ResourceNodeDefs[node.type];
+
+    if (nodeDef.requiresTool) {
+      const tool = inventory.find(i => i.key === nodeDef.requiresTool && i.toolProps && i.toolProps.remainingUses > 0);
+      if (!tool) return[];
+      actions.push(toolUsed(tool));
     }
 
-    const nodeDef = ResourceNodeDefs[node!.type];
     if (nodeDef.yieldsItem) {
       const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
       actions.push(itemCreated(harvestedItem));

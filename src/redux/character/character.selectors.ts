@@ -10,7 +10,7 @@ import {
   getItemsState,
 } from 'app/baseSelectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
-import { AREA_RESOURCE_TYPE } from 'data/resources.consts';
+import { NODE_KEYS } from 'data/resources.consts';
 
 export const getCharacterObject = createSelector(
   getCharacter,
@@ -108,11 +108,6 @@ export const getPlayerCombatEnemy = createSelector(
 export const getPlayerCanHarvestResources = createSelector(
   getPlayerInventory,
   items => ({
-    [AREA_RESOURCE_TYPE.Plant]: true,
-    [AREA_RESOURCE_TYPE.Tree]: (items.filter(i => i.key === 'WoodAxe' && i.toolProps && i.toolProps.remainingUses > 0).length > 0),
-    [AREA_RESOURCE_TYPE.Stone]: false,
-    [AREA_RESOURCE_TYPE.Mine]: false,
-    [AREA_RESOURCE_TYPE.Stick]: true,
-    [AREA_RESOURCE_TYPE.Sand]: true,
+    [NODE_KEYS.Tree]: (items.filter(i => i.key === 'WoodAxe' && i.toolProps && i.toolProps.remainingUses > 0).length > 0),
   }),
 )

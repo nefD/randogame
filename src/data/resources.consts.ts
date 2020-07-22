@@ -3,25 +3,22 @@ import {
   ItemKey,
 } from 'data/item.consts';
 
-export enum AREA_RESOURCE_TYPE {
-  Plant = 'Plant',
+export enum NODE_KEYS {
   Tree = 'Tree',
-  Stone = 'Stone',
-  Mine = 'Mine',
-  Stick = 'Stick',
-  Sand = 'Sand',
 }
 
 export interface ResourceNodeDef {
   name: string;
-  type: AREA_RESOURCE_TYPE;
+  type: NODE_KEYS;
+  requiresTool?: ItemKey;
   yieldsItem: ItemKey;
   remainingResources: number;
 }
-export const ResourceNodeDefs: { [key: string]: ResourceNodeDef} = {
-  [AREA_RESOURCE_TYPE.Tree]: {
+export const ResourceNodeDefs: { [key in NODE_KEYS]: ResourceNodeDef} = {
+  [NODE_KEYS.Tree]: {
     name: 'Tree!',
-    type: AREA_RESOURCE_TYPE.Tree,
+    type: NODE_KEYS.Tree,
+    requiresTool: ITEM_KEYS.WoodAxe,
     yieldsItem: ITEM_KEYS.Wood,
     remainingResources: 6,
   },

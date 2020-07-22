@@ -1,4 +1,8 @@
-import { AREA_RESOURCE_TYPE } from 'data/resources.consts';
+import { NODE_KEYS } from 'data/resources.consts';
+import {
+  ITEM_KEYS,
+  ItemKey,
+} from 'data/item.consts';
 
 export enum AREA_CELL_TYPES {
   None,
@@ -69,8 +73,15 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
   },
 };
 
+export enum AreaResourceType {
+  Item,
+  Node,
+}
+
 export interface CellResourceDefinition {
-  type: AREA_RESOURCE_TYPE;
+  type: AreaResourceType;
+  itemKey?: ItemKey;
+  nodeKey?: string;
   max: number;
   chance: number;
 }
@@ -80,16 +91,45 @@ export const AreaCellResourceDefs: Record<AREA_CELL_TYPES, CellResourceDefinitio
   [AREA_CELL_TYPES.Town]: [],
   [AREA_CELL_TYPES.Water]: [],
   [AREA_CELL_TYPES.Beach]: [
-    { type: AREA_RESOURCE_TYPE.Sand, max: 1, chance: 50 },
+    {
+      type: AreaResourceType.Item,
+      itemKey: ITEM_KEYS.Sand,
+      max: 1,
+      chance: 50,
+    },
   ],
   [AREA_CELL_TYPES.Plains]: [
-    { type: AREA_RESOURCE_TYPE.Stick, max: 1, chance: 20 },
-    { type: AREA_RESOURCE_TYPE.Plant, max: 1, chance: 50 },
+    {
+      type: AreaResourceType.Item,
+      itemKey: ITEM_KEYS.Stick,
+      max: 1,
+      chance: 20,
+    },    {
+      type: AreaResourceType.Item,
+      itemKey: ITEM_KEYS.Plant,
+      max: 1,
+      chance: 50,
+    },
   ],
   [AREA_CELL_TYPES.Forest]: [
-    { type: AREA_RESOURCE_TYPE.Tree, max: 1, chance: 100 },
-    { type: AREA_RESOURCE_TYPE.Stick, max: 1, chance: 50 },
-    { type: AREA_RESOURCE_TYPE.Plant, max: 1, chance: 20 },
+    {
+      type: AreaResourceType.Node,
+      nodeKey: 'Tree', // this should be a strongly typed value
+      max: 1,
+      chance: 100,
+    },
+    {
+      type: AreaResourceType.Item,
+      itemKey: ITEM_KEYS.Stick,
+      max: 1,
+      chance: 50,
+    },
+    {
+      type: AreaResourceType.Item,
+      itemKey: ITEM_KEYS.Plant,
+      max: 1,
+      chance: 20,
+    },
   ],
   [AREA_CELL_TYPES.Mountain]: [],
   [AREA_CELL_TYPES.Swamp]: [],

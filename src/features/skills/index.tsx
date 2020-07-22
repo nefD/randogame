@@ -11,7 +11,7 @@ import { SkillDefs } from 'data/skills.consts';
 const renderSkill = (playerSkill: CharacterSkill) => {
   const skill = SkillDefs[playerSkill.skillKey];
   return (
-    <Flex id={playerSkill.skillKey}>
+    <Flex key={playerSkill.skillKey}>
       <Box color='white'>{skill.name} ({playerSkill.level})</Box>
     </Flex>
   );

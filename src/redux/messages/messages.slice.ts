@@ -11,10 +11,12 @@ export interface Message {
 
 export interface MessagesState {
   messages: Message[];
+  maxMessages: number;
 }
 
 const initialState: MessagesState = {
   messages: [],
+  maxMessages: 20,
 };
 
 const messagesSlice = createSlice({
@@ -26,6 +28,9 @@ const messagesSlice = createSlice({
         timestamp: new Date().toLocaleTimeString(),
         ...action.payload
       });
+      if (state.messages.length > state.maxMessages) {
+        state.messages.shift();
+      }
     },
     clearMessages(state, action: PayloadAction) {
       state.messages = [];
