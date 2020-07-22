@@ -72,11 +72,11 @@ export const MapDisplay = () => {
 
     const inlineStyle = { animationDelay: '0s' };
     if (cellType === AREA_CELL_TYPES.Plains) {
-      inlineStyle.animationDelay = `-${rng(4)}s`;
+      inlineStyle.animationDelay = `-${rng(0.5)}s`;
     } else if (cellType === AREA_CELL_TYPES.Forest) {
       inlineStyle.animationDelay = `-${rng(0.3)}s`;
     } else if (cellType === AREA_CELL_TYPES.Water) {
-      const delay = (x * 0.1) + (y * 0.1)
+      const delay = (x * 0.2) + (y * 0.2)
       inlineStyle.animationDelay = `-${delay}s`;
     }
 

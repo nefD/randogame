@@ -15,7 +15,10 @@ import {
   Tabs,
 } from '@chakra-ui/core';
 import { getCurrentShopInventory } from 'redux/mapAreas/mapAreas.selectors';
-import { buyItemFromShop } from 'redux/character/character.slice';
+import {
+  buyItemFromShop,
+  sellItemToShop,
+} from 'redux/character/character.slice';
 import { getPlayerInventory } from 'redux/character/character.selectors';
 
 export const ShopDisplay = () => {
@@ -38,7 +41,7 @@ export const ShopDisplay = () => {
               {shopItems?.map(item => (
                 <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
                   <Box px={2} flex="1" color="white">{item.name}</Box>
-                  <Box px={4} color="white">{item.value} Gold</Box>
+                  <Box px={4} color="white">{item.goldValue} Gold</Box>
                   <Box><Button size='sm' onClick={() => dispatch(buyItemFromShop(item))}>Buy</Button></Box>
                 </Flex>
               ))}
@@ -50,8 +53,8 @@ export const ShopDisplay = () => {
               {playerItems.map(item => (
                 <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
                   <Box px={2} flex="1" color="white">{item.name}</Box>
-                  <Box px={4} color="white">{item.value} Gold</Box>
-                  <Box><Button size='sm' onClick={() => dispatch(buyItemFromShop(item))}>Sell</Button></Box>
+                  <Box px={4} color="white">{item.goldValue} Gold</Box>
+                  <Box><Button size='sm' onClick={() => dispatch(sellItemToShop(item))}>Sell</Button></Box>
                 </Flex>
               ))}
             </Stack>

@@ -26,7 +26,7 @@ export const PlayerCellDisplayDef: CellDisplayDefinition = {
 
 export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition> = {
   [AREA_CELL_TYPES.None]: {
-    content: 'W',
+    content: '~',
     cssClass: 'cellEmpty',
     name: 'Water',
   },
@@ -101,3 +101,9 @@ export enum FACILITY_TYPE {
   Shop,
   Stash,
 }
+
+export const FacilityIcons: { [key: string]: string } = {
+  [FACILITY_TYPE.Inn]: 'bed.svg',
+  [FACILITY_TYPE.Tavern]: 'beer-stein.svg',
+  [FACILITY_TYPE.Shop]: 'shop.svg',
+};

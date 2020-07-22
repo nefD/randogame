@@ -59,15 +59,13 @@
     &.cellIcon > * {
         display: inline-block;
         transform-origin: 50% 100%;
-        animation: treesway 2s infinite alternate ease-in-out;
+        animation: treesway 1.5s infinite alternate ease-in-out;
     }
     img {
         filter: invert(46%) sepia(12%) saturate(2012%) hue-rotate(72deg) brightness(91%) contrast(88%);
     }
 }
 @keyframes treesway {
-    //0% { transform: rotateX(-15deg) skewX(-10deg) }
-    //100% { transform: rotateX(15deg) skewX(10deg) }
     0% { transform: rotateX(-2deg) skewX(-3deg) }
     100% { transform: rotateX(2deg) skewX(3deg) }
 }
@@ -75,6 +73,16 @@
 .cellEmpty {
     color: #2b5187;
     background-color: rgba(43, 73, 119, 0.4);
+    &.cellIcon > * {
+        display: inline-block;
+        transform-origin: 50% 50%;
+        animation: emptySway 2s infinite alternate ease-in-out;
+    }
+}
+@keyframes emptySway {
+    0% { color: #48648d; transform: skewY(-10deg) translateY(-2px) }
+    50% { color: #2b448d;  transform: translateY(2px)}
+    100% { color: #48648d; transform: skewY(10deg) translateY(-2px) }
 }
 
 .cellPlains {
@@ -83,7 +91,7 @@
     &.cellIcon > * {
         display: inline-block;
         transform-origin: 50% 100%;
-        animation: plainsSway 5s infinite alternate ease-in-out;
+        animation: plainsSway 2s infinite alternate ease-in-out;
     }
 }
 @keyframes plainsSway {
@@ -127,12 +135,11 @@
         transform-origin: 50% 50%;
         animation: waterSway 2s infinite alternate ease-in-out;
     }
-}@keyframes waterSway {
-     //0% { transform: rotateX(-15deg) skewX(-10deg) }
-     //100% { transform: rotateX(15deg) skewX(10deg) }
-     0% { transform: skewY(-10deg) translateY(-2px) }
-     50% { transform: translateY(2px)}
-     100% { transform: skewY(10deg) translateY(-2px) }
+}
+@keyframes waterSway {
+     0% { color: #88ADE3; transform: skewY(-10deg) translateY(-2px) }
+     50% { color: #3966db;  transform: translateY(2px)}
+     100% { color: #88ADE3; transform: skewY(10deg) translateY(-2px) }
  }
 
 .cellTown {

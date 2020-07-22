@@ -26,12 +26,18 @@ import {
   CSSReset,
   Flex,
   Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   ThemeProvider,
 } from '@chakra-ui/core';
 import customTheme from 'theme';
 import { getCurrentMapArea } from 'redux/mapAreas/mapAreas.selectors';
 import { DeathScreen } from 'features/deathScreen/deathScreen';
 import { FacilityDisplay } from 'features/facilityDisplay/facilityDisplay';
+import { MessagesDisplay } from 'features/messagesDisplay/messagesDisplay';
 
 function App() {
   const dispatch = useDispatch();
@@ -42,7 +48,7 @@ function App() {
   const mapArea = useSelector(getCurrentMapArea);
   if (!mapArea) {
     dispatch(generateMap());
-    const item = ItemFactory(ItemDefs.TestItem);
+    const item = ItemFactory(ItemDefs.WoodAxe);
     dispatch(itemCreated(item));
     dispatch(inventoryAdded(item));
   }
@@ -70,7 +76,7 @@ function App() {
     case CharacterGameState.Travel:
     default: {
       mainDisplay = (
-        <Stack direction="row" spacing={4}>
+        <Stack maxH="50vw" overflowY="auto" direction="row" spacing={4}>
           <Box><MapDisplay/></Box>
           <Box flex="1"><AreaCellDisplay /></Box>
         </Stack>
@@ -98,11 +104,29 @@ function App() {
         <Stack direction="column" spacing={4} w="80vw">
           <Box><CharacterOverview /></Box>
 
-          {mainDisplay}
-
-          <Box bg="panelBackground" borderWidth="1px" p={4}>
-            <InventoryDisplay />
+          <Box>
+            {mainDisplay}
           </Box>
+
+          <Tabs variant="line" isFitted={true}>
+            <TabList color="white">
+              <Tab>Messages</Tab>
+              <Tab>Inventory</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <MessagesDisplay></MessagesDisplay>
+              </TabPanel>
+
+              <TabPanel>
+                <Box bg="panelBackground" borderWidth="1px" borderTop="none" p={4}>
+                  <InventoryDisplay />
+                </Box>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+
         </Stack>
       </Flex>
     </ThemeProvider>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import 'features/areaCellDisplay/areaCellDisplay.scss';
 import { AreaCellDisplayDefs } from 'data/areas.consts';
 import {
@@ -7,6 +7,7 @@ import {
 } from 'react-redux';
 import { Item } from 'redux/items/items.slice';
 import {
+  harvestResourceNode,
   pickUpItemFromCurrentMapCell,
   playerEnteringFacility,
   playerStartCombat,
@@ -18,7 +19,10 @@ import {
   Flex,
   Stack,
 } from '@chakra-ui/core';
-import { getPlayerMapPos } from 'redux/character/character.selectors';
+import {
+  getPlayerCanHarvestResources,
+  getPlayerMapPos,
+} from 'redux/character/character.selectors';
 import {
   getCurrentCellType,
   getEnemiesAtPlayerPos,
@@ -28,6 +32,7 @@ import {
 } from 'redux/mapAreas/mapAreas.selectors';
 import { ItemIcon } from 'features/common/itemIcon/itemIcon';
 import { ResourceIcon } from 'features/common/resourceIcon/resourceIcon';
+import { FacilityIcon } from 'features/common/facilityIcon/facilityIcon';
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();
@@ -38,6 +43,7 @@ export const AreaCellDisplay = () => {
   const playerPos = useSelector(getPlayerMapPos);
   const town = useSelector(getTownAtPlayerPos);
   const resourceNodes = useSelector(getResourceNodesAtPlayerPos);
+  const canHarvest = useSelector(getPlayerCanHarvestResources);
 
   const itemClicked = (item: Item) => {
     dispatch(pickUpItemFromCurrentMapCell(item));
@@ -58,30 +64,12 @@ export const AreaCellDisplay = () => {
   );
 
   return (
-    <Box bg="panelBackground" borderWidth="1px" h="100%">
+    <Box bg="panelBackground" borderWidth="1px" h="100%" overflowY="auto">
       <Box p={1} borderBottom="1px solid">
         {playerPos.x}, {playerPos.y} - {areaLabel}
       </Box>
 
-      <Stack p={4} spacing={1} h='15rem' overflowY="auto">
-        {resourceNodes.map((node, nodeIdx) =>
-          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
-            <ResourceIcon resourceNode={node} />
-            <Box flex="1" color="white">
-              {node.name}
-            </Box>
-            <Button size='sm'>Harvest</Button>
-          </Flex>
-        )}
-        {items.map(item =>
-          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
-            <ItemIcon item={item}/>
-            <Box flex="1" color="white">
-              {item.name}
-            </Box>
-            <Button size='sm'>Pick Up</Button>
-          </Flex>
-        )}
+      <Stack p={4} spacing={1} overflowY="auto">
         {enemies.map(enemy =>
           <Flex className="areaCellEntity" p={2} bg="enemyBackground.700" direction="row" key={enemy.id} onClick={() => enemyClicked(enemy)}>
             <Box flex="1" color="white">{enemy.name}</Box>
@@ -90,8 +78,27 @@ export const AreaCellDisplay = () => {
         )}
         {town?.facilities.map(facility =>
           <Flex className="areaCellEntity" p={2} bg="facilityBackground.800" direction="row" key={facility.name} onClick={() => dispatch(playerEnteringFacility(facility.id))}>
+            <FacilityIcon facility={facility} />
             <Box flex="1" color="white">{facility.name}</Box>
             <Button size='sm'>Enter</Button>
+          </Flex>
+        )}
+        {resourceNodes.map((node, nodeIdx) =>
+          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
+            <ResourceIcon resourceNode={node} />
+            <Box flex="1" color="white">
+              {node.name}
+            </Box>
+            <Button isDisabled={!canHarvest[node.type]} size='sm' onClick={() => dispatch(harvestResourceNode(node.id))}>Harvest</Button>
+          </Flex>
+        )}
+        {items.map(item =>
+          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
+            <ItemIcon item={item}/>
+            <Box flex="1" color="white">
+              <span>{item.name}</span>
+            </Box>
+            <Button size='sm'>Pick Up</Button>
           </Flex>
         )}
       </Stack>

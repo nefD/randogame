@@ -5,6 +5,7 @@ import mapAreasReducer from 'redux/mapAreas/mapAreas.slice';
 import { combineEpics } from 'redux-observable';
 import itemsReducer from 'redux/items/items.slice';
 import enemiesReducer from 'redux/enemies/enemies.slice';
+import messagesReducer from 'redux/messages/messages.slice';
 import * as combatEpics from 'redux/combat/combat.epics';
 import * as characterEpics from 'redux/character/character.epics';
 import * as itemEpics from 'redux/items/items.epics';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   mapAreas: mapAreasReducer,
   items: itemsReducer,
   enemies: enemiesReducer,
+  messages: messagesReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

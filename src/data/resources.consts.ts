@@ -9,6 +9,7 @@ export enum AREA_RESOURCE_TYPE {
 
 export interface ResourceNodeDef {
   name: string;
+  type: AREA_RESOURCE_TYPE;
   // iconPath?: string;
   // usesTool, usesSkill
   remainingResources: number;
@@ -16,6 +17,7 @@ export interface ResourceNodeDef {
 export const ResourceNodeDefs: { [key: string]: ResourceNodeDef} = {
   Tree: {
     name: 'Tree!',
+    type: AREA_RESOURCE_TYPE.Tree,
     // iconPath: 'pine-tree.svg',
     remainingResources: 6,
   },

@@ -25,11 +25,15 @@ import {
   playerGoldModified,
   addToInventory,
   buyItemFromShop,
+  sellItemToShop,
+  harvestResourceNode,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject,
   getCurrentMapId,
+  getPlayerCanHarvestResources,
   getPlayerGold,
+  getPlayerInventory,
   getPlayerLocation,
   getPlayerMapPos,
   getPlayerStats,
@@ -42,6 +46,7 @@ import {
   getPlayerInnCost,
   getPlayersCurrentFacility,
   getPlayerTavernCost,
+  getResourceNodesAtPlayerPos,
 } from '../mapAreas/mapAreas.selectors';
 import {
   NullAction,
@@ -51,8 +56,12 @@ import {
   removeItemFromMapCell,
   addItemToMapCell,
   removeItemFromShop,
+  addItemToShop,
 } from 'redux/mapAreas/mapAreas.slice';
 import { FACILITY_TYPE } from 'data/areas.consts';
+import { addMessage } from 'redux/messages/messages.slice';
+import { toolUsed } from 'redux/items/items.slice';
+import { AREA_RESOURCE_TYPE } from 'data/resources.consts';
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),
@@ -144,6 +153,7 @@ export const pickUpItemFromAreaCell$: Epic<Action, Action, RootState> = (actions
   mergeMap(([action, mapId, playerPos]) => [
     removeItemFromMapCell(mapId, playerPos.x, playerPos.y, action.payload),
     addToInventory(action.payload),
+    addMessage({ content: `Picked up ${action.payload.name}.` }),
   ]),
 );
 
@@ -156,6 +166,7 @@ export const dropItemFromInventory$: Epic<Action, Action, RootState> = (actions$
   mergeMap(([action, mapId, playerPos]) => [
     addItemToMapCell(mapId, playerPos.x, playerPos.y, action.payload),
     removeFromInventory(action.payload),
+    addMessage({ content: `Dropped ${action.payload.name} from inventory.` }),
   ]),
 );
 
@@ -184,6 +195,7 @@ export const playerUsedTavern$: Epic<Action, Action, RootState> = (actions$, sta
     playerHungerModified(character.stats.hungerMax),
     playerGoldModified(-cost),
     playerLeavingFacility(),
+    addMessage({ content: `You enjoy a fine meal at the Tavern.` }),
   ]),
 );
 
@@ -197,6 +209,7 @@ export const playerUsedInn$: Epic<Action, Action, RootState> = (actions$, state$
     playerHealthModified(character.stats.healthMax),
     playerGoldModified(-cost),
     playerLeavingFacility(),
+    addMessage({ content: `You rest at the Inn and wake up feeling refreshed.` }),
   ]),
 );
 
@@ -224,11 +237,57 @@ export const buyItemFromShop$: Epic<Action, Action, RootState> = (actions$, stat
     facility
     && facility.type === FACILITY_TYPE.Shop
     && facility.shopItems.includes(action.payload.id)
-    && playerGold >= action.payload.value
+    && playerGold >= action.payload.goldValue
   )),
   mergeMap(([action, playerLocation, facility]) => [
     addToInventory(action.payload),
-    playerGoldModified(-action.payload.value),
+    playerGoldModified(-action.payload.goldValue),
     removeItemFromShop(playerLocation.mapId, facility!.id, action.payload.id),
+    addMessage({ content: `Bought ${action.payload.name} for ${action.payload.goldValue} Gold.` }),
   ]),
+);
+
+export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(sellItemToShop.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerLocation)),
+    state$.pipe(select(getPlayersCurrentFacility)),
+  ),
+  filter(([action,,facility]) => !!(facility && facility.type === FACILITY_TYPE.Shop)),
+  mergeMap(([action, playerLocation, facility]) => [
+    removeFromInventory(action.payload),
+    playerGoldModified(action.payload.goldValue),
+    addItemToShop(playerLocation.mapId, facility!.id, action.payload.id),
+    addMessage({ content: `Sold ${action.payload.name} for ${action.payload.goldValue} Gold.` }),
+  ]),
+);
+
+export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(harvestResourceNode.match),
+  withLatestFrom(
+    state$.pipe(select(getResourceNodesAtPlayerPos)),
+    state$.pipe(select(getPlayerCanHarvestResources)),
+    state$.pipe(select(getPlayerInventory)),
+  ),
+  filter(([action, resourceNodes, canHarvest]) => {
+    const node = resourceNodes.find(node => node.id === action.payload);
+    return !!(node && canHarvest[node.type]);
+  }),
+  mergeMap(([action, resourceNodes,,inventory]) => {
+    const node = resourceNodes.find(n => n.id === action.payload);
+    const actions: Action[] = [];
+
+    switch (node!.type) {
+      case (AREA_RESOURCE_TYPE.Tree): {
+        const item = inventory.find(i => i.key === 'WoodAxe');
+        if (!item) return [];
+        actions.push(toolUsed(item));
+        break;
+      }
+      default: return [];
+    }
+
+    actions.push(addMessage({ content: `Harvesting the ${node!.name}...`}));
+    return actions;
+  }),
 );

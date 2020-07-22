@@ -15,10 +15,13 @@ import {
   fromXY,
 } from 'utilities/mapAreas.utilities';
 import { CHARACTER_RACE } from 'data/races.consts';
+import { AREA_RESOURCE_TYPE } from 'data/resources.consts';
 
 export interface ResourceNode {
+  id: string;
   name: string;
   key: string;
+  type: AREA_RESOURCE_TYPE;
   // remaining uses/remaining resources
   remainingResources: number;
 }
@@ -153,6 +156,18 @@ const mapAreasSlice = createSlice({
         return { payload: { mapId, facilityId, itemId } };
       }
     },
+    addItemToShop: {
+      reducer(state, { payload: { mapId, facilityId, itemId } }: PayloadAction<{ mapId: string, facilityId: string, itemId: string }>) {
+        const mapArea = state.entities[mapId];
+        if (!mapArea) return;
+        const facility = findFacilityInMapArea(mapArea, facilityId);
+        if (!facility) return;
+        facility.shopItems.push(itemId);
+      },
+      prepare(mapId: string, facilityId: string, itemId: string) {
+        return { payload: { mapId, facilityId, itemId } };
+      },
+    },
   },
 });
 
@@ -164,6 +179,7 @@ export const addResourceNodeToMapCell = mapAreasSlice.actions.addResourceNodeToM
 export const removeItemFromMapCell = mapAreasSlice.actions.removeItemFromMapCell;
 export const removeEnemyFromMapCell = mapAreasSlice.actions.removeEnemyFromMapCell;
 export const removeItemFromShop = mapAreasSlice.actions.removeItemFromShop;
+export const addItemToShop = mapAreasSlice.actions.addItemToShop;
 export const spawnMapCell = createAction('mapArea/spawnMapCell');
 
 export type mapAreaActionTypes =

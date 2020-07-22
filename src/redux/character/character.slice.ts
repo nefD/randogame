@@ -141,5 +141,7 @@ export const playerAttacked = createAction(
 export const playerUsedInn = createAction('character/playerUsedInn');
 export const playerUsedTavern = createAction('character/playerUsedTavern');
 export const buyItemFromShop = createAction<Item>('character/buyItemFromShop');
+export const sellItemToShop = createAction<Item>('character/sellItemToShop');
+export const harvestResourceNode = createAction<string>('character/harvestResourceNode');
 
 export default characterSlice.reducer;

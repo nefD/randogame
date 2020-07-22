@@ -14,6 +14,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 } from '@chakra-ui/core';
+import { ItemIcon } from 'features/common/itemIcon/itemIcon';
 export const InventoryDisplay = () => {
   const dispatch = useDispatch();
 
@@ -22,8 +23,14 @@ export const InventoryDisplay = () => {
   return (
     <Stack spacing={1}>
       {items.map(item =>
-        <Flex className="inventoryItem" key={item.id}>
-          <Box flex='1' color='white'>{item.name}</Box>
+        <Flex className="inventoryItem" key={item.id} p={2}>
+          <ItemIcon item={item} />
+          <Stack flex='1' color='white' direction="row" spacing={2}>
+            <Box>{item.name}</Box>
+            {item.toolProps && (
+              <Box>{`(Uses: ${item.toolProps.remainingUses}/${item.toolProps.maxUses})`}</Box>
+            )}
+          </Stack>
 
           <Button size='sm' onClick={() => dispatch(dropItemFromInventory(item))}>Drop</Button>
         </Flex>

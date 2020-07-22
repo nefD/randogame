@@ -13,6 +13,8 @@ export interface MapLocation {
 export interface Stats {
   health: number;
   healthMax: number;
+  mana: number;
+  manaMax: number;
   hunger: number;
   hungerMax: number;
   attack: number;
@@ -21,6 +23,8 @@ export interface Stats {
 export const StatsFactory = (config?: Partial<Stats>): Stats => ({
   health: 1,
   healthMax: 1,
+  mana: 1,
+  manaMax: 1,
   hunger: 1,
   hungerMax: 1,
   attack: 0,

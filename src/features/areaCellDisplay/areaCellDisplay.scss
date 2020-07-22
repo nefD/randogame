@@ -1,5 +1,5 @@
 .areaCellContainer {
-    height: 15em;
+    
 }
 
 .areaCellEntity {
@@ -19,7 +19,7 @@
 
     &__action {}
 
-    .itemIcon {
+    .itemIcon, .resourceIcon, .facilityIcon {
         margin-right: var(--spacing-small);
     }
 }
