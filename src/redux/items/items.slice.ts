@@ -14,7 +14,7 @@ export interface ItemToolProperties {
 
 export interface Item {
   name: string;
-  key: string;
+  key: ItemKey;
   id: string;
   goldValue: number;
   toolProps?: ItemToolProperties;

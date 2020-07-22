@@ -1,3 +1,8 @@
+import {
+  ITEM_KEYS,
+  ItemKey,
+} from 'data/item.consts';
+
 export enum AREA_RESOURCE_TYPE {
   Plant,
   Tree,
@@ -10,15 +15,14 @@ export enum AREA_RESOURCE_TYPE {
 export interface ResourceNodeDef {
   name: string;
   type: AREA_RESOURCE_TYPE;
-  // iconPath?: string;
-  // usesTool, usesSkill
+  yieldsItem: ItemKey;
   remainingResources: number;
 }
 export const ResourceNodeDefs: { [key: string]: ResourceNodeDef} = {
   Tree: {
     name: 'Tree!',
     type: AREA_RESOURCE_TYPE.Tree,
-    // iconPath: 'pine-tree.svg',
+    yieldsItem: ITEM_KEYS.Wood,
     remainingResources: 6,
   },
 };

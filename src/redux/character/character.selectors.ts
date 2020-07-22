@@ -104,7 +104,7 @@ export const getPlayerCanHarvestResources = createSelector(
   getPlayerInventory,
   items => ({
     [AREA_RESOURCE_TYPE.Plant]: true,
-    [AREA_RESOURCE_TYPE.Tree]: (items.filter(i => i.key === 'WoodAxe').length > 0),
+    [AREA_RESOURCE_TYPE.Tree]: (items.filter(i => i.key === 'WoodAxe' && i.toolProps && i.toolProps.remainingUses > 0).length > 0),
     [AREA_RESOURCE_TYPE.Stone]: false,
     [AREA_RESOURCE_TYPE.Mine]: false,
     [AREA_RESOURCE_TYPE.Stick]: true,

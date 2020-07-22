@@ -1,4 +1,7 @@
-import { ItemKey } from 'data/item.consts';
+import {
+  ITEM_KEYS,
+  ItemKey,
+} from 'data/item.consts';
 
 export interface ILootItem {
   itemDef: ItemKey;
@@ -13,11 +16,9 @@ type TLootTables = { [key: string]: ILootTable };
 
 const testingLootTable: ILootTable = {
   items: [
-    { itemDef: 'TestItem', chance: 60 },
-    { itemDef: 'TestItem', chance: 60 },
-    { itemDef: 'TestItem', chance: 60 },
-    { itemDef: 'TestItem', chance: 60 },
-  ]
+    { itemDef: ITEM_KEYS.TestItem, chance: 60 },
+    { itemDef: ITEM_KEYS.TestItem, chance: 60 },
+  ],
 };
 
 export const LootTables = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Item } from 'redux/items/items.slice';
-import { ItemIcons } from 'data/item.consts';
+import { ItemDefs } from 'data/item.consts';
 import './itemIcon.scss';
 
 type ItemIconProps = {
@@ -8,7 +8,7 @@ type ItemIconProps = {
 }
 
 export function ItemIcon({ item }: ItemIconProps) {
-  const path = ItemIcons[item.key];
+  const path = ItemDefs[item.key].iconPath;
   if (!path) return (<div className="itemIcon"></div>);
   return (
     <div className="itemIcon">

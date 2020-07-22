@@ -10,7 +10,10 @@ import { generateMap } from 'redux/mapAreas/mapAreas.slice';
 import { AreaCellDisplay } from 'features/areaCellDisplay/areaCellDisplay';
 import { InventoryDisplay } from 'features/inventoryDisplay/inventoryDisplay';
 import { ItemFactory } from 'utilities/item.utilities';
-import { ItemDefs } from 'data/item.consts';
+import {
+  ITEM_KEYS,
+  ItemDefs,
+} from 'data/item.consts';
 import { itemCreated } from 'redux/items/items.slice';
 import {
   inventoryAdded,
@@ -48,7 +51,7 @@ function App() {
   const mapArea = useSelector(getCurrentMapArea);
   if (!mapArea) {
     dispatch(generateMap());
-    const item = ItemFactory(ItemDefs.WoodAxe);
+    const item = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
     dispatch(itemCreated(item));
     dispatch(inventoryAdded(item));
   }

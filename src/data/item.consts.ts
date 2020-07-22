@@ -1,46 +1,72 @@
-export const ItemDefs = {
-  Empty: {
-    key: 'Empty',
-    name: 'Empty Item',
-  },
-  TestItem: {
-    key: 'TestItem',
-    name: 'Test Item',
-  },
-  Sand: {
-    key: 'Sand',
-    name: 'Sand',
-  },
-  Stick: {
-    key: 'Stick',
-    name: 'Stick',
-  },
-  Plant: {
-    key: 'Plant',
-    name: 'Plant',
-  },
-  WoodAxe: {
-    key: 'WoodAxe',
-    name: 'Wood Axe',
-    toolProps: {
-      remainingUses: 6,
-      maxUses: 6,
+import { Item } from 'redux/items/items.slice';
+
+export enum ITEM_KEYS {
+  Empty = 'Empty',
+  TestItem = 'TestItem',
+  Sand = 'Sand',
+  Stick = 'Stick',
+  Plant = 'Plant',
+  WoodAxe = 'WoodAxe',
+  Wood = 'Wood',
+}
+
+export type ItemKey = keyof typeof ITEM_KEYS;
+
+export interface ItemDefinition {
+  config: Partial<Item>;
+  iconPath?: string;
+}
+
+export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
+  [ITEM_KEYS.Empty]: {
+    config: {
+      key: ITEM_KEYS.Empty,
+      name: 'Empty Item',
     },
   },
-  Wood: {
-    key: 'Wood',
-    name: 'Wood',
+  [ITEM_KEYS.TestItem]: {
+    config: {
+      key: ITEM_KEYS.TestItem,
+      name: 'Test Item',
+    },
+  },
+  [ITEM_KEYS.Sand]: {
+    iconPath: 'sand.svg',
+    config: {
+      key: ITEM_KEYS.Sand,
+      name: 'Sand',
+    },
+  },
+  [ITEM_KEYS.Stick]: {
+    iconPath: 'wood-stick.svg',
+    config: {
+      key: ITEM_KEYS.Stick,
+      name: 'Stick',
+    },
+  },
+  [ITEM_KEYS.Plant]: {
+    iconPath: 'zigzag-leaf.svg',
+    config: {
+      key: ITEM_KEYS.Plant,
+      name: 'Plant',
+    },
+  },
+  [ITEM_KEYS.WoodAxe]: {
+    iconPath: 'axe-in-log.svg',
+    config: {
+      key: ITEM_KEYS.WoodAxe,
+      name: 'Wood Axe',
+      toolProps: {
+        remainingUses: 6,
+        maxUses: 6,
+      },
+    },
+  },
+  [ITEM_KEYS.Wood]: {
+    iconPath: 'log.svg',
+    config: {
+      key: ITEM_KEYS.Wood,
+      name: 'Wood',
+    },
   },
 };
-
-export type ItemKey = keyof typeof ItemDefs;
-
-export const ItemIcons: Record<string, string> = {
-  Sand: 'sand.svg',
-  Stick: 'wood-stick.svg',
-  Plant: 'zigzag-leaf.svg',
-  WoodAxe: 'axe-in-log.svg',
-  Wood: 'log.svg',
-};
-
-
