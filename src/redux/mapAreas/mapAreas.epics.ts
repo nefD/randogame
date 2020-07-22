@@ -72,21 +72,21 @@ export const spawnMapCell$: Epic<Action, Action, RootState> = (actions$, state$)
         if (def.type === AREA_RESOURCE_TYPE.Sand) {
           if (cellItems.filter(i => i.key === 'Sand').length >= def.max) return;
           if (rng(100) < def.chance) {
-            const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand].config);
+            const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand]);
             actions.push(itemCreated(item));
             actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
           }
         } else if (def.type === AREA_RESOURCE_TYPE.Stick) {
           if (cellItems.filter(i => i.key === 'Stick').length >= def.max) return;
           if (rng(100) < def.chance) {
-            const item = ItemFactory(ItemDefs[ITEM_KEYS.Stick].config);
+            const item = ItemFactory(ItemDefs[ITEM_KEYS.Stick]);
             actions.push(itemCreated(item));
             actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
           }
         } else if (def.type === AREA_RESOURCE_TYPE.Plant) {
           if (cellItems.filter(i => i.key === 'Plant').length >= def.max) return;
           if (rng(100) < def.chance) {
-            const item = ItemFactory(ItemDefs[ITEM_KEYS.Plant].config);
+            const item = ItemFactory(ItemDefs[ITEM_KEYS.Plant]);
             actions.push(itemCreated(item));
             actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
           }
@@ -115,7 +115,7 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$, state$) 
     const playerY = Math.floor(mapHeight / 2);
     const mapArea = generateMapArea(mapWidth, mapHeight);
 
-    const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand].config);
+    const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand]);
     mapArea.items[fromXY(playerX, playerY, mapWidth)] = [item.id];
     const enemy = EnemyFactory(EnemyDefs.TestEnemy.config);
     mapArea.enemies[fromXY(playerX, playerY, mapWidth)] = [enemy.id];
@@ -131,10 +131,10 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$, state$) 
 
     Object.values(mapArea.towns).forEach(town => {
       town.facilities.filter(f => f.type === FACILITY_TYPE.Shop).forEach(shop => {
-        const shopItem1 = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
+        const shopItem1 = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe]);
         shop.shopItems.push(shopItem1.id);
         actions.push(itemCreated(shopItem1));
-        const shopItem2 = ItemFactory(ItemDefs[ITEM_KEYS.Plant].config);
+        const shopItem2 = ItemFactory(ItemDefs[ITEM_KEYS.Plant]);
         shop.shopItems.push(shopItem2.id);
         actions.push(itemCreated(shopItem2));
       });

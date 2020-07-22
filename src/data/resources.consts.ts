@@ -4,12 +4,12 @@ import {
 } from 'data/item.consts';
 
 export enum AREA_RESOURCE_TYPE {
-  Plant,
-  Tree,
-  Stone,
-  Mine,
-  Stick,
-  Sand,
+  Plant = 'Plant',
+  Tree = 'Tree',
+  Stone = 'Stone',
+  Mine = 'Mine',
+  Stick = 'Stick',
+  Sand = 'Sand',
 }
 
 export interface ResourceNodeDef {
@@ -19,7 +19,7 @@ export interface ResourceNodeDef {
   remainingResources: number;
 }
 export const ResourceNodeDefs: { [key: string]: ResourceNodeDef} = {
-  Tree: {
+  [AREA_RESOURCE_TYPE.Tree]: {
     name: 'Tree!',
     type: AREA_RESOURCE_TYPE.Tree,
     yieldsItem: ITEM_KEYS.Wood,

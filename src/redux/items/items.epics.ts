@@ -25,7 +25,7 @@ export const rollLootTables$: Epic<Action, Action, RootState> = (actions$, state
     action.payload.forEach(key => {
       LootTables[key].items.forEach(lootItem => {
         if (rng(100) <= lootItem.chance) {
-          const item = ItemFactory(ItemDefs[lootItem.itemDef].config);
+          const item = ItemFactory(ItemDefs[lootItem.itemDef]);
           actions.push(itemCreated(item));
           actions.push(addToInventory(item));
         }

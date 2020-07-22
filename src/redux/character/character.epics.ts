@@ -60,8 +60,19 @@ import {
 } from 'redux/mapAreas/mapAreas.slice';
 import { FACILITY_TYPE } from 'data/areas.consts';
 import { addMessage } from 'redux/messages/messages.slice';
-import { toolUsed } from 'redux/items/items.slice';
-import { AREA_RESOURCE_TYPE } from 'data/resources.consts';
+import {
+  itemCreated,
+  toolUsed,
+} from 'redux/items/items.slice';
+import {
+  AREA_RESOURCE_TYPE,
+  ResourceNodeDefs,
+} from 'data/resources.consts';
+import {
+  ITEM_KEYS,
+  ItemDefs,
+} from 'data/item.consts';
+import { ItemFactory } from 'utilities/item.utilities';
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),
@@ -279,12 +290,19 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
 
     switch (node!.type) {
       case (AREA_RESOURCE_TYPE.Tree): {
-        const item = inventory.find(i => i.key === 'WoodAxe');
+        const item = inventory.find(i => i.key === ITEM_KEYS.WoodAxe);
         if (!item) return [];
         actions.push(toolUsed(item));
         break;
       }
       default: return [];
+    }
+
+    const nodeDef = ResourceNodeDefs[node!.type];
+    if (nodeDef.yieldsItem) {
+      const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
+      actions.push(itemCreated(harvestedItem));
+      actions.push(addToInventory(harvestedItem));
     }
 
     actions.push(addMessage({ content: `Harvesting the ${node!.name}...`}));
