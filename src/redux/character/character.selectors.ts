@@ -11,6 +11,11 @@ import {
 } from 'app/baseSelectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { NODE_KEYS } from 'data/resources.consts';
+import { CharacterEquipmentItemsFactory } from 'utilities/equipment.utilities';
+import {
+  EquipmentSlots,
+  EquipSlotKey,
+} from 'redux/character/character.slice';
 
 export const getCharacterObject = createSelector(
   getCharacter,
@@ -75,6 +80,22 @@ export const getPlayerMapLocation = createSelector(
 export const getPlayerMapPos = createSelector(
   getPlayerMapLocation,
   location => location.coords,
+);
+
+export const getPlayerEquipment = createSelector(
+  getCharacter,
+  getItemsState,
+  ({ equipment }, itemsState) => {
+    const eqItems = CharacterEquipmentItemsFactory();
+    Object.values(EquipmentSlots).forEach(eqKey => {
+      if (!equipment[eqKey]) return
+      const item = itemSelectors.selectById(itemsState, equipment[eqKey]!);
+      if (item) {
+        eqItems[eqKey] = item;
+      }
+    });
+    return eqItems;
+  },
 );
 
 export const getPlayerInventory = createSelector(

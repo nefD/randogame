@@ -42,6 +42,7 @@ import { DeathScreen } from 'features/deathScreen/deathScreen';
 import { FacilityDisplay } from 'features/facility/facilityDisplay';
 import { MessagesDisplay } from 'features/messages/messagesDisplay';
 import { Skills } from 'features/skills';
+import { Equipment } from 'features/equipment';
 
 function App() {
   const dispatch = useDispatch();
@@ -116,6 +117,7 @@ function App() {
             <TabList color="white">
               <Tab>Messages</Tab>
               <Tab>Inventory</Tab>
+              <Tab>Equipment</Tab>
               <Tab>Skills</Tab>
             </TabList>
 
@@ -128,6 +130,10 @@ function App() {
                 <Box bg="panelBackground" borderWidth="1px" borderTop="none" p={4}>
                   <InventoryDisplay/>
                 </Box>
+              </TabPanel>
+
+              <TabPanel>
+                <Equipment/>
               </TabPanel>
 
               <TabPanel>

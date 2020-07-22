@@ -18,6 +18,7 @@ import {
   SkillKey,
 } from 'data/skills.consts';
 import { CharacterSkillFactory } from 'utilities/skills.utilities';
+import { CharacterEquipmentFactory } from 'utilities/equipment.utilities';
 
 export enum CharacterGameState {
   Travel,
@@ -36,6 +37,23 @@ export interface CharacterSkill {
   pointsToLevel: number;
 }
 
+export enum EquipmentSlots {
+  Head = 'Head',
+  Body = 'Body',
+  Feet = 'Feet',
+  Weapon = 'Weapon',
+  Shield = 'Shield',
+}
+export type EquipSlotKey = keyof typeof EquipmentSlots;
+
+export type CharacterEquipment = {
+  [key in EquipSlotKey]: string | null;
+}
+
+export type CharacterEquipmentItems = {
+  [key in EquipSlotKey]: Item | null;
+}
+
 export interface CharacterState {
   name: string;
   race: CHARACTER_RACE;
@@ -47,6 +65,7 @@ export interface CharacterState {
   skills: CharacterSkill[];
   stats: Stats;
   location: MapLocation;
+  equipment: CharacterEquipment;
   inventory: string[];
   inventoryMax: number;
   gameState: CharacterGameState;
@@ -74,6 +93,7 @@ const initialState: CharacterState = {
     coords: { x: 0, y: 0 },
     facilityId: null,
   },
+  equipment: CharacterEquipmentFactory(),
   inventory: [],
   inventoryMax: 15,
   gameState: CharacterGameState.Travel,
