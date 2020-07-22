@@ -27,6 +27,10 @@ import {
   buyItemFromShop,
   sellItemToShop,
   harvestResourceNode,
+  addSkillPoints,
+  playerManaModified,
+  playerSkillIncreased,
+  updateSkill,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject,
@@ -36,6 +40,7 @@ import {
   getPlayerInventory,
   getPlayerLocation,
   getPlayerMapPos,
+  getPlayerSkills,
   getPlayerStats,
 } from 'redux/character/character.selectors';
 import { RootState } from 'app/rootReducer';
@@ -73,6 +78,11 @@ import {
   ItemDefs,
 } from 'data/item.consts';
 import { ItemFactory } from 'utilities/item.utilities';
+import {
+  SKILL_KEYS,
+  SkillDefs,
+} from 'data/skills.consts';
+import { CharacterSkillFactory } from 'utilities/skills.utilities';
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),
@@ -144,13 +154,7 @@ export const playerMovingWest$: Epic<Action, Action, RootState> = (actions$, sta
 
 export const playerMoved$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMoved.match),
-  withLatestFrom(
-    state$.pipe(select(getPlayerStats)),
-  ),
-  map(([action, stats]) => {
-    if (stats.hunger - 1 <= 0) {
-      console.log(`player starved to death!`);
-    }
+  map((action) => {
     return playerHungerModified(-1);
   }),
 );
@@ -218,6 +222,7 @@ export const playerUsedInn$: Epic<Action, Action, RootState> = (actions$, state$
   ),
   mergeMap(([action, character, cost]) => [
     playerHealthModified(character.stats.healthMax),
+    playerManaModified(character.stats.manaMax),
     playerGoldModified(-cost),
     playerLeavingFacility(),
     addMessage({ content: `You rest at the Inn and wake up feeling refreshed.` }),
@@ -273,6 +278,29 @@ export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state
   ]),
 );
 
+export const playerSkillIncreased$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(playerSkillIncreased.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerSkills)),
+  ),
+  mergeMap(([action, skills]) => {
+    const actions: Action[] = [];
+    const newSkill = CharacterSkillFactory({
+      skillKey: action.payload.skillKey,
+      ...skills.find(s => s.skillKey === action.payload.skillKey),
+    });
+
+    newSkill.points += action.payload.points;
+    if (newSkill.points >= newSkill.pointsToLevel) {
+      newSkill.points -= newSkill.pointsToLevel;
+      newSkill.level++;
+      actions.push(addMessage({ content: `Your ${SkillDefs[newSkill.skillKey].name} skill has leveled up to ${newSkill.level}!` }));
+    }
+
+    return actions.concat(updateSkill(newSkill));
+  }),
+);
+
 export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(harvestResourceNode.match),
   withLatestFrom(
@@ -303,6 +331,8 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
       actions.push(addToInventory(harvestedItem));
     }
 
+    // actions.push(addSkillPoints(SKILL_KEYS.Woodcutting, 1));
+    actions.push(playerSkillIncreased(SKILL_KEYS.Woodcutting, 1));
     actions.push(addMessage({ content: `Harvesting the ${node!.name}...`}));
     return actions;
   }),

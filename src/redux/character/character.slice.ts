@@ -32,7 +32,8 @@ export interface CombatState {
 export interface CharacterSkill {
   skillKey: SkillKey;
   level: number;
-  progress: number;
+  points: number;
+  pointsToLevel: number;
 }
 
 export interface CharacterState {
@@ -60,12 +61,11 @@ const initialState: CharacterState = {
   xp: 0,
   age: 0,
   gold: 100,
-  skills: [
-    CharacterSkillFactory({ skillKey: SKILL_KEYS.Woodcutting }),
-  ],
+  skills: [],
   stats: StatsFactory({
     health: 10, healthMax: 10,
     hunger: 100, hungerMax: 100,
+    mana: 10, manaMax: 10,
     attack: 4,
     defense: 4,
   }),
@@ -119,6 +119,9 @@ const characterSlice = createSlice({
     playerGoldModified(state, action: PayloadAction<number>) {
       state.gold = Math.max(state.gold + action.payload, 0);
     },
+    playerManaModified(state, action: PayloadAction<number>) {
+      state.stats.mana = clamp(state.stats.mana + action.payload, 0, state.stats.manaMax);
+    },
     playerEnteringFacility(state, action: PayloadAction<string>) {
       state.location.facilityId = action.payload;
       state.gameState = CharacterGameState.Facility;
@@ -127,6 +130,30 @@ const characterSlice = createSlice({
       state.location.facilityId = null;
       state.gameState = CharacterGameState.Travel;
     },
+    addSkillPoints: {
+      reducer(state, { payload: { skillKey, points } }: PayloadAction<{ skillKey: SkillKey, points: number }>) {
+        let playerSkill = state.skills.find(s => s.skillKey === skillKey);
+        if (!playerSkill) {
+          playerSkill = CharacterSkillFactory({
+            skillKey: skillKey,
+          });
+          state.skills.push(playerSkill);
+        }
+        playerSkill.points += points;
+      },
+      prepare(skillKey: SkillKey, points: number) {
+        return { payload: { skillKey, points } };
+      },
+    },
+    updateSkill(state, { payload: skill }: PayloadAction<CharacterSkill>) {
+      let playerSkill = state.skills.find(s => s.skillKey === skill.skillKey);
+      if (!playerSkill) {
+        playerSkill = CharacterSkillFactory(skill);
+        state.skills.push(playerSkill);
+        return;
+      }
+      Object.assign(playerSkill, skill);
+    }
   },
 });
 
@@ -142,6 +169,10 @@ export const playerEnteringFacility = characterSlice.actions.playerEnteringFacil
 export const playerLeavingFacility = characterSlice.actions.playerLeavingFacility;
 export const playerHealthModified = characterSlice.actions.playerHealthModified;
 export const playerGoldModified = characterSlice.actions.playerGoldModified;
+export const playerManaModified = characterSlice.actions.playerManaModified;
+export const addSkillPoints = characterSlice.actions.addSkillPoints;
+export const updateSkill = characterSlice.actions.updateSkill;
+
 export const playerMovingNorth = createAction('character/movingNorth');
 export const playerMovingEast = createAction('character/movingEast');
 export const playerMovingSouth = createAction('character/movingSouth');
@@ -158,5 +189,9 @@ export const playerUsedTavern = createAction('character/playerUsedTavern');
 export const buyItemFromShop = createAction<Item>('character/buyItemFromShop');
 export const sellItemToShop = createAction<Item>('character/sellItemToShop');
 export const harvestResourceNode = createAction<string>('character/harvestResourceNode');
+export const playerSkillIncreased = createAction(
+  'character/skillIncreased',
+  (skillKey: SkillKey, points: number) => ({ payload: { skillKey, points }}),
+);
 
 export default characterSlice.reducer;

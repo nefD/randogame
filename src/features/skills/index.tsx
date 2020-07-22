@@ -12,7 +12,7 @@ const renderSkill = (playerSkill: CharacterSkill) => {
   const skill = SkillDefs[playerSkill.skillKey];
   return (
     <Flex key={playerSkill.skillKey}>
-      <Box color='white'>{skill.name} ({playerSkill.level})</Box>
+      <Box color='white'>{skill.name} ({playerSkill.level}, points: {playerSkill.points}/{playerSkill.pointsToLevel})</Box>
     </Flex>
   );
 };
