@@ -4,11 +4,11 @@ import {
   useDispatch,
   useSelector,
 } from 'react-redux';
-import { MapDisplay } from 'features/mapDisplay/mapDisplay';
+import { MapDisplay } from 'features/map/mapDisplay';
 import { CharacterOverview } from 'features/characterOverview/characterOverview';
 import { generateMap } from 'redux/mapAreas/mapAreas.slice';
-import { AreaCellDisplay } from 'features/areaCellDisplay/areaCellDisplay';
-import { InventoryDisplay } from 'features/inventoryDisplay/inventoryDisplay';
+import { AreaCellDisplay } from 'features/areaCell/areaCellDisplay';
+import { InventoryDisplay } from 'features/inventory/inventoryDisplay';
 import { ItemFactory } from 'utilities/item.utilities';
 import {
   ITEM_KEYS,
@@ -23,7 +23,7 @@ import {
   getPlayerGameState,
   getPlayerIsDead,
 } from 'redux/character/character.selectors';
-import { CombatDisplay } from 'features/combatDisplay/combatDisplay';
+import { CombatDisplay } from 'features/combat/combatDisplay';
 import {
   Box,
   CSSReset,
@@ -39,8 +39,9 @@ import {
 import customTheme from 'theme';
 import { getCurrentMapArea } from 'redux/mapAreas/mapAreas.selectors';
 import { DeathScreen } from 'features/deathScreen/deathScreen';
-import { FacilityDisplay } from 'features/facilityDisplay/facilityDisplay';
-import { MessagesDisplay } from 'features/messagesDisplay/messagesDisplay';
+import { FacilityDisplay } from 'features/facility/facilityDisplay';
+import { MessagesDisplay } from 'features/messages/messagesDisplay';
+import { Skills } from 'features/skills';
 
 function App() {
   const dispatch = useDispatch();
@@ -115,17 +116,22 @@ function App() {
             <TabList color="white">
               <Tab>Messages</Tab>
               <Tab>Inventory</Tab>
+              <Tab>Skills</Tab>
             </TabList>
 
             <TabPanels>
               <TabPanel>
-                <MessagesDisplay></MessagesDisplay>
+                <MessagesDisplay/>
               </TabPanel>
 
               <TabPanel>
                 <Box bg="panelBackground" borderWidth="1px" borderTop="none" p={4}>
-                  <InventoryDisplay />
+                  <InventoryDisplay/>
                 </Box>
+              </TabPanel>
+
+              <TabPanel>
+                <Skills/>
               </TabPanel>
             </TabPanels>
           </Tabs>

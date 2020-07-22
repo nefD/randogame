@@ -1,15 +1,11 @@
-.areaCellContainer {
-    
-}
-
-.areaCellEntity {
+.inventoryItem {
     background-color: rgba(255, 255, 255, 0.075);
     padding: var(--spacing-xsmall);
     display: flex;
     flex-direction: row;
     align-items: center;
 
-    + .areaCellEntity {
+    + .inventoryItem {
         margin-top: var(--spacing-xsmall);
     }
 
@@ -19,7 +15,7 @@
 
     &__action {}
 
-    .itemIcon, .resourceIcon, .facilityIcon {
+    .entityIcon {
         margin-right: var(--spacing-small);
     }
 }

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import 'features/areaCellDisplay/areaCellDisplay.scss';
+import 'features/areaCell/areaCellDisplay.scss';
 import { AreaCellDisplayDefs } from 'data/areas.consts';
 import {
   useDispatch,
@@ -30,9 +30,7 @@ import {
   getResourceNodesAtPlayerPos,
   getTownAtPlayerPos,
 } from 'redux/mapAreas/mapAreas.selectors';
-import { ItemIcon } from 'features/common/itemIcon/itemIcon';
-import { ResourceIcon } from 'features/common/resourceIcon/resourceIcon';
-import { FacilityIcon } from 'features/common/facilityIcon/facilityIcon';
+import { EntityIcon } from 'features/common/entityIcon';
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();
@@ -78,14 +76,14 @@ export const AreaCellDisplay = () => {
         )}
         {town?.facilities.map(facility =>
           <Flex className="areaCellEntity" p={2} bg="facilityBackground.800" direction="row" key={facility.name} onClick={() => dispatch(playerEnteringFacility(facility.id))}>
-            <FacilityIcon facility={facility} />
+            <EntityIcon facility={facility} />
             <Box flex="1" color="white">{facility.name}</Box>
             <Button size='sm'>Enter</Button>
           </Flex>
         )}
         {resourceNodes.map((node, nodeIdx) =>
           <Flex className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
-            <ResourceIcon resourceNode={node} />
+            <EntityIcon resourceNode={node} />
             <Box flex="1" color="white">
               {node.name}
             </Box>
@@ -94,7 +92,7 @@ export const AreaCellDisplay = () => {
         )}
         {items.map(item =>
           <Flex className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
-            <ItemIcon item={item}/>
+            <EntityIcon item={item} />
             <Box flex="1" color="white">
               <span>{item.name}</span>
             </Box>

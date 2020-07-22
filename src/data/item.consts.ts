@@ -1,4 +1,6 @@
+import React from 'react';
 import { Item } from 'redux/items/items.slice';
+import * as icons from 'data/icons.consts';
 
 export enum ITEM_KEYS {
   Empty = 'Empty',
@@ -14,7 +16,8 @@ export type ItemKey = keyof typeof ITEM_KEYS;
 
 export interface ItemDefinition {
   config: Partial<Item>;
-  iconPath?: string;
+  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  iconClass?: string;
 }
 
 export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
@@ -31,28 +34,32 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     },
   },
   [ITEM_KEYS.Sand]: {
-    iconPath: 'sand.svg',
+    icon: icons.IconSand,
+    iconClass: 'sand',
     config: {
       key: ITEM_KEYS.Sand,
       name: 'Sand',
     },
   },
   [ITEM_KEYS.Stick]: {
-    iconPath: 'wood-stick.svg',
+    icon: icons.IconStick,
+    iconClass: 'stick',
     config: {
       key: ITEM_KEYS.Stick,
       name: 'Stick',
     },
   },
   [ITEM_KEYS.Plant]: {
-    iconPath: 'zigzag-leaf.svg',
+    icon: icons.IconPlant,
+    iconClass: 'plant',
     config: {
       key: ITEM_KEYS.Plant,
       name: 'Plant',
     },
   },
   [ITEM_KEYS.WoodAxe]: {
-    iconPath: 'axe-in-log.svg',
+    icon: icons.IconWoodAxe,
+    iconClass: 'woodAxe',
     config: {
       key: ITEM_KEYS.WoodAxe,
       name: 'Wood Axe',
@@ -63,7 +70,8 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     },
   },
   [ITEM_KEYS.Wood]: {
-    iconPath: 'log.svg',
+    icon: icons.IconWood,
+    iconClass: 'wood',
     config: {
       key: ITEM_KEYS.Wood,
       name: 'Wood',

@@ -1,5 +1,5 @@
 import React from 'react';
-import 'features/inventoryDisplay/inventoryDisplay.scss';
+import 'features/inventory/inventoryDisplay.scss';
 import {
   useDispatch,
   useSelector,
@@ -14,7 +14,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 } from '@chakra-ui/core';
-import { ItemIcon } from 'features/common/itemIcon/itemIcon';
+import { EntityIcon } from 'features/common/entityIcon';
 export const InventoryDisplay = () => {
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ export const InventoryDisplay = () => {
     <Stack spacing={1}>
       {items.map(item =>
         <Flex className="inventoryItem" key={item.id} p={2}>
-          <ItemIcon item={item} />
+          <EntityIcon item={item} />
           <Stack flex='1' color='white' direction="row" spacing={2}>
             <Box>{item.name}</Box>
             {item.toolProps && (

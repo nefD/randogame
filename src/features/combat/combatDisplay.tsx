@@ -1,5 +1,5 @@
 import React from 'react';
-import 'features/combatDisplay/combatDisplay.scss'
+import 'features/combat/combatDisplay.scss'
 import {
   useDispatch,
   useSelector,

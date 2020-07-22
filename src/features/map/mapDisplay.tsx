@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import 'features/mapDisplay/mapDisplay.scss';
+import 'features/map/mapDisplay.scss';
 import {
   AREA_CELL_TYPES,
   AreaCellDisplayDefs,

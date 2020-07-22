@@ -13,9 +13,9 @@ import { playerLeavingFacility } from 'redux/character/character.slice';
 import { getPlayersCurrentFacility } from 'redux/mapAreas/mapAreas.selectors';
 import "./facilityDisplay.scss";
 import { FACILITY_TYPE } from 'data/areas.consts';
-import { TavernDisplay } from 'features/facilityDisplay/tavernDisplay';
-import { InnDisplay } from 'features/facilityDisplay/innDisplay';
-import { ShopDisplay } from 'features/facilityDisplay/shopDisplay';
+import { TavernDisplay } from 'features/facility/tavernDisplay';
+import { InnDisplay } from 'features/facility/innDisplay';
+import { ShopDisplay } from 'features/facility/shopDisplay';
 
 export const FacilityDisplay = () => {
   const dispatch = useDispatch();

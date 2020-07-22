@@ -1,0 +1,34 @@
+.entityIcon {
+  display: inline-block;
+
+  img {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  svg {
+    max-width: 1.5em;
+    max-height: 1.5em;
+    line-height: 1em;
+  }
+}
+
+.sand path {
+  fill: #e8d6aa;
+}
+
+.stick path {
+  fill: #7c6a53;
+}
+
+.plant path {
+  fill: #93CD56;
+}
+
+.woodAxe path {
+  fill: #806953;
+}
+
+.wood path {
+  fill: #806953;
+}

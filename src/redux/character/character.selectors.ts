@@ -47,6 +47,11 @@ export const getPlayerClass = createSelector(
   state => state.class,
 );
 
+export const getPlayerSkills = createSelector(
+  getCharacter,
+  state => state.skills,
+);
+
 export const getPlayerGold = createSelector(
   getCharacter,
   state => state.gold,

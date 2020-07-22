@@ -13,6 +13,11 @@ import {
 import { Item } from '../items/items.slice';
 import { Enemy } from '../enemies/enemies.slice';
 import { clamp } from 'utilities/math.utilities';
+import {
+  SKILL_KEYS,
+  SkillKey,
+} from 'data/skills.consts';
+import { CharacterSkillFactory } from 'utilities/skills.utilities';
 
 export enum CharacterGameState {
   Travel,
@@ -24,6 +29,12 @@ export interface CombatState {
   enemy: string;
 }
 
+export interface CharacterSkill {
+  skillKey: SkillKey;
+  level: number;
+  progress: number;
+}
+
 export interface CharacterState {
   name: string;
   race: CHARACTER_RACE;
@@ -32,6 +43,7 @@ export interface CharacterState {
   xp: number;
   age: number;
   gold: number;
+  skills: CharacterSkill[];
   stats: Stats;
   location: MapLocation;
   inventory: string[];
@@ -48,6 +60,9 @@ const initialState: CharacterState = {
   xp: 0,
   age: 0,
   gold: 100,
+  skills: [
+    CharacterSkillFactory({ skillKey: SKILL_KEYS.Woodcutting }),
+  ],
   stats: StatsFactory({
     health: 10, healthMax: 10,
     hunger: 100, hungerMax: 100,
