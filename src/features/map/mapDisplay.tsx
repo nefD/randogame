@@ -24,6 +24,7 @@ import {
 import {
   Box,
   Button,
+  Flex,
   Stack,
 } from '@chakra-ui/core';
 import { rng } from 'utilities/random.utilities';
@@ -58,22 +59,32 @@ export const MapDisplay = () => {
 
     const inlineStyle = { animationDelay: '0s' };
     if (cellType === AREA_CELL_TYPES.Plains) {
-      inlineStyle.animationDelay = `-${rng(0.5)}s`;
+      inlineStyle.animationDelay = `-${rng(2)}s`;
     } else if (cellType === AREA_CELL_TYPES.Forest) {
-      inlineStyle.animationDelay = `-${rng(0.3)}s`;
+      inlineStyle.animationDelay = `-${rng(1.5)}s`;
     } else if (cellType === AREA_CELL_TYPES.Water) {
-      const delay = (x * 0.2) + (y * 0.4)
+      const delay = (x * 0.2) + (y * 0.4);
       inlineStyle.animationDelay = `-${delay}s`;
+    }
+
+    let content = <span style={inlineStyle}>{AreaCellDisplayDefs[cellType].content}</span>;
+    const def = AreaCellDisplayDefs[cellType];
+    if (def.icon) {
+      // content = <def.icon></def.icon>;
+      return (
+        <div key={`${x},${y}`} className="mapCell">
+          <Flex align='center' justify='center' className={"cellIcon " + AreaCellDisplayDefs[cellType].iconClass} style={inlineStyle}>
+            <def.icon style={inlineStyle}></def.icon>
+          </Flex>
+        </div>
+      );
     }
 
     return (
       <div key={`${x},${y}`} className="mapCell">
-        <div className={"cellIcon " + AreaCellDisplayDefs[cellType].cssClass}>
-            {AreaCellDisplayDefs[cellType].iconPath
-              ? <img  style={inlineStyle} src={AreaCellDisplayDefs[cellType].iconPath} alt={AreaCellDisplayDefs[cellType].name} />
-              : <span style={inlineStyle}>{AreaCellDisplayDefs[cellType].content}</span>
-            }
-        </div>
+        <Flex align='center' justify='center' className={"cellIcon " + AreaCellDisplayDefs[cellType].cssClass} style={inlineStyle}>
+          {content}
+        </Flex>
       </div>
     );
   }

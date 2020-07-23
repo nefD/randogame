@@ -61,10 +61,10 @@ export const getMapViewBounds = createSelector(
       // right = Math.max(11, Math.min(mapArea.width, playerPos.x + 6));
       // top = Math.min(mapArea.height - 11, Math.max(0, playerPos.y - 5));
       // bottom = Math.max(11, Math.min(mapArea.height, playerPos.y + 6));
-      left = playerPos.x - 4;
-      right = playerPos.x + 5;
-      top = playerPos.y - 4;
-      bottom = playerPos.y + 5;
+      left = playerPos.x - 3;
+      right = playerPos.x + 4;
+      top = playerPos.y - 3;
+      bottom = playerPos.y + 4;
     }
 
     return { left, right, top, bottom };

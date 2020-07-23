@@ -3,6 +3,13 @@ import {
   ITEM_KEYS,
   ItemKey,
 } from 'data/item.consts';
+import React from 'react';
+import {
+  IconForest,
+  IconMountain,
+  IconPlains,
+  IconTown,
+} from 'data/icons.consts';
 
 export enum AREA_CELL_TYPES {
   None,
@@ -19,7 +26,8 @@ export interface CellDisplayDefinition {
   content: string;
   cssClass: string;
   name: string;
-  iconPath?: string;
+  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  iconClass?: string;
 }
 
 export const PlayerCellDisplayDef: CellDisplayDefinition = {
@@ -38,12 +46,15 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
     content: 'P',
     cssClass: 'cellPlains',
     name: 'Plains',
+    icon: IconPlains,
+    iconClass: 'icon-plains'
   },
   [AREA_CELL_TYPES.Forest]: {
     content: 'T',
     cssClass: 'cellForest',
     name: 'Forest',
-    // iconPath: 'pine-tree.svg',
+    icon: IconForest,
+    iconClass: 'icon-forest',
   },
   [AREA_CELL_TYPES.Swamp]: {
     content: 'S',
@@ -59,7 +70,8 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
     content: 'M',
     cssClass: 'cellMountain',
     name: 'Mountain',
-    // iconPath: 'peaks.svg',
+    icon: IconMountain,
+    iconClass: 'icon-mountain',
   },
   [AREA_CELL_TYPES.Water]: {
     content: '~',
@@ -70,6 +82,8 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
     content: '$',
     cssClass: 'cellTown',
     name: 'Town',
+    icon: IconTown,
+    iconClass: 'icon-town',
   },
 };
 

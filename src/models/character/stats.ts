@@ -32,3 +32,4 @@ export const StatsFactory = (config?: Partial<Stats>): Stats => ({
   [STATS.intelligence]: 1,
   ...config,
 });
+

@@ -3,6 +3,7 @@ import * as icons from 'data/icons.consts';
 import { EquipmentSlots } from 'models/character';
 import { Item } from 'models/item';
 import { STATS } from 'models/character/stats';
+import { EffectType } from 'models/character/effects';
 
 export enum ITEM_KEYS {
   Empty = 'Empty',
@@ -13,6 +14,7 @@ export enum ITEM_KEYS {
   WoodAxe = 'WoodAxe',
   Wood = 'Wood',
   Hat = 'Hat',
+  HealingPotion = 'HealingPotion',
 }
 
 export type ItemKey = keyof typeof ITEM_KEYS;
@@ -92,4 +94,20 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
       },
     },
   },
+  [ITEM_KEYS.HealingPotion]: {
+    icon: icons.IconPotion,
+    iconClass: 'healingPotion',
+    config: {
+      key: ITEM_KEYS.HealingPotion,
+      name: 'Healing Potion',
+      useProps: {
+        effects: [
+          {
+            type: EffectType.fixed,
+            statModifiers: [{ statKey: STATS.health, amount: 10 }],
+          },
+        ],
+      },
+    },
+  }
 };

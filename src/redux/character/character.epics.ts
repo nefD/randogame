@@ -34,6 +34,8 @@ import {
   playerEquippedItem,
   updateEquipment,
   playerUnequippedItem,
+  playerUsedItem,
+  applyEffectsToPlayer,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject,
@@ -376,6 +378,21 @@ export const playerUnequippedItem$: Epic<Action, Action, RootState> = (actions$,
     return [
       addToInventory(item),
       updateEquipment({ [item.equipProps!.slotKey]: null }),
+    ];
+  }),
+);
+
+export const playerUsedItem$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(playerUsedItem.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerInventory)),
+  ),
+  filter(([{ payload: item }, inventory]) => !!(item.useProps && inventory.find(i => i.id === item.id))),
+  mergeMap(([{ payload: item }, inventory]) => {
+    console.log(`item effects:`, item.useProps!.effects);
+    return [
+      applyEffectsToPlayer(item.useProps!.effects),
+      removeFromInventory(item),
     ];
   }),
 );

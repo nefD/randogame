@@ -61,6 +61,10 @@ function App() {
     const hat = ItemFactory(ItemDefs[ITEM_KEYS.Hat].config);
     dispatch(itemCreated(hat));
     dispatch(inventoryAdded(hat));
+
+    const potion = ItemFactory(ItemDefs[ITEM_KEYS.HealingPotion].config);
+    dispatch(itemCreated(potion));
+    dispatch(inventoryAdded(potion));
   }
 
   useEffect(() => {

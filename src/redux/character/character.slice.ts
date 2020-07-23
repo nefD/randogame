@@ -23,6 +23,7 @@ import {
   Stats,
   StatsFactory,
 } from 'models/character/stats';
+import { Effect } from 'models/character/effects';
 
 export interface CombatState {
   enemy: string;
@@ -196,5 +197,7 @@ export const playerSkillIncreased = createAction(
 );
 export const playerEquippedItem = createAction<Item>('character/playerEquippedItem');
 export const playerUnequippedItem = createAction<Item>('character/playerUnequippedItem');
+export const playerUsedItem = createAction<Item>('character/playerUsedItem');
+export const applyEffectsToPlayer = createAction<Effect[]>('character/applyEffectsToPlayer');
 
 export default characterSlice.reducer;

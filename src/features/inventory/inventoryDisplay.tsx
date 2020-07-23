@@ -8,6 +8,7 @@ import { getPlayerInventory } from 'redux/character/character.selectors';
 import {
   dropItemFromInventory,
   playerEquippedItem,
+  playerUsedItem,
 } from 'redux/character/character.slice';
 import {
   Box,
@@ -39,7 +40,11 @@ export const InventoryDisplay = () => {
             <Button size='sm' onClick={() => dispatch(playerEquippedItem(item))}>Equip</Button>
           )}
 
-          <Button size='sm' onClick={() => dispatch(dropItemFromInventory(item))}>Drop</Button>
+          {item.useProps && (
+            <Button size='sm' onClick={() => dispatch(playerUsedItem(item))}>Use</Button>
+          )}
+
+          <Button size='sm' variantColor='red' onClick={() => dispatch(dropItemFromInventory(item))}>Drop</Button>
         </Stack>
       )}
     </Stack>

@@ -1,5 +1,10 @@
-export { ReactComponent as IconWood } from 'log.svg';
-export { ReactComponent as IconSand } from 'sand.svg';
-export { ReactComponent as IconStick } from 'wood-stick.svg';
-export { ReactComponent as IconPlant } from 'zigzag-leaf.svg';
-export { ReactComponent as IconWoodAxe } from 'axe-in-log.svg';
+export { ReactComponent as IconWood } from 'icons/log.svg';
+export { ReactComponent as IconSand } from 'icons/sand.svg';
+export { ReactComponent as IconStick } from 'icons/wood-stick.svg';
+export { ReactComponent as IconPlant } from 'icons/zigzag-leaf.svg';
+export { ReactComponent as IconWoodAxe } from 'icons/axe-in-log.svg';
+export { ReactComponent as IconPlains } from 'icons/high-grass.svg';
+export { ReactComponent as IconForest } from 'icons/pine-tree.svg';
+export { ReactComponent as IconMountain } from 'icons/peaks.svg';
+export { ReactComponent as IconPotion } from 'icons/round-bottom-flask.svg';
+export { ReactComponent as IconTown } from 'icons/village.svg';

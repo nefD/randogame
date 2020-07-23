@@ -40,3 +40,64 @@ code {
     background-color: #999;
   }
 }
+
+.icon-sand path {
+  fill: #e8d6aa;
+}
+
+.icon-stick path {
+  fill: #7c6a53;
+}
+
+.icon-plant path {
+  fill: #93CD56;
+}
+
+.icon-woodAxe path {
+  fill: #806953;
+}
+
+.icon-wood path {
+  fill: #806953;
+}
+
+.icon-forest {
+  svg {
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, .5));
+  }
+
+  path {
+    fill: #267e29;
+    stroke: #214822;
+    stroke-width: 0.25em;
+  }
+}
+
+.icon-plains path {
+  fill: #67913c;
+}
+
+.icon-mountain {
+  svg {
+    filter: drop-shadow(0px 3px 10px rgba(5, 0, 0, .5));
+  }
+
+  path {
+    fill: #b0966d;
+    stroke: #484c5a;
+    stroke-width: 0.5em;
+  }
+}
+
+.icon-town {
+  svg {
+    filter: drop-shadow(0px 6px 4px rgba(5, 0, 0, .5));
+  }
+
+  path {
+    fill: #dad64d;
+    stroke: #543b09;
+    stroke-width: 0.25em;
+  }
+}
+

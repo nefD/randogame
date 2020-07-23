@@ -7,8 +7,16 @@ import { EquipSlotKey } from 'models/character';
 import { uuid } from 'utilities/random.utilities';
 import { isItemDefinition } from 'utilities/item.utilities';
 import { StatsKey } from 'models/character/stats';
+import {
+  Effect,
+  EffectType,
+} from 'models/character/effects';
 
-export interface ItemToolProperties {
+export interface UsableItemProperties {
+  effects: Effect[],
+}
+
+export interface ToolItemProperties {
   remainingUses: number;
   maxUses: number;
 }
@@ -18,7 +26,7 @@ export interface EquipmentBonus {
   modifier: number;
 }
 
-export interface ItemEquipmentProperties {
+export interface EquipmentItemProperties {
   slotKey: EquipSlotKey;
   bonuses?: EquipmentBonus[];
 }
@@ -28,8 +36,9 @@ export interface Item {
   key: ItemKey;
   id: string;
   goldValue: number;
-  toolProps?: ItemToolProperties;
-  equipProps?: ItemEquipmentProperties;
+  toolProps?: ToolItemProperties;
+  equipProps?: EquipmentItemProperties;
+  useProps?: UsableItemProperties;
 }
 
 export const ItemFactory = (config?: Partial<Item> | ItemDefinition): Item => {

@@ -25,27 +25,31 @@
 }
 
 .mapCell {
-    width: 2rem;
-    height: 2rem;
+    width: 3rem;
+    height: 3rem;
     background: rgb(62,54,48);
     background: radial-gradient(circle, rgba(62,54,48,1) 40%, rgba(98,89,83,1) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-
 }
 
 .cellIcon {
-    font-size: 1.75em;
+    font-size: 2.25em;
     color: white;
     font-weight: 900;
     width: 100%;
-
+    height: 100%;
     text-align: center;
+    display: inline-block;
 
     img {
         width: 100%;
+    }
+
+    svg {
+        max-width: 100%;
+        max-height: 100%;
     }
 }
 
@@ -53,15 +57,22 @@
     color: #fff92f
 }
 
-.cellForest {
+.cellIcon.icon-forest, .cellForest {
     color: #3e8340;
     background-color: #21482266;
+    width: 100%;
+    height: 100%;
+
     &.cellIcon > * {
-        display: inline-block;
         transform-origin: 50% 100%;
         animation: treesway 1.5s infinite alternate ease-in-out;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        top: -35%;
     }
     img {
+        display: inline-block;
         filter: invert(46%) sepia(12%) saturate(2012%) hue-rotate(72deg) brightness(91%) contrast(88%);
     }
 }
@@ -85,13 +96,22 @@
     100% { color: #48648d; transform: skewY(10deg) translateY(-2px) }
 }
 
-.cellPlains {
+.cellIcon.icon-plains, .cellPlains {
     color: #93CD56;
-    background-color: #4e653799;
+    background-color: #536c39cc;
+
     &.cellIcon > * {
-        display: inline-block;
+        //display: inline-block;
         transform-origin: 50% 100%;
         animation: plainsSway 2s infinite alternate ease-in-out;
+        width: 70%;
+        height: 70%;
+
+    }
+    img {
+        display: inline-block;
+        filter: invert(76%) sepia(42%) saturate(489%) hue-rotate(44deg) brightness(88%) contrast(101%);
+        //filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
     }
 }
 @keyframes plainsSway {
@@ -114,14 +134,22 @@
 }
 
 .cellBeach {
-    color: #faffb9;
-    background-color: #75775399;
+    color: #dee399;
+    background-color: #b4b96ab5;
 }
 
-.cellMountain {
-    color: #b56e18;
-    background-color: #653f1166;
+.cellIcon.icon-mountain, .cellMountain {
+    color: #ae7e4c;
+    background-color: #785f2b96;
 
+    &.cellIcon > * {
+        //display: inline-block;
+        transform-origin: 50% 100%;
+        width: 95%;
+        height: 95%;
+        position: relative;
+        top: -20%;
+    }
     img {
         filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
     }
@@ -142,7 +170,19 @@
      100% { color: #88ADE3; transform: skewY(10deg) translateY(-2px) }
  }
 
-.cellTown {
-    color: #ffff00;
-    background-color: #ffff0044;
+.cellIcon.icon-town, .cellTown {
+    color: #dad64d;
+    background-color: #967d2dc4;
+
+    &.cellIcon > * {
+        //display: inline-block;
+        transform-origin: 50% 100%;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        top: -15%;
+    }
+    img {
+        filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
+    }
 }
