@@ -53,9 +53,13 @@ function App() {
   const mapArea = useSelector(getCurrentMapArea);
   if (!mapArea) {
     dispatch(generateMap());
-    const item = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
-    dispatch(itemCreated(item));
-    dispatch(inventoryAdded(item));
+    const axe = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
+    dispatch(itemCreated(axe));
+    dispatch(inventoryAdded(axe));
+
+    const hat = ItemFactory(ItemDefs[ITEM_KEYS.Hat].config);
+    dispatch(itemCreated(hat));
+    dispatch(inventoryAdded(hat));
   }
 
   useEffect(() => {

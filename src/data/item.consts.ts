@@ -1,6 +1,7 @@
 import React from 'react';
 import { Item } from 'redux/items/items.slice';
 import * as icons from 'data/icons.consts';
+import { EquipmentSlots } from 'redux/character/character.slice';
 
 export enum ITEM_KEYS {
   Empty = 'Empty',
@@ -10,6 +11,7 @@ export enum ITEM_KEYS {
   Plant = 'Plant',
   WoodAxe = 'WoodAxe',
   Wood = 'Wood',
+  Hat = 'Hat',
 }
 
 export type ItemKey = keyof typeof ITEM_KEYS;
@@ -75,6 +77,15 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.Wood,
       name: 'Wood',
+    },
+  },
+  [ITEM_KEYS.Hat]: {
+    config: {
+      key: ITEM_KEYS.Hat,
+      name: 'Hat',
+      equipProps: {
+        slotKey: EquipmentSlots.Head,
+      },
     },
   },
 };

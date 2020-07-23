@@ -5,7 +5,10 @@ import {
   useSelector,
 } from 'react-redux';
 import { getPlayerInventory } from 'redux/character/character.selectors';
-import { dropItemFromInventory } from 'redux/character/character.slice';
+import {
+  dropItemFromInventory,
+  playerEquippedItem,
+} from 'redux/character/character.slice';
 import {
   Box,
   Button,
@@ -23,7 +26,7 @@ export const InventoryDisplay = () => {
   return (
     <Stack spacing={1}>
       {items.map(item =>
-        <Flex className="inventoryItem" key={item.id} p={2}>
+        <Stack direction='row' spacing={2} className="inventoryItem" key={item.id} p={2}>
           <EntityIcon item={item} />
           <Stack flex='1' color='white' direction="row" spacing={2}>
             <Box>{item.name}</Box>
@@ -32,8 +35,12 @@ export const InventoryDisplay = () => {
             )}
           </Stack>
 
+          {item.equipProps && (
+            <Button size='sm' onClick={() => dispatch(playerEquippedItem(item))}>Equip</Button>
+          )}
+
           <Button size='sm' onClick={() => dispatch(dropItemFromInventory(item))}>Drop</Button>
-        </Flex>
+        </Stack>
       )}
     </Stack>
   );

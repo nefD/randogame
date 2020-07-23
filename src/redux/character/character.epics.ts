@@ -31,11 +31,16 @@ import {
   playerManaModified,
   playerSkillIncreased,
   updateSkill,
+  playerEquippedItem,
+  updateEquipment,
+  EquipmentSlots,
+  playerUnequippedItem,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject,
   getCurrentMapId,
   getPlayerCanHarvestResources,
+  getPlayerEquipment,
   getPlayerGold,
   getPlayerInventory,
   getPlayerLocation,
@@ -335,5 +340,40 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
     actions.push(playerSkillIncreased(SKILL_KEYS.Woodcutting, 1));
     actions.push(addMessage({ content: `Harvesting the ${node!.name}...`}));
     return actions;
+  }),
+);
+
+export const playerEquippedItem$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(playerEquippedItem.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerInventory)),
+    state$.pipe(select(getPlayerEquipment)),
+  ),
+  filter(([{ payload: equipItem }, inventory, equipment]) => !!(equipItem.equipProps && inventory.find(i => i.id === equipItem.id))),
+  mergeMap(([{ payload: equipItem }, inventory, equipment]) => {
+    const actions: Action[] = [];
+
+    console.log(`equipping item:`, equipItem);
+
+    return [
+      removeFromInventory(equipItem),
+      updateEquipment({
+        [equipItem.equipProps!.slotKey]: equipItem.id,
+      }),
+    ];
+  }),
+);
+
+export const playerUnequippedItem$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(playerUnequippedItem.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerEquipment)),
+  ),
+  filter(([{ payload: item }, equipment]) => !!(item.equipProps && equipment[item.equipProps.slotKey]?.id === item.id)),
+  mergeMap(([{ payload: item }, equipment]) => {
+    return [
+      addToInventory(item),
+      updateEquipment({ [item.equipProps!.slotKey]: null }),
+    ];
   }),
 );

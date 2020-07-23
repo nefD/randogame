@@ -173,6 +173,12 @@ const characterSlice = createSlice({
         return;
       }
       Object.assign(playerSkill, skill);
+    },
+    updateEquipment(state, { payload: updatedEquipment }: PayloadAction<Partial<CharacterEquipment>>) {
+      state.equipment = {
+        ...state.equipment,
+        ...updatedEquipment,
+      };
     }
   },
 });
@@ -192,6 +198,7 @@ export const playerGoldModified = characterSlice.actions.playerGoldModified;
 export const playerManaModified = characterSlice.actions.playerManaModified;
 export const addSkillPoints = characterSlice.actions.addSkillPoints;
 export const updateSkill = characterSlice.actions.updateSkill;
+export const updateEquipment = characterSlice.actions.updateEquipment;
 
 export const playerMovingNorth = createAction('character/movingNorth');
 export const playerMovingEast = createAction('character/movingEast');
@@ -213,5 +220,7 @@ export const playerSkillIncreased = createAction(
   'character/skillIncreased',
   (skillKey: SkillKey, points: number) => ({ payload: { skillKey, points }}),
 );
+export const playerEquippedItem = createAction<Item>('character/playerEquippedItem');
+export const playerUnequippedItem = createAction<Item>('character/playerUnequippedItem');
 
 export default characterSlice.reducer;
