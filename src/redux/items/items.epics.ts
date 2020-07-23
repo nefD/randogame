@@ -11,11 +11,11 @@ import {
 } from 'redux/items/items.slice';
 import { LootTables } from 'data/loot.consts';
 import { rng } from 'utilities/random.utilities';
-import { ItemFactory } from 'utilities/item.utilities';
 import { ItemDefs } from 'data/item.consts';
 import {
   addToInventory,
 } from 'redux/character/character.slice';
+import { ItemFactory } from 'models/item';
 
 export const rollLootTables$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(rollLootTables.match),

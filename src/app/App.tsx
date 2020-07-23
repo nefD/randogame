@@ -9,7 +9,6 @@ import { CharacterOverview } from 'features/characterOverview/characterOverview'
 import { generateMap } from 'redux/mapAreas/mapAreas.slice';
 import { AreaCellDisplay } from 'features/areaCell/areaCellDisplay';
 import { InventoryDisplay } from 'features/inventory/inventoryDisplay';
-import { ItemFactory } from 'utilities/item.utilities';
 import {
   ITEM_KEYS,
   ItemDefs,
@@ -17,7 +16,7 @@ import {
 import { itemCreated } from 'redux/items/items.slice';
 import {
   inventoryAdded,
-  CharacterGameState,
+
 } from 'redux/character/character.slice';
 import {
   getPlayerGameState,
@@ -43,6 +42,8 @@ import { FacilityDisplay } from 'features/facility/facilityDisplay';
 import { MessagesDisplay } from 'features/messages/messagesDisplay';
 import { Skills } from 'features/skills';
 import { Equipment } from 'features/equipment';
+import { CharacterGameState } from 'models/character';
+import { ItemFactory } from 'models/item';
 
 function App() {
   const dispatch = useDispatch();

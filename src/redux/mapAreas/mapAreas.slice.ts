@@ -5,17 +5,13 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import {
-  AREA_CELL_TYPES,
-  FACILITY_TYPE,
-} from 'data/areas.consts';
-import { Item } from 'redux/items/items.slice';
-import { Enemy } from 'redux/enemies/enemies.slice';
-import {
   findFacilityInMapArea,
   fromXY,
 } from 'utilities/mapAreas.utilities';
-import { CHARACTER_RACE } from 'data/races.consts';
 import { NODE_KEYS } from 'data/resources.consts';
+import { MapArea } from 'models/map';
+import { Enemy } from 'models/enemy';
+import { Item } from 'models/item';
 
 export interface ResourceNode {
   id: string;
@@ -24,30 +20,6 @@ export interface ResourceNode {
   type: NODE_KEYS;
   // remaining uses/remaining resources
   remainingResources: number;
-}
-
-export interface Facility {
-  id: string;
-  name: string;
-  type: FACILITY_TYPE;
-  shopItems: string[];
-}
-
-export interface Town {
-  race: CHARACTER_RACE;
-  facilities: Facility[];
-}
-
-export interface MapArea {
-  id: string;
-  name: string;
-  width: number;
-  height: number;
-  cellTypes: AREA_CELL_TYPES[];
-  items: { [key: string]: string[] };
-  enemies: { [key: string]: string[] };
-  towns: { [key: string]: Town };
-  resourceNodes: { [key: string]: ResourceNode[] };
 }
 
 export const mapAreasAdapter = createEntityAdapter<MapArea>({

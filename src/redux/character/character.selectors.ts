@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import {
   itemSelectors,
 } from '../items/items.selectors';
-import { Item } from '../items/items.slice';
 import {
   getCharacter,
   getEnemiesState,
@@ -11,11 +10,12 @@ import {
 } from 'app/baseSelectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { NODE_KEYS } from 'data/resources.consts';
-import { CharacterEquipmentItemsFactory } from 'utilities/equipment.utilities';
 import {
+  CharacterEquipmentItemsFactory,
   EquipmentSlots,
   EquipSlotKey,
-} from 'redux/character/character.slice';
+} from 'models/character';
+import { Item } from 'models/item';
 
 export const getCharacterObject = createSelector(
   getCharacter,

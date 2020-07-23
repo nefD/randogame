@@ -4,12 +4,6 @@ export interface Coords {
 }
 export const coordsFactory = (x = 0, y = 0): Coords => ({ x, y });
 
-export interface MapLocation {
-  mapId: string;
-  coords: Coords;
-  facilityId: string | null;
-}
-
 export interface Stats {
   health: number;
   healthMax: number;

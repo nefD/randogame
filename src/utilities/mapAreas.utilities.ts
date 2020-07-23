@@ -1,9 +1,4 @@
 import {
-  Facility,
-  MapArea,
-  Town,
-} from 'redux/mapAreas/mapAreas.slice';
-import {
   AREA_CELL_TYPES,
   FACILITY_TYPE,
 } from 'data/areas.consts';
@@ -12,11 +7,15 @@ import {
   shuffleArray,
   uuid,
 } from './random.utilities';
+import { Coords } from 'data/commonTypes';
 import {
-  Coords,
-  MapLocation,
-} from 'data/commonTypes';
-import { CHARACTER_RACE } from 'data/races.consts';
+  Facility,
+  FacilityFactory,
+  MapArea,
+  MapAreaFactory,
+  Town,
+  TownFactory,
+} from 'models/map';
 
 export function fromXY(x: number, y: number, width: number | MapArea = 0): number {
   if (typeof width !== 'number') {
@@ -31,33 +30,6 @@ export function toXY(n: number, width: number | MapArea): {x: number, y: number}
   }
   return { x: n % width, y: Math.floor(n / width) };
 }
-
-export const MapAreaFactory = (config?: Partial<MapArea>): MapArea => ({
-  id: uuid(),
-  name: 'Unknown Area',
-  width: 1,
-  height: 1,
-  cellTypes: [],
-  items: {},
-  enemies: {},
-  towns: {},
-  resourceNodes: {},
-  ...config,
-});
-
-export const FacilityFactory = (config?: Partial<Facility>): Facility => ({
-  id: uuid(),
-  name: 'Unknown Facility',
-  type: FACILITY_TYPE.Inn,
-  shopItems: [],
-  ...config,
-});
-
-export const TownFactory = (config?: Partial<Town>): Town => ({
-  race: CHARACTER_RACE.Human,
-  facilities: [],
-  ...config,
-});
 
 const directions = [[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1], [-1,0], [-1, -1]];
 const inDir = (map: Array<AREA_CELL_TYPES[]>, cellX: number, cellY: number, dirX: number, dirY: number, width: number, height: number): AREA_CELL_TYPES | null => {
@@ -227,12 +199,6 @@ export const generateMapArea = (
     towns,
   });
 };
-
-export const MapLocationFactory = (mapId = '', x = 0, y = 0, facilityId: string | null = null): MapLocation => ({
-  mapId,
-  coords: { x, y},
-  facilityId,
-});
 
 export const findFacilityInMapArea = (mapArea: MapArea, facilityId: string) =>
   Object.values(mapArea.towns)

@@ -5,26 +5,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { LootTableKey } from 'data/loot.consts';
-import { ItemKey } from 'data/item.consts';
-import { EquipSlotKey } from 'redux/character/character.slice';
-
-export interface ItemToolProperties {
-  remainingUses: number;
-  maxUses: number;
-}
-
-export interface ItemEquipmentProperties {
-  slotKey: EquipSlotKey;
-}
-
-export interface Item {
-  name: string;
-  key: ItemKey;
-  id: string;
-  goldValue: number;
-  toolProps?: ItemToolProperties;
-  equipProps?: ItemEquipmentProperties;
-}
+import { Item } from 'models/item';
 
 export const itemsAdapter = createEntityAdapter<Item>({
   selectId: item => item.id,

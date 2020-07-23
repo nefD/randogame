@@ -17,9 +17,9 @@ import {
 } from 'data/areas.consts';
 import { fromXY } from 'utilities/mapAreas.utilities';
 import { itemSelectors } from '../items/items.selectors';
-import { Item } from 'redux/items/items.slice';
-import { Enemy } from 'redux/enemies/enemies.slice';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
+import { Enemy } from 'models/enemy';
+import { Item } from 'models/item';
 
 export const {
   selectById: selectMapAreaById,

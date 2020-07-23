@@ -33,7 +33,6 @@ import {
   updateSkill,
   playerEquippedItem,
   updateEquipment,
-  EquipmentSlots,
   playerUnequippedItem,
 } from 'redux/character/character.slice';
 import {
@@ -82,12 +81,15 @@ import {
   ITEM_KEYS,
   ItemDefs,
 } from 'data/item.consts';
-import { ItemFactory } from 'utilities/item.utilities';
 import {
   SKILL_KEYS,
   SkillDefs,
 } from 'data/skills.consts';
-import { CharacterSkillFactory } from 'utilities/skills.utilities';
+import {
+  CharacterSkillFactory,
+  EquipmentSlots,
+} from 'models/character';
+import { ItemFactory } from 'models/item';
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),

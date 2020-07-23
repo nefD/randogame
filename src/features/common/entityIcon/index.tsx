@@ -1,13 +1,13 @@
 import React from 'react';
-import { Item } from 'redux/items/items.slice';
 import { ItemDefs } from 'data/item.consts';
 import './entityIcon.scss';
 import {
-  Facility,
   ResourceNode,
 } from 'redux/mapAreas/mapAreas.slice';
 import { ResourceNodeIcons } from 'data/resources.consts';
 import { FacilityIcons } from 'data/areas.consts';
+import { Facility } from 'models/map';
+import { Item } from 'models/item';
 
 type EntityIconProps = {
   item?: Item;

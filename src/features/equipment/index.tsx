@@ -11,10 +11,12 @@ import {
   Stack,
 } from '@chakra-ui/core';
 import {
-  EquipmentSlots,
-  EquipSlotKey,
   playerUnequippedItem,
 } from 'redux/character/character.slice';
+import {
+  EquipmentSlots,
+  EquipSlotKey,
+} from 'models/character';
 
 
 export function Equipment() {
@@ -22,21 +24,18 @@ export function Equipment() {
   const equipment = useSelector(getPlayerEquipment);
 
   const renderSlot = (slotKey: EquipSlotKey) => {
-    const content: JSX.Element[] = [
-      <Box color='white' flex='1'>{slotKey}</Box>
-    ];
+    let itemContent;
+    let buttonContent;
     const item = equipment[slotKey];
     if (item) {
-      content.push(
-        <Box color='white'>{item.name}</Box>,
-        <Button size='sm' onClick={() => dispatch(playerUnequippedItem(item))}>Remove</Button>,
-      );
-    } else {
-      content.push(<Box>None</Box>)
+      itemContent = <Box color='white'>{item.name}</Box>;
+      buttonContent = <Button size='sm' onClick={() => dispatch(playerUnequippedItem(item))}>Remove</Button>;
     }
     return (
-      <Stack spacing={2} direction='row' align='center' key={slotKey}  bg='shopItemBackground' p={2}>
-        {content}
+      <Stack spacing={2} direction='row' align='center' key={slotKey} bg='shopItemBackground' p={2}>
+        <Box color='white' flex='1'>{slotKey}</Box>
+        {itemContent}
+        {buttonContent}
       </Stack>
     );
   };

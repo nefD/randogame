@@ -4,7 +4,7 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { Item } from '../items/items.slice';
+import { Item } from 'models/item';
 
 export interface AreaCell {
   id: string;

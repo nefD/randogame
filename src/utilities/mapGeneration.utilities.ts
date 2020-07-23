@@ -4,20 +4,22 @@ import {
   uuid,
 } from 'utilities/random.utilities';
 import {
-  MapArea,
-  Town,
-} from 'redux/mapAreas/mapAreas.slice';
-import {
   AREA_CELL_TYPES,
   FACILITY_TYPE,
 } from 'data/areas.consts';
 import {
-  FacilityFactory,
   fromXY,
-  MapAreaFactory,
-  TownFactory,
+
+
 } from 'utilities/mapAreas.utilities';
 import { Coords } from 'data/commonTypes';
+import {
+  FacilityFactory,
+  MapArea,
+  MapAreaFactory,
+  Town,
+  TownFactory,
+} from 'models/map';
 
 
 const directions = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1]];

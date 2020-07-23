@@ -3,17 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from '@reduxjs/toolkit';
-import { MapLocation } from 'data/commonTypes';
-import { LootTableKey } from 'data/loot.consts';
-
-export interface Enemy {
-  id: string;
-  name: string;
-  location: MapLocation;
-  health: number;
-  maxHealth: number;
-  lootTables: LootTableKey[];
-}
+import { Enemy } from 'models/enemy';
 
 export const enemiesAdapter = createEntityAdapter<Enemy>({
   selectId: enemy => enemy.id,

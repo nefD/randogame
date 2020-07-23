@@ -5,14 +5,12 @@ import {
   useDispatch,
   useSelector,
 } from 'react-redux';
-import { Item } from 'redux/items/items.slice';
 import {
   harvestResourceNode,
   pickUpItemFromCurrentMapCell,
   playerEnteringFacility,
   playerStartCombat,
 } from 'redux/character/character.slice';
-import { Enemy } from 'redux/enemies/enemies.slice';
 import {
   Box,
   Button,
@@ -31,6 +29,8 @@ import {
   getTownAtPlayerPos,
 } from 'redux/mapAreas/mapAreas.selectors';
 import { EntityIcon } from 'features/common/entityIcon';
+import { Enemy } from 'models/enemy';
+import { Item } from 'models/item';
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();

@@ -5,8 +5,8 @@ import {
 } from '@chakra-ui/core';
 import { getPlayerSkills } from 'redux/character/character.selectors';
 import { useSelector } from 'react-redux';
-import { CharacterSkill } from 'redux/character/character.slice';
 import { SkillDefs } from 'data/skills.consts';
+import { CharacterSkill } from 'models/character';
 
 const renderSkill = (playerSkill: CharacterSkill) => {
   const skill = SkillDefs[playerSkill.skillKey];

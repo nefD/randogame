@@ -1,4 +1,4 @@
-import { Enemy } from 'redux/enemies/enemies.slice';
+import { Enemy } from 'models/enemy';
 
 export interface EnemyDefinition {
   config: Partial<Enemy>;

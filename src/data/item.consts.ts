@@ -1,7 +1,7 @@
 import React from 'react';
-import { Item } from 'redux/items/items.slice';
 import * as icons from 'data/icons.consts';
-import { EquipmentSlots } from 'redux/character/character.slice';
+import { EquipmentSlots } from 'models/character';
+import { Item } from 'models/item';
 
 export enum ITEM_KEYS {
   Empty = 'Empty',

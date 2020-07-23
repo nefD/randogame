@@ -6,52 +6,24 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import {
-  MapLocation,
   Stats,
   StatsFactory,
 } from 'data/commonTypes';
-import { Item } from '../items/items.slice';
-import { Enemy } from '../enemies/enemies.slice';
 import { clamp } from 'utilities/math.utilities';
+import { SkillKey } from 'data/skills.consts';
 import {
-  SKILL_KEYS,
-  SkillKey,
-} from 'data/skills.consts';
-import { CharacterSkillFactory } from 'utilities/skills.utilities';
-import { CharacterEquipmentFactory } from 'utilities/equipment.utilities';
-
-export enum CharacterGameState {
-  Travel,
-  Combat,
-  Facility,
-}
+  CharacterEquipment,
+  CharacterEquipmentFactory,
+  CharacterGameState,
+  CharacterSkill,
+  CharacterSkillFactory,
+} from 'models/character';
+import { MapLocation } from 'models/map';
+import { Enemy } from 'models/enemy';
+import { Item } from 'models/item';
 
 export interface CombatState {
   enemy: string;
-}
-
-export interface CharacterSkill {
-  skillKey: SkillKey;
-  level: number;
-  points: number;
-  pointsToLevel: number;
-}
-
-export enum EquipmentSlots {
-  Head = 'Head',
-  Body = 'Body',
-  Feet = 'Feet',
-  Weapon = 'Weapon',
-  Shield = 'Shield',
-}
-export type EquipSlotKey = keyof typeof EquipmentSlots;
-
-export type CharacterEquipment = {
-  [key in EquipSlotKey]: string | null;
-}
-
-export type CharacterEquipmentItems = {
-  [key in EquipSlotKey]: Item | null;
 }
 
 export interface CharacterState {

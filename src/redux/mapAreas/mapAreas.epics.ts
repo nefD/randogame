@@ -16,16 +16,14 @@ import {
 } from 'rxjs/operators';
 import {
   fromXY,
-  MapLocationFactory,
+
 } from 'utilities/mapAreas.utilities';
-import { ItemFactory } from 'utilities/item.utilities';
 import {
   ITEM_KEYS,
   ItemDefs,
 } from 'data/item.consts';
 import { itemCreated } from 'redux/items/items.slice';
 import { playerMoved } from '../character/character.slice';
-import { EnemyFactory } from 'utilities/enemy.utilities';
 import { EnemyDefs } from 'data/enemies.consts';
 import { enemyCreated } from '../enemies/enemies.slice';
 import {
@@ -49,6 +47,9 @@ import {
 } from 'data/resources.consts';
 import { rng } from 'utilities/random.utilities';
 import { ResourceNodeFactory } from 'utilities/resources.utilities';
+import { MapLocationFactory } from 'models/map';
+import { EnemyFactory } from 'models/enemy';
+import { ItemFactory } from 'models/item';
 
 export const playerMoved$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMoved.match),
