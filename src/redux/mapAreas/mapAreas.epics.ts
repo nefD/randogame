@@ -72,7 +72,7 @@ export const spawnMapCell$: Epic<Action, Action, RootState> = (actions$, state$)
       resourceDefs.forEach(resourceDef => {
 
         if (resourceDef.itemKey) {
-          if (cellItems.filter(i => i.key === resourceDef.itemKey).length > resourceDef.max) return;
+          if (cellItems.filter(i => i.key === resourceDef.itemKey).length >= resourceDef.max) return;
           if (rng(100) < resourceDef.chance) {
             const item = ItemFactory(ItemDefs[resourceDef.itemKey]);
             actions.push(itemCreated(item));

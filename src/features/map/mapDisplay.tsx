@@ -62,7 +62,7 @@ export const MapDisplay = () => {
     } else if (cellType === AREA_CELL_TYPES.Forest) {
       inlineStyle.animationDelay = `-${rng(0.3)}s`;
     } else if (cellType === AREA_CELL_TYPES.Water) {
-      const delay = (x * 0.2) + (y * 0.2)
+      const delay = (x * 0.2) + (y * 0.4)
       inlineStyle.animationDelay = `-${delay}s`;
     }
 
