@@ -6,14 +6,21 @@ import {
 import { EquipSlotKey } from 'models/character';
 import { uuid } from 'utilities/random.utilities';
 import { isItemDefinition } from 'utilities/item.utilities';
+import { StatsKey } from 'models/character/stats';
 
 export interface ItemToolProperties {
   remainingUses: number;
   maxUses: number;
 }
 
+export interface EquipmentBonus {
+  statKey: StatsKey;
+  modifier: number;
+}
+
 export interface ItemEquipmentProperties {
   slotKey: EquipSlotKey;
+  bonuses?: EquipmentBonus[];
 }
 
 export interface Item {

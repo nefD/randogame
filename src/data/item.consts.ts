@@ -2,6 +2,7 @@ import React from 'react';
 import * as icons from 'data/icons.consts';
 import { EquipmentSlots } from 'models/character';
 import { Item } from 'models/item';
+import { STATS } from 'models/character/stats';
 
 export enum ITEM_KEYS {
   Empty = 'Empty',
@@ -85,6 +86,9 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
       name: 'Hat',
       equipProps: {
         slotKey: EquipmentSlots.Head,
+        bonuses: [
+          { statKey: STATS.attack, modifier: 2 },
+        ],
       },
     },
   },

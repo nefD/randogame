@@ -16,6 +16,7 @@ import {
   EquipSlotKey,
 } from 'models/character';
 import { Item } from 'models/item';
+import { Stats } from 'models/character/stats';
 
 export const getCharacterObject = createSelector(
   getCharacter,
@@ -27,9 +28,34 @@ export const getCharacterName = createSelector(
   state => state.name,
 );
 
+export const getPlayerEquipment = createSelector(
+  getCharacter,
+  getItemsState,
+  ({ equipment }, itemsState) => {
+    const eqItems = CharacterEquipmentItemsFactory();
+    Object.values(EquipmentSlots).forEach(eqKey => {
+      if (!equipment[eqKey]) return
+      const item = itemSelectors.selectById(itemsState, equipment[eqKey]!);
+      if (item) {
+        eqItems[eqKey] = item;
+      }
+    });
+    return eqItems;
+  },
+);
+
 export const getPlayerStats = createSelector(
   getCharacter,
-  state => state.stats,
+  getPlayerEquipment,
+  (state, equipment) => {
+    const stats: Stats = { ...state.stats };
+    Object.values(equipment).forEach(item => {
+      item?.equipProps?.bonuses?.forEach(bonus => {
+        stats[bonus.statKey] += bonus.modifier;
+      });
+    });
+    return stats;
+  },
 );
 
 export const getPlayerHealth = createSelector(
@@ -80,22 +106,6 @@ export const getPlayerMapLocation = createSelector(
 export const getPlayerMapPos = createSelector(
   getPlayerMapLocation,
   location => location.coords,
-);
-
-export const getPlayerEquipment = createSelector(
-  getCharacter,
-  getItemsState,
-  ({ equipment }, itemsState) => {
-    const eqItems = CharacterEquipmentItemsFactory();
-    Object.values(EquipmentSlots).forEach(eqKey => {
-      if (!equipment[eqKey]) return
-      const item = itemSelectors.selectById(itemsState, equipment[eqKey]!);
-      if (item) {
-        eqItems[eqKey] = item;
-      }
-    });
-    return eqItems;
-  },
 );
 
 export const getPlayerInventory = createSelector(

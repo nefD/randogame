@@ -8,6 +8,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    animation: 0.1s ease-out 0s 1 areaCellEntityFadeIn;
+    position: relative;
 
     + .areaCellEntity {
         margin-top: var(--spacing-xsmall);
@@ -22,4 +24,8 @@
     .entityIcon {
         margin-right: var(--spacing-small);
     }
+}
+@keyframes areaCellEntityFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }

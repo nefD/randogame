@@ -59,3 +59,4 @@ export const CharacterEquipmentItemsFactory = (config?: Partial<CharacterEquipme
   [EquipmentSlots.Shield]: null,
   ...config,
 });
+

@@ -5,10 +5,6 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import {
-  Stats,
-  StatsFactory,
-} from 'data/commonTypes';
 import { clamp } from 'utilities/math.utilities';
 import { SkillKey } from 'data/skills.consts';
 import {
@@ -17,10 +13,16 @@ import {
   CharacterGameState,
   CharacterSkill,
   CharacterSkillFactory,
+
+
 } from 'models/character';
 import { MapLocation } from 'models/map';
 import { Enemy } from 'models/enemy';
 import { Item } from 'models/item';
+import {
+  Stats,
+  StatsFactory,
+} from 'models/character/stats';
 
 export interface CombatState {
   enemy: string;
