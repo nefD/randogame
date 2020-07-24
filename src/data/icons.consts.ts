@@ -9,3 +9,11 @@ export { ReactComponent as IconMountain } from 'icons/peaks.svg';
 export { ReactComponent as IconPotion } from 'icons/round-bottom-flask.svg';
 export { ReactComponent as IconTown } from 'icons/village.svg';
 export { ReactComponent as IconBeach } from 'icons/path-tile.svg';
+export { ReactComponent as IconInn } from 'icons/bed.svg';
+export { ReactComponent as IconTavern } from 'icons/beer-stein.svg';
+export { ReactComponent as IconShop } from 'icons/shop.svg';
+export { ReactComponent as IconGold } from 'icons/two-coins.svg';
+export { ReactComponent as IconHealth } from 'icons/hearts.svg';
+export { ReactComponent as IconMana } from 'icons/round-star.svg';
+export { ReactComponent as IconHunger } from 'icons/eating.svg';
+

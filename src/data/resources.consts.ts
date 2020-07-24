@@ -2,6 +2,8 @@ import {
   ITEM_KEYS,
   ItemKey,
 } from 'data/item.consts';
+import React from "react";
+import {IconForest} from "./icons.consts";
 
 export enum NODE_KEYS {
   Tree = 'Tree',
@@ -24,6 +26,6 @@ export const ResourceNodeDefs: { [key in NODE_KEYS]: ResourceNodeDef} = {
   },
 };
 
-export const ResourceNodeIcons: Record<string, string> = {
-  Tree: 'pine-tree.svg',
+export const ResourceNodeIcons: { [key in NODE_KEYS]: React.FunctionComponent<React.SVGProps<SVGSVGElement>> } = {
+  Tree: IconForest
 };

@@ -6,9 +6,9 @@ import {
 import React from 'react';
 import {
   IconBeach,
-  IconForest,
+  IconForest, IconInn,
   IconMountain,
-  IconPlains,
+  IconPlains, IconShop, IconTavern,
   IconTown,
 } from 'data/icons.consts';
 
@@ -159,8 +159,8 @@ export enum FACILITY_TYPE {
   Stash,
 }
 
-export const FacilityIcons: { [key: string]: string } = {
-  [FACILITY_TYPE.Inn]: 'bed.svg',
-  [FACILITY_TYPE.Tavern]: 'beer-stein.svg',
-  [FACILITY_TYPE.Shop]: 'shop.svg',
+export const FacilityIcons: { [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>> } = {
+  [FACILITY_TYPE.Inn]: IconInn,
+  [FACILITY_TYPE.Tavern]: IconTavern,
+  [FACILITY_TYPE.Shop]: IconShop,
 };

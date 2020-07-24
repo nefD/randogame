@@ -20,10 +20,12 @@ import { MapLocation } from 'models/map';
 import { Enemy } from 'models/enemy';
 import { Item } from 'models/item';
 import {
+  StatModifier,
   Stats,
   StatsFactory,
 } from 'models/character/stats';
 import { Effect } from 'models/character/effects';
+import {isStatKey} from "utilities/stats.utilities";
 
 export interface CombatState {
   enemy: string;
@@ -57,7 +59,7 @@ const initialState: CharacterState = {
   gold: 100,
   skills: [],
   stats: StatsFactory({
-    health: 10, healthMax: 10,
+    health: 5, healthMax: 20,
     hunger: 100, hungerMax: 100,
     mana: 10, manaMax: 10,
     attack: 4,
@@ -117,6 +119,16 @@ const characterSlice = createSlice({
     playerManaModified(state, action: PayloadAction<number>) {
       state.stats.mana = clamp(state.stats.mana + action.payload, 0, state.stats.manaMax);
     },
+    playerStatsModified(state, { payload: statMods }: PayloadAction<StatModifier[]>) {
+      let maxStatKey;
+      statMods.forEach(statMod => {
+        state.stats[statMod.statKey] = Math.max(0, state.stats[statMod.statKey] + statMod.amount);
+        maxStatKey = `${statMod.statKey}Max`;
+        if (isStatKey(maxStatKey)) {
+          state.stats[statMod.statKey] = Math.min(state.stats[statMod.statKey], state.stats[maxStatKey]);
+        }
+      });
+    },
     playerEnteringFacility(state, action: PayloadAction<string>) {
       state.location.facilityId = action.payload;
       state.gameState = CharacterGameState.Facility;
@@ -174,6 +186,7 @@ export const playerManaModified = characterSlice.actions.playerManaModified;
 export const addSkillPoints = characterSlice.actions.addSkillPoints;
 export const updateSkill = characterSlice.actions.updateSkill;
 export const updateEquipment = characterSlice.actions.updateEquipment;
+export const playerStatsModified = characterSlice.actions.playerStatsModified;
 
 export const playerMovingNorth = createAction('character/movingNorth');
 export const playerMovingEast = createAction('character/movingEast');

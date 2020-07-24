@@ -35,7 +35,7 @@ import {
   updateEquipment,
   playerUnequippedItem,
   playerUsedItem,
-  applyEffectsToPlayer,
+  applyEffectsToPlayer, playerStatsModified,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject,
@@ -92,6 +92,7 @@ import {
   EquipmentSlots,
 } from 'models/character';
 import { ItemFactory } from 'models/item';
+import {EffectType} from "models/character/effects";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),
@@ -392,7 +393,24 @@ export const playerUsedItem$: Epic<Action, Action, RootState> = (actions$, state
     console.log(`item effects:`, item.useProps!.effects);
     return [
       applyEffectsToPlayer(item.useProps!.effects),
-      removeFromInventory(item),
+      // removeFromInventory(item),
     ];
+  }),
+);
+
+export const applyEffects$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(applyEffectsToPlayer.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerStats)),
+  ),
+  mergeMap(([{ payload: effects }, stats]) => {
+    const actions: Action[] = [];
+    effects.forEach(effect => {
+      if (effect.type === EffectType.fixed) {
+        actions.push(playerStatsModified(effect.statModifiers));
+      }
+      // console.log(`${effect.type} effect ${effect.name}:`, effect);
+    });
+    return actions;
   }),
 );

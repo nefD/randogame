@@ -4,10 +4,6 @@ import { Button, Tab, Progress } from '@chakra-ui/core';
 
 const MyTheme = { ...theme };
 
-// MyTheme.styles.global['body'] = {};
-
-console.log(`MyTheme:`, MyTheme.styles.global);
-
 MyTheme.styles.global = (props) => ({
   fontFamily: "body",
   color: mode("gray.800", "whiteAlpha.900")(props),
@@ -24,6 +20,11 @@ MyTheme.styles.global = (props) => ({
   fontFeatureSettings: `"pnum"`,
   fontVariantNumeric: "proportional-nums",
 });
+
+// MyTheme.components.Button.baseStyle.container = {
+//   ...MyTheme.components.Button.baseStyle.container,
+//   textTransform: "uppercase",
+// };
 
 Button.defaultProps = {
   size: "sm",

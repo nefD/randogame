@@ -1,4 +1,4 @@
-import { StatsKey } from 'models/character/stats';
+import {StatModifier} from 'models/character/stats';
 
 export enum EffectType {
   fixed = 'fixed',
@@ -7,15 +7,10 @@ export enum EffectType {
 
 export type EffectTypeKeys = keyof typeof EffectType;
 
-export interface EffectStatModifier {
-  statKey: StatsKey;
-  amount: number;
-}
-
 export interface Effect {
   type: EffectType;
   name?: string;
   createdOn?: number;
   duration?: number;
-  statModifiers: EffectStatModifier[],
+  statModifiers: StatModifier[],
 }

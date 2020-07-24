@@ -20,6 +20,8 @@ import {
   sellItemToShop,
 } from 'redux/character/character.slice';
 import { getPlayerInventory } from 'redux/character/character.selectors';
+import {EntityListItem} from "components/entityListItem/entityListItem";
+import {EntityIcon} from "features/common/entityIcon";
 
 export const ShopDisplay = () => {
   const dispatch = useDispatch();
@@ -39,11 +41,12 @@ export const ShopDisplay = () => {
           <TabPanel>
             <Stack spacing={1}>
               {shopItems?.map(item => (
-                <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
-                  <Box px={2} flex="1" color="white">{item.name}</Box>
-                  <Box px={4} color="white">{item.goldValue} Gold</Box>
-                  <Box><Button onClick={() => dispatch(buyItemFromShop(item))}>Buy</Button></Box>
-                </Flex>
+                <EntityListItem
+                  key={item.id}
+                  label={`${item.name} (${item.goldValue} Gold)`}
+                  icon={<EntityIcon item={item}/>}
+                  buttons={<Button onClick={() => dispatch(buyItemFromShop(item))}>Buy</Button>}
+                />
               ))}
             </Stack>
           </TabPanel>
@@ -51,11 +54,18 @@ export const ShopDisplay = () => {
           <TabPanel>
             <Stack spacing={1}>
               {playerItems.map(item => (
-                <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
-                  <Box px={2} flex="1" color="white">{item.name}</Box>
-                  <Box px={4} color="white">{item.goldValue} Gold</Box>
-                  <Box><Button onClick={() => dispatch(sellItemToShop(item))}>Sell</Button></Box>
-                </Flex>
+                // <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
+                //   <Box px={2} flex="1" color="white">{item.name}</Box>
+                //   <Box px={4} color="white">{item.goldValue} Gold</Box>
+                //   <Box><Button onClick={() => dispatch(sellItemToShop(item))}>Sell</Button></Box>
+                // </Flex>
+
+                <EntityListItem
+                  key={item.id}
+                  label={`${item.name} (${item.goldValue} Gold)`}
+                  icon={<EntityIcon item={item}/>}
+                  buttons={<Button onClick={() => dispatch(sellItemToShop(item))}>Sell</Button>}
+                />
               ))}
             </Stack>
           </TabPanel>

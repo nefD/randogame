@@ -103,6 +103,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
       useProps: {
         effects: [
           {
+            name: 'Healing Potion',
             type: EffectType.fixed,
             statModifiers: [{ statKey: STATS.health, amount: 10 }],
           },

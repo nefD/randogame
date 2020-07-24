@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {Fragment, useContext} from 'react';
 import 'features/areaCell/areaCellDisplay.scss';
 import { AreaCellDisplayDefs } from 'data/areas.consts';
 import {
@@ -32,6 +32,7 @@ import { EntityIcon } from 'features/common/entityIcon';
 import { Enemy } from 'models/enemy';
 import { Item } from 'models/item';
 import { Card } from 'components/card';
+import {EntityListItem} from "../../components/entityListItem/entityListItem";
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();
@@ -72,35 +73,31 @@ export const AreaCellDisplay = () => {
 
         <Stack p={1} spacing={1} overflowY="auto">
           {enemies.map(enemy =>
-            <Flex bg='white' className="areaCellEntity" p={2} direction="row" key={enemy.id} onClick={() => enemyClicked(enemy)}>
-              <Box flex="1">{enemy.name}</Box>
-              <Button>Attack</Button>
-            </Flex>
+            <EntityListItem
+              key={enemy.id}
+              label={enemy.name}
+              buttons={<Button onClick={() => enemyClicked(enemy)}>Attack</Button>}/>
           )}
           {town?.facilities.map(facility =>
-            <Flex bg='white' className="areaCellEntity" p={2} direction="row" key={facility.name} onClick={() => dispatch(playerEnteringFacility(facility.id))}>
-              <EntityIcon facility={facility} />
-              <Box flex="1">{facility.name}</Box>
-              <Button>Enter</Button>
-            </Flex>
+            <EntityListItem
+              key={facility.name}
+              label={facility.name}
+              icon={<EntityIcon facility={facility} />}
+              buttons={<Button onClick={() => dispatch(playerEnteringFacility(facility.id))}>Enter</Button>}/>
           )}
           {resourceNodes.map((node, nodeIdx) =>
-            <Flex bg='white' className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
-              <EntityIcon resourceNode={node} />
-              <Box flex="1">
-                {node.name}
-              </Box>
-              <Button isDisabled={!canHarvest[node.type]} onClick={() => dispatch(harvestResourceNode(node.id))}>Harvest</Button>
-            </Flex>
+            <EntityListItem
+              key={nodeIdx}
+              label={node.name}
+              icon={<EntityIcon resourceNode={node} />}
+              buttons={<Button isDisabled={!canHarvest[node.type]} onClick={() => dispatch(harvestResourceNode(node.id))}>Harvest</Button>}/>
           )}
           {items.map(item =>
-            <Flex bg='white' className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
-              <EntityIcon item={item} />
-              <Box flex="1">
-                <span>{item.name}</span>
-              </Box>
-              <Button colorScheme="teal" variant="solid">Pick Up</Button>
-            </Flex>
+            <EntityListItem
+              key={item.id}
+              label={item.name}
+              icon={<EntityIcon item={item} />}
+              buttons={<Button onClick={() => itemClicked(item)} colorScheme="teal" variant="solid">Pick Up</Button>}/>
           )}
         </Stack>
       </Box>

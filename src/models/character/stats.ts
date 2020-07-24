@@ -14,6 +14,11 @@ export enum STATS {
 
 export type StatsKey = keyof typeof STATS;
 
+export interface StatModifier {
+  statKey: StatsKey;
+  amount: number;
+}
+
 export type Stats = {
   [key in STATS]: number;
 }
@@ -32,4 +37,7 @@ export const StatsFactory = (config?: Partial<Stats>): Stats => ({
   [STATS.intelligence]: 1,
   ...config,
 });
+
+
+
 

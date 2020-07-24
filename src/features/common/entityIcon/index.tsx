@@ -4,11 +4,12 @@ import './entityIcon.scss';
 import {
   ResourceNode,
 } from 'redux/mapAreas/mapAreas.slice';
-import { ResourceNodeIcons } from 'data/resources.consts';
+import {ResourceNodeDefs, ResourceNodeIcons} from 'data/resources.consts';
 import { FacilityIcons } from 'data/areas.consts';
 import { Facility } from 'models/map';
 import { Item } from 'models/item';
 import { Box } from '@chakra-ui/core';
+import {Icon} from "components/icon/icon";
 
 type EntityIconProps = {
   item?: Item;
@@ -18,33 +19,21 @@ type EntityIconProps = {
 
 export function EntityIcon({ item, resourceNode, facility}: EntityIconProps) {
   if (item) {
-    const def = ItemDefs[item.key];
-    if (!def.icon) return (<Box className="entityIcon"></Box>);
-    return (
-      <Box bg='gray.700' className={`entityIcon ${def.iconClass}`}>
-        <def.icon />
-      </Box>
-    );
+    const icon = ItemDefs[item.key].icon;
+    if (!icon) return (<Box className="entityIcon"></Box>);
+    return <Icon icon={icon} />
   }
 
   if (resourceNode) {
-    const path = ResourceNodeIcons[resourceNode.key];
-    if (!path) return (<Box className="entityIcon"></Box>)
-    return (
-      <Box bg='gray.700' className="entityIcon">
-        <img src={path} alt={resourceNode.name} />
-      </Box>
-    );
+    const icon = ResourceNodeIcons[resourceNode.type];
+    if (!icon) return (<Box className="entityIcon"></Box>)
+    return <Icon icon={icon} />
   }
 
   if (facility) {
-    const path = FacilityIcons[facility.type];
-    if (!path) return (<Box className="entityIcon"></Box>);
-    return (
-      <Box bg='gray.700' className="entityIcon">
-        <img src={path} alt={facility.name} />
-      </Box>
-    );
+    const icon = FacilityIcons[facility.type];
+    if (!icon) return (<Box className="entityIcon"></Box>);
+    return <Icon icon={icon} />
   }
 
   return (<Box className="entityIcon"></Box>);

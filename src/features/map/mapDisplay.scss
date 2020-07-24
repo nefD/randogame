@@ -82,21 +82,6 @@
     100% { transform: rotateX(2deg) skewX(3deg) }
 }
 
-.cellEmpty {
-    color: #2b5187;
-    background-color: rgba(43, 73, 119, 0.4);
-    &.cellIcon > * {
-        display: inline-block;
-        transform-origin: 50% 50%;
-        animation: emptySway 2s infinite alternate ease-in-out;
-    }
-}
-@keyframes emptySway {
-    0% { color: #48648d; transform: skewY(-10deg) translateY(-2px) }
-    50% { color: #2b448d;  transform: translateY(2px)}
-    100% { color: #48648d; transform: skewY(10deg) translateY(-2px) }
-}
-
 .cellIcon.icon-plains, .cellPlains {
     color: #93CD56;
     background-color: #536c39cc;
@@ -176,10 +161,20 @@
     }
 }
 @keyframes waterSway {
-     0% { color: #88ADE3; transform: skewY(-10deg) translateY(-2px) }
-     50% { color: #3966db;  transform: translateY(2px)}
-     100% { color: #88ADE3; transform: skewY(10deg) translateY(-2px) }
- }
+    0% { transform: skewY(-10deg) translateY(-2px); }
+    50% { transform: translateY(2px)}
+    100% { transform: skewY(10deg) translateY(-2px) }
+}
+
+.cellEmpty {
+    color: #2b5187;
+    background-color: rgba(43, 73, 119, 0.4);
+    &.cellIcon > * {
+        display: inline-block;
+        transform-origin: 50% 50%;
+        animation: waterSway 2s infinite alternate ease-in-out;
+    }
+}
 
 .cellIcon.icon-town, .cellTown {
     color: #dad64d;
