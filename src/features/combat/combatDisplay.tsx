@@ -53,9 +53,9 @@ export const CombatDisplay = () => {
 
       <Box>
         <SimpleGrid columns={2} spacing={2}>
-          <Button size='sm' onClick={() => dispatch(combatPlayerAttacking())}>Attack</Button>
-          <Button size='sm'>Items</Button>
-          <Button size='sm' onClick={() => dispatch(combatPlayerFleeing())}>Flee</Button>
+          <Button onClick={() => dispatch(combatPlayerAttacking())}>Attack</Button>
+          <Button>Items</Button>
+          <Button onClick={() => dispatch(combatPlayerFleeing())}>Flee</Button>
         </SimpleGrid>
       </Box>
     </Stack>

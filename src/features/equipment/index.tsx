@@ -29,11 +29,11 @@ export function Equipment() {
     const item = equipment[slotKey];
     if (item) {
       itemContent = <Box color='white'>{item.name}</Box>;
-      buttonContent = <Button size='sm' onClick={() => dispatch(playerUnequippedItem(item))}>Remove</Button>;
+      buttonContent = <Button onClick={() => dispatch(playerUnequippedItem(item))}>Remove</Button>;
     }
     return (
-      <Stack spacing={2} direction='row' align='center' key={slotKey} bg='shopItemBackground' p={2}>
-        <Box color='white' flex='1'>{slotKey}</Box>
+      <Stack spacing={2} direction='row' align='center' key={slotKey} p={2}>
+        <Box flex='1'>{slotKey}</Box>
         {itemContent}
         {buttonContent}
       </Stack>
@@ -41,10 +41,8 @@ export function Equipment() {
   };
 
   return (
-    <Box p={4} bg="panelBackground" borderWidth="1px" borderTop="none">
-      <Stack spacing={2}>
-        {Object.values(EquipmentSlots).map(slotKey => renderSlot(slotKey))}
-      </Stack>
-    </Box>
-  )
+    <Stack spacing={2}>
+      {Object.values(EquipmentSlots).map(slotKey => renderSlot(slotKey))}
+    </Stack>
+  );
 };

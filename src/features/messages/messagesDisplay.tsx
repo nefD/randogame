@@ -17,18 +17,18 @@ export function MessagesDisplay() {
   const messages = useSelector(getMessages);
 
   return (
-    <Box bg="panelBackground" borderWidth="1px" borderTop="none">
-      <Flex direction="row" p={2} borderBottomWidth="1px" align="center">
-        <Box flex="1" color="white">Message Log</Box>
-        <Button size="sm" onClick={() => dispatch(clearMessages())}>Clear</Button>
+    <Box>
+      <Flex direction="row" borderBottomWidth="1px" align="center">
+        <Box flex="1">Message Log</Box>
+        <Button onClick={() => dispatch(clearMessages())}>Clear</Button>
       </Flex>
 
-      <Flex p={4} direction="column-reverse" h="20vh" overflowY="auto">
+      <Flex direction="column-reverse" h="20vh" overflowY="auto">
         <Stack spacing={1}>
           {messages.map((message, i) =>
-            <Flex key={i} color="white">
+            <Flex key={i}>
               {message.timestamp &&
-                <Box marginRight={2} color="grey">{`[${message.timestamp}] `}</Box>
+                <Box marginRight={2}>{`[${message.timestamp}] `}</Box>
               }
               <Box>{message.content}</Box>
             </Flex>

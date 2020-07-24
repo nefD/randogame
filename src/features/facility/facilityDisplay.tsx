@@ -16,6 +16,7 @@ import { FACILITY_TYPE } from 'data/areas.consts';
 import { TavernDisplay } from 'features/facility/tavernDisplay';
 import { InnDisplay } from 'features/facility/innDisplay';
 import { ShopDisplay } from 'features/facility/shopDisplay';
+import { Card } from 'components/card';
 
 export const FacilityDisplay = () => {
   const dispatch = useDispatch();
@@ -30,12 +31,14 @@ export const FacilityDisplay = () => {
   }
 
   return (
-    <Stack p={2} spacing={4} bg="panelBackground" borderWidth="1px">
+    <Card>
+    <Stack p={2} spacing={4}>
       <Box>{facilityContent}</Box>
 
       <Flex direction="row" justify="center">
         <Button onClick={() => dispatch(playerLeavingFacility())}>Leave</Button>
       </Flex>
     </Stack>
+    </Card>
   );
 };

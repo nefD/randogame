@@ -8,6 +8,7 @@ import { ResourceNodeIcons } from 'data/resources.consts';
 import { FacilityIcons } from 'data/areas.consts';
 import { Facility } from 'models/map';
 import { Item } from 'models/item';
+import { Box } from '@chakra-ui/core';
 
 type EntityIconProps = {
   item?: Item;
@@ -18,33 +19,33 @@ type EntityIconProps = {
 export function EntityIcon({ item, resourceNode, facility}: EntityIconProps) {
   if (item) {
     const def = ItemDefs[item.key];
-    if (!def.icon) return (<div className="entityIcon"></div>);
+    if (!def.icon) return (<Box className="entityIcon"></Box>);
     return (
-      <div className={`entityIcon ${def.iconClass}`}>
+      <Box bg='gray.700' className={`entityIcon ${def.iconClass}`}>
         <def.icon />
-      </div>
+      </Box>
     );
   }
 
   if (resourceNode) {
     const path = ResourceNodeIcons[resourceNode.key];
-    if (!path) return (<div className="entityIcon"></div>)
+    if (!path) return (<Box className="entityIcon"></Box>)
     return (
-      <div className="entityIcon">
+      <Box bg='gray.700' className="entityIcon">
         <img src={path} alt={resourceNode.name} />
-      </div>
+      </Box>
     );
   }
 
   if (facility) {
     const path = FacilityIcons[facility.type];
-    if (!path) return (<div className="entityIcon"></div>);
+    if (!path) return (<Box className="entityIcon"></Box>);
     return (
-      <div className="entityIcon">
+      <Box bg='gray.700' className="entityIcon">
         <img src={path} alt={facility.name} />
-      </div>
+      </Box>
     );
   }
 
-  return (<div className="entityIcon"></div>);
+  return (<Box className="entityIcon"></Box>);
 }

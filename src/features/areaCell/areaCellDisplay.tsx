@@ -31,6 +31,7 @@ import {
 import { EntityIcon } from 'features/common/entityIcon';
 import { Enemy } from 'models/enemy';
 import { Item } from 'models/item';
+import { Card } from 'components/card';
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();
@@ -55,51 +56,54 @@ export const AreaCellDisplay = () => {
   if (town) {
     areaName = `${areaName} [${town.race}]`;
   }
+  // <span className={AreaCellDisplayDefs[cellType].cssClass}>
   const areaLabel = (
-    <span className={AreaCellDisplayDefs[cellType].cssClass}>
+    <span>
       {areaName}
     </span>
   );
 
   return (
-    <Box bg="panelBackground" borderWidth="1px" h="100%" overflowY="auto">
-      <Box p={1} borderBottom="1px solid">
-        {playerPos.x}, {playerPos.y} - {areaLabel}
-      </Box>
+    <Card>
+      <Box h="100%" overflowY="auto">
+        <Box p={1} borderBottomWidth='1px'>
+          {playerPos.x}, {playerPos.y} - {areaLabel}
+        </Box>
 
-      <Stack p={4} spacing={1} overflowY="auto">
-        {enemies.map(enemy =>
-          <Flex className="areaCellEntity" p={2} bg="enemyBackground.700" direction="row" key={enemy.id} onClick={() => enemyClicked(enemy)}>
-            <Box flex="1" color="white">{enemy.name}</Box>
-            <Button size='sm'>Attack</Button>
-          </Flex>
-        )}
-        {town?.facilities.map(facility =>
-          <Flex className="areaCellEntity" p={2} bg="facilityBackground.800" direction="row" key={facility.name} onClick={() => dispatch(playerEnteringFacility(facility.id))}>
-            <EntityIcon facility={facility} />
-            <Box flex="1" color="white">{facility.name}</Box>
-            <Button size='sm'>Enter</Button>
-          </Flex>
-        )}
-        {resourceNodes.map((node, nodeIdx) =>
-          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
-            <EntityIcon resourceNode={node} />
-            <Box flex="1" color="white">
-              {node.name}
-            </Box>
-            <Button isDisabled={!canHarvest[node.type]} size='sm' onClick={() => dispatch(harvestResourceNode(node.id))}>Harvest</Button>
-          </Flex>
-        )}
-        {items.map(item =>
-          <Flex className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
-            <EntityIcon item={item} />
-            <Box flex="1" color="white">
-              <span>{item.name}</span>
-            </Box>
-            <Button size='sm'>Pick Up</Button>
-          </Flex>
-        )}
-      </Stack>
-    </Box>
+        <Stack p={1} spacing={1} overflowY="auto">
+          {enemies.map(enemy =>
+            <Flex bg='white' className="areaCellEntity" p={2} direction="row" key={enemy.id} onClick={() => enemyClicked(enemy)}>
+              <Box flex="1">{enemy.name}</Box>
+              <Button>Attack</Button>
+            </Flex>
+          )}
+          {town?.facilities.map(facility =>
+            <Flex bg='white' className="areaCellEntity" p={2} direction="row" key={facility.name} onClick={() => dispatch(playerEnteringFacility(facility.id))}>
+              <EntityIcon facility={facility} />
+              <Box flex="1">{facility.name}</Box>
+              <Button>Enter</Button>
+            </Flex>
+          )}
+          {resourceNodes.map((node, nodeIdx) =>
+            <Flex bg='white' className="areaCellEntity" p={2} direction="row" align="center" key={nodeIdx}>
+              <EntityIcon resourceNode={node} />
+              <Box flex="1">
+                {node.name}
+              </Box>
+              <Button isDisabled={!canHarvest[node.type]} onClick={() => dispatch(harvestResourceNode(node.id))}>Harvest</Button>
+            </Flex>
+          )}
+          {items.map(item =>
+            <Flex bg='white' className="areaCellEntity" p={2} direction="row" align="center" key={item.id} onClick={() => itemClicked(item)}>
+              <EntityIcon item={item} />
+              <Box flex="1">
+                <span>{item.name}</span>
+              </Box>
+              <Button colorScheme="teal" variant="solid">Pick Up</Button>
+            </Flex>
+          )}
+        </Stack>
+      </Box>
+    </Card>
   )
 };

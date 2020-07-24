@@ -8,3 +8,4 @@ export { ReactComponent as IconForest } from 'icons/pine-tree.svg';
 export { ReactComponent as IconMountain } from 'icons/peaks.svg';
 export { ReactComponent as IconPotion } from 'icons/round-bottom-flask.svg';
 export { ReactComponent as IconTown } from 'icons/village.svg';
+export { ReactComponent as IconBeach } from 'icons/path-tile.svg';

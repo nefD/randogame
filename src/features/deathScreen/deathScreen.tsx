@@ -8,8 +8,6 @@ import './deathScreen.scss';
 export const DeathScreen = () => {
   return (
     <Flex
-      bg="panelBackground"
-      borderWidth="1px"
       minW="500px"
       w="50vw"
       p={4}

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {
   getCharacterObject,
   getPlayerStats,
-} from '../../redux/character/character.selectors';
+} from 'redux/character/character.selectors';
 import './characterOverview.scss';
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   Progress,
   Stack,
 } from '@chakra-ui/core';
+import { Card } from 'components/card';
 
 interface CharacterOverviewProps {
   // character: CharacterState,
@@ -22,11 +23,13 @@ export const CharacterOverview = ({
   const character = useSelector(getCharacterObject);
   const stats = useSelector(getPlayerStats);
 
+  console.log(`rendering.. stats`);
+
   return (
     <Stack direction="column" spacing={2}>
-      <Flex bg="panelBackground" borderWidth="1px" p={1} direction="row" justifyContent="space-between" color="white">
-        <Box>{character.name} - Level {character.level} {character.race} {character.class}</Box>
-        <Stack direction="row">
+      <Card>
+        <Stack spacing={2} p={1} direction="row" align='center' justify='center'>
+          <Box flex='1'>{character.name} - Level {character.level} {character.race} {character.class}</Box>
           <Flex direction="row" align="center">
             <div className="icon"><img src="two-coins.svg" alt="Current Gold" /></div>
             <div>Gold: {character.gold}</div>
@@ -34,16 +37,16 @@ export const CharacterOverview = ({
           <Box>Atk: {stats.attack}</Box>
           <Box>Def: {stats.defense}</Box>
         </Stack>
-      </Flex>
 
-      <Stack direction="row" spacing={2} align="center">
-        <div className="icon"><img src="hearts.svg" alt="Life"/></div>
-        <Box flex="1"><Progress color="healthProgress" value={(stats.health / stats.healthMax) * 100} /></Box>
-        <div className="icon"><img src="round-star.svg" alt="Mana"/></div>
-        <Box flex="1"><Progress color="blue" value={(stats.mana / stats.manaMax) * 100} /></Box>
-        <div className="icon"><img src="eating.svg" alt="Hunger"/></div>
-        <Box flex="1"><Progress color="yellow" value={(stats.hunger / stats.hungerMax) * 100} /></Box>
-      </Stack>
+        <Stack direction="row" spacing={2} align="center">
+          <Box className="icon"><img src="hearts.svg" alt="Life"/></Box>
+          <Box flex="1"><Progress colorScheme='red' hasStripe value={(stats.health / stats.healthMax) * 100} /></Box>
+          <Box className="icon"><img src="round-star.svg" alt="Mana"/></Box>
+          <Box flex="1"><Progress colorScheme="blue" value={(stats.mana / stats.manaMax) * 100} /></Box>
+          <Box className="icon"><img src="eating.svg" alt="Hunger"/></Box>
+          <Box flex="1"><Progress colorScheme="yellow" value={(stats.hunger / stats.hungerMax) * 100} /></Box>
+        </Stack>
+      </Card>
     </Stack>
   );
 };

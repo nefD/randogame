@@ -27,9 +27,9 @@ export const InventoryDisplay = () => {
   return (
     <Stack spacing={1}>
       {items.map(item =>
-        <Stack direction='row' spacing={2} className="inventoryItem" key={item.id} p={2}>
+        <Stack bg='white' direction='row' spacing={2} align='center' justify='center' className="inventoryItem" key={item.id} p={2}>
           <EntityIcon item={item} />
-          <Stack flex='1' color='white' direction="row" spacing={2}>
+          <Stack flex='1' direction="row" spacing={2}>
             <Box>{item.name}</Box>
             {item.toolProps && (
               <Box>{`(Uses: ${item.toolProps.remainingUses}/${item.toolProps.maxUses})`}</Box>
@@ -37,14 +37,14 @@ export const InventoryDisplay = () => {
           </Stack>
 
           {item.equipProps && (
-            <Button size='sm' onClick={() => dispatch(playerEquippedItem(item))}>Equip</Button>
+            <Button onClick={() => dispatch(playerEquippedItem(item))}>Equip</Button>
           )}
 
           {item.useProps && (
-            <Button size='sm' onClick={() => dispatch(playerUsedItem(item))}>Use</Button>
+            <Button onClick={() => dispatch(playerUsedItem(item))}>Use</Button>
           )}
 
-          <Button size='sm' variantColor='red' onClick={() => dispatch(dropItemFromInventory(item))}>Drop</Button>
+          <Button colorScheme='red' onClick={() => dispatch(dropItemFromInventory(item))}>Drop</Button>
         </Stack>
       )}
     </Stack>

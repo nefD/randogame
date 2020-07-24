@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 import 'features/map/mapDisplay.scss';
 import {
@@ -11,40 +11,25 @@ import {
   useSelector,
 } from 'react-redux';
 import {
-  playerMovingEast,
-  playerMovingNorth,
-  playerMovingSouth,
-  playerMovingWest,
-} from 'redux/character/character.slice';
-import {
   getCurrentMapArea,
   getCurrentMapCells,
   getTranslatedPlayerMapPos,
 } from 'redux/mapAreas/mapAreas.selectors';
 import {
   Box,
-  Button,
   Flex,
-  Stack,
 } from '@chakra-ui/core';
 import { rng } from 'utilities/random.utilities';
 
 export const MapDisplay = () => {
-  const mapArea = useSelector(getCurrentMapArea);
-
   const dispatch = useDispatch();
-
-  const moveNorth = () => dispatch(playerMovingNorth());
-  const moveSouth = () => dispatch(playerMovingSouth());
-  const moveEast = () => dispatch(playerMovingEast());
-
   const areaCells = useSelector(getCurrentMapCells);
-
+  const mapArea = useSelector(getCurrentMapArea);
   const translatedPlayerPos = useSelector(getTranslatedPlayerMapPos);
 
   const renderMapCell = (cellType: AREA_CELL_TYPES, x: number, y: number) => {
     if (!AreaCellDisplayDefs[cellType]) {
-      return (<div key={`${x},${y}`} className="mapCell"></div>)
+      return (<div key={`${x},${y}`} className="mapCell"/>)
     }
 
     if (translatedPlayerPos.x === x && translatedPlayerPos.y === y) {
@@ -74,7 +59,7 @@ export const MapDisplay = () => {
       return (
         <div key={`${x},${y}`} className="mapCell">
           <Flex align='center' justify='center' className={"cellIcon " + AreaCellDisplayDefs[cellType].iconClass} style={inlineStyle}>
-            <def.icon style={inlineStyle}></def.icon>
+            <def.icon style={inlineStyle}/>
           </Flex>
         </div>
       );
@@ -101,27 +86,12 @@ export const MapDisplay = () => {
   }
 
   return (
-    <Stack>
-      <Box className="mapContainer">
-        {rows.map((row, rowIdx) => (
-          <div key={rowIdx} className="mapRow">
-            {row.map(content => content)}
-          </div>
-        ))}
-      </Box>
-
-      <Stack direction='row' justify='center' align='center'>
-        <Box>
-          <Button onClick={() => dispatch(playerMovingWest())}>West</Button>
-        </Box>
-        <Stack direction='column'>
-          <Button onClick={moveNorth}>North</Button>
-          <Button onClick={moveSouth}>South</Button>
-        </Stack>
-        <Box>
-          <Button onClick={moveEast}>East</Button>
-        </Box>
-      </Stack>
-    </Stack>
+    <Box className="mapContainer">
+      {rows.map((row, rowIdx) => (
+        <div key={rowIdx} className="mapRow">
+          {row.map(content => content)}
+        </div>
+      ))}
+    </Box>
   );
 };

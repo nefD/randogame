@@ -42,7 +42,7 @@ export const ShopDisplay = () => {
                 <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
                   <Box px={2} flex="1" color="white">{item.name}</Box>
                   <Box px={4} color="white">{item.goldValue} Gold</Box>
-                  <Box><Button size='sm' onClick={() => dispatch(buyItemFromShop(item))}>Buy</Button></Box>
+                  <Box><Button onClick={() => dispatch(buyItemFromShop(item))}>Buy</Button></Box>
                 </Flex>
               ))}
             </Stack>
@@ -54,7 +54,7 @@ export const ShopDisplay = () => {
                 <Flex key={item.id} bg="shopItemBackground" p={1} align="center">
                   <Box px={2} flex="1" color="white">{item.name}</Box>
                   <Box px={4} color="white">{item.goldValue} Gold</Box>
-                  <Box><Button size='sm' onClick={() => dispatch(sellItemToShop(item))}>Sell</Button></Box>
+                  <Box><Button onClick={() => dispatch(sellItemToShop(item))}>Sell</Button></Box>
                 </Flex>
               ))}
             </Stack>

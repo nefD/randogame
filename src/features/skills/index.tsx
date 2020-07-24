@@ -12,7 +12,7 @@ const renderSkill = (playerSkill: CharacterSkill) => {
   const skill = SkillDefs[playerSkill.skillKey];
   return (
     <Flex key={playerSkill.skillKey}>
-      <Box color='white'>{skill.name} ({playerSkill.level}, points: {playerSkill.points}/{playerSkill.pointsToLevel})</Box>
+      <Box>{skill.name} ({playerSkill.level}, points: {playerSkill.points}/{playerSkill.pointsToLevel})</Box>
     </Flex>
   );
 };
@@ -21,7 +21,7 @@ export function Skills() {
   const playerSkills = useSelector(getPlayerSkills);
 
   return (
-    <Box p={4} bg="panelBackground" borderWidth="1px" borderTop="none">
+    <Box p={4}>
       {playerSkills.map(playerSkill => renderSkill(playerSkill))}
     </Box>
   )

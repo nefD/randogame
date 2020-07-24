@@ -1,15 +1,25 @@
 .entityIcon {
-  display: inline-block;
+  //--icon-width: 1.5em;
+  //--icon-height: 1.5em;
+  --icon-size: 2em;
+  --frame-size: 2.5em;
+
+  border-radius: 3px;
+  width: var(--frame-size);
+  height: var(--frame-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   img {
-    width: 1.5em;
-    height: 1.5em;
+    width: var(--icon-size);
+    height: var(--icon-size);
   }
 
   svg {
-    max-width: 1.5em;
-    max-height: 1.5em;
-    line-height: 1em;
+    max-width: var(--icon-size);
+    max-height: var(--icon-size);
+    //line-height: 1em;
   }
 }
 

@@ -5,6 +5,7 @@ import {
 } from 'data/item.consts';
 import React from 'react';
 import {
+  IconBeach,
   IconForest,
   IconMountain,
   IconPlains,
@@ -65,6 +66,8 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
     content: 'B',
     cssClass: 'cellBeach',
     name: 'Beach',
+    icon: IconBeach,
+    iconClass: 'icon-beach',
   },
   [AREA_CELL_TYPES.Mountain]: {
     content: 'M',

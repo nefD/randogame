@@ -1,18 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+// import theme from "@chakra-ui/theme"
+// import theme from 'chakra';
+import { ChakraProvider, CSSReset, ThemeProvider } from "@chakra-ui/core"
 
 import * as serviceWorker from './serviceWorker';
 import store from './app/store';
 
 import 'index.scss';
+import MyTheme from 'mytheme';
 
 const render = () => {
   const App = require('./app/App').default;
 
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <ChakraProvider theme={MyTheme}>
+        <CSSReset />
+        <App />
+      </ChakraProvider>
     </Provider>,
     document.getElementById('root'),
   );

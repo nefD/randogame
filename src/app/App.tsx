@@ -23,19 +23,9 @@ import {
   getPlayerIsDead,
 } from 'redux/character/character.selectors';
 import { CombatDisplay } from 'features/combat/combatDisplay';
-import {
-  Box,
-  CSSReset,
-  Flex,
-  Stack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  ThemeProvider,
-} from '@chakra-ui/core';
-import customTheme from 'theme';
+// import customTheme from 'theme';
+// import theme from 'chakra';
+import theme from "@chakra-ui/theme"
 import { getCurrentMapArea } from 'redux/mapAreas/mapAreas.selectors';
 import { DeathScreen } from 'features/deathScreen/deathScreen';
 import { FacilityDisplay } from 'features/facility/facilityDisplay';
@@ -44,6 +34,12 @@ import { Skills } from 'features/skills';
 import { Equipment } from 'features/equipment';
 import { CharacterGameState } from 'models/character';
 import { ItemFactory } from 'models/item';
+import { ChakraProvider, CSSReset, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel, Button } from '@chakra-ui/core';
+import { Card } from 'components/card';
+import { MapNavigation } from 'features/map/mapNavigation';
+// import Button from 'chakra/components/button';
+
+let mapCreated = false;
 
 function App() {
   const dispatch = useDispatch();
@@ -51,8 +47,8 @@ function App() {
   const playerGameState = useSelector(getPlayerGameState);
   const playerIsDead = useSelector(getPlayerIsDead);
 
-  const mapArea = useSelector(getCurrentMapArea);
-  if (!mapArea) {
+  if (!mapCreated) {
+    mapCreated = true;
     dispatch(generateMap());
     const axe = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
     dispatch(itemCreated(axe));
@@ -66,12 +62,6 @@ function App() {
     dispatch(itemCreated(potion));
     dispatch(inventoryAdded(potion));
   }
-
-  useEffect(() => {
-    return () => {
-      console.log(`running useEffect cleanup`);
-    };
-  }, []);
 
   let mainDisplay;
   switch (playerGameState) {
@@ -91,7 +81,10 @@ function App() {
     default: {
       mainDisplay = (
         <Stack maxH="50vw" overflowY="auto" direction="row" spacing={4}>
-          <Box><MapDisplay/></Box>
+          <Card>
+            <MapDisplay/>
+            <MapNavigation/>
+          </Card>
           <Box flex="1"><AreaCellDisplay /></Box>
         </Stack>
       );
@@ -100,8 +93,7 @@ function App() {
   }
 
   return (
-    <ThemeProvider theme={customTheme}>
-      <CSSReset />
+    <Box>
       {playerIsDead &&
         <Flex
           p={4}
@@ -122,38 +114,38 @@ function App() {
             {mainDisplay}
           </Box>
 
-          <Tabs variant="line" isFitted={true}>
-            <TabList color="white">
-              <Tab>Messages</Tab>
-              <Tab>Inventory</Tab>
-              <Tab>Equipment</Tab>
-              <Tab>Skills</Tab>
-            </TabList>
+          <Card>
+            <Tabs variant="enclosed">
+              <TabList>
+                <Tab>Messages</Tab>
+                <Tab>Inventory</Tab>
+                <Tab>Equipment</Tab>
+                <Tab>Skills</Tab>
+              </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <MessagesDisplay/>
-              </TabPanel>
+              <TabPanels>
+                <TabPanel>
+                  <MessagesDisplay/>
+                </TabPanel>
 
-              <TabPanel>
-                <Box bg="panelBackground" borderWidth="1px" borderTop="none" p={4}>
+                <TabPanel>
                   <InventoryDisplay/>
-                </Box>
-              </TabPanel>
+                </TabPanel>
 
-              <TabPanel>
-                <Equipment/>
-              </TabPanel>
+                <TabPanel>
+                  <Equipment/>
+                </TabPanel>
 
-              <TabPanel>
-                <Skills/>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+                <TabPanel>
+                  <Skills/>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Card>
 
         </Stack>
       </Flex>
-    </ThemeProvider>
+    </Box>
   );
 }
 
