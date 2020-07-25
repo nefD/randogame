@@ -4,7 +4,7 @@ import {
   getPlayerMapLocation,
   getPlayerMapPos,
   getPlayerRace,
-} from '../character/character.selectors';
+} from 'redux/character/character.selectors';
 import { createSelector } from 'reselect';
 import {
   getEnemiesState,
@@ -16,7 +16,7 @@ import {
   FACILITY_TYPE,
 } from 'data/areas.consts';
 import { fromXY } from 'utilities/mapAreas.utilities';
-import { itemSelectors } from '../items/items.selectors';
+import { itemSelectors } from 'redux/items/items.selectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { Enemy } from 'models/enemy';
 import { Item } from 'models/item';
@@ -57,10 +57,6 @@ export const getMapViewBounds = createSelector(
     let bottom = 0;
 
     if (mapArea) {
-      // left = Math.min(mapArea.width - 11, Math.max(0, playerPos.x - 5));
-      // right = Math.max(11, Math.min(mapArea.width, playerPos.x + 6));
-      // top = Math.min(mapArea.height - 11, Math.max(0, playerPos.y - 5));
-      // bottom = Math.max(11, Math.min(mapArea.height, playerPos.y + 6));
       left = playerPos.x - 3;
       right = playerPos.x + 4;
       top = playerPos.y - 3;

@@ -1,4 +1,3 @@
-
 import { createSelector } from 'reselect';
 import {
   itemSelectors,
@@ -13,7 +12,6 @@ import { NODE_KEYS } from 'data/resources.consts';
 import {
   CharacterEquipmentItemsFactory,
   EquipmentSlots,
-  EquipSlotKey,
 } from 'models/character';
 import { Item } from 'models/item';
 import { Stats } from 'models/character/stats';

@@ -11,17 +11,15 @@ import {
   playerUsedItem,
 } from 'redux/character/character.slice';
 import {
-  Box,
   Button,
-  Flex,
   Stack,
 } from '@chakra-ui/core';
-import { EntityIcon } from 'features/common/entityIcon';
-import {EntityListItem} from "../../components/entityListItem/entityListItem";
-import {Item} from "../../models/item";
+import { EntityIcon } from 'features/common/entityIcon/entityIcon';
+import { EntityListItem } from "components/entityListItem/entityListItem";
+import { Item } from "models/item";
+
 export const InventoryDisplay = () => {
   const dispatch = useDispatch();
-
   const items = useSelector(getPlayerInventory);
 
   const getButtons = (item: Item) => (

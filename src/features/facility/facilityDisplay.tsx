@@ -20,7 +20,6 @@ import { Card } from 'components/card';
 
 export const FacilityDisplay = () => {
   const dispatch = useDispatch();
-
   const facility = useSelector(getPlayersCurrentFacility);
 
   let facilityContent;
@@ -34,7 +33,6 @@ export const FacilityDisplay = () => {
     <Card>
     <Stack p={2} spacing={4}>
       <Box>{facilityContent}</Box>
-
       <Flex direction="row" justify="center">
         <Button onClick={() => dispatch(playerLeavingFacility())}>Leave</Button>
       </Flex>

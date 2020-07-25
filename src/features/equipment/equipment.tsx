@@ -7,12 +7,9 @@ import { getPlayerEquipment } from 'redux/character/character.selectors';
 import {
   Box,
   Button,
-  Flex,
   Stack,
 } from '@chakra-ui/core';
-import {
-  playerUnequippedItem,
-} from 'redux/character/character.slice';
+import { playerUnequippedItem } from 'redux/character/character.slice';
 import {
   EquipmentSlots,
   EquipSlotKey,
@@ -45,4 +42,4 @@ export function Equipment() {
       {Object.values(EquipmentSlots).map(slotKey => renderSlot(slotKey))}
     </Stack>
   );
-};
+}

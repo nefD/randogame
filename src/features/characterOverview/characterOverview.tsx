@@ -7,21 +7,14 @@ import {
 import './characterOverview.scss';
 import {
   Box,
-  Flex,
   Progress,
   Stack,
 } from '@chakra-ui/core';
 import { Card } from 'components/card';
-import {Icon} from "components/icon/icon";
-import {IconGold, IconHealth, IconHunger, IconMana} from "data/icons.consts";
+import { Icon } from "components/icon/icon";
+import { IconGold, IconHealth, IconHunger, IconMana } from "data/icons.consts";
 
-interface CharacterOverviewProps {
-  // character: CharacterState,
-}
-
-export const CharacterOverview = ({
-  // character,
-}: CharacterOverviewProps) => {
+export const CharacterOverview = () => {
   const character = useSelector(getCharacterObject);
   const stats = useSelector(getPlayerStats);
 

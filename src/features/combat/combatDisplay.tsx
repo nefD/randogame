@@ -23,28 +23,22 @@ import {
 
 export const CombatDisplay = () => {
   const dispatch = useDispatch();
-
   const player = useSelector(getCharacterObject);
   const enemy = useSelector(getPlayerCombatEnemy);
 
-  const playerHealthBar = (
-    <Progress value={enemy ? ((player.stats.health / player.stats.healthMax) * 100) : 0} />
-  );
-
-  const enemyHealthBar = (
-    <Progress value={enemy ? ((enemy?.health / enemy?.maxHealth) * 100) : 0} />
-  );
+  const playerHealthBar = <Progress value={enemy ? ((player.stats.health / player.stats.healthMax) * 100) : 0} />;
+  const enemyHealthBar = <Progress value={enemy ? ((enemy?.health / enemy?.maxHealth) * 100) : 0} />;
 
   return (
     <Stack className="combatContainer" p={2}>
-      <Box color='white'>
+      <Box>
         {enemy?.name}
         {enemyHealthBar}
       </Box>
 
       <Divider />
 
-      <Box color='white'>
+      <Box>
         {player?.name}
         {playerHealthBar}
       </Box>

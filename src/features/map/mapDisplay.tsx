@@ -1,17 +1,12 @@
 import React from 'react';
-
 import 'features/map/mapDisplay.scss';
 import {
   AREA_CELL_TYPES,
   AreaCellDisplayDefs,
   PlayerCellDisplayDef,
 } from 'data/areas.consts';
+import { useSelector } from 'react-redux';
 import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  getCurrentMapArea,
   getCurrentMapCells,
   getTranslatedPlayerMapPos,
 } from 'redux/mapAreas/mapAreas.selectors';

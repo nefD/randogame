@@ -1,4 +1,4 @@
-import React, {Fragment, useContext} from 'react';
+import React from 'react';
 import 'features/areaCell/areaCellDisplay.scss';
 import { AreaCellDisplayDefs } from 'data/areas.consts';
 import {
@@ -14,7 +14,6 @@ import {
 import {
   Box,
   Button,
-  Flex,
   Stack,
 } from '@chakra-ui/core';
 import {
@@ -28,15 +27,12 @@ import {
   getResourceNodesAtPlayerPos,
   getTownAtPlayerPos,
 } from 'redux/mapAreas/mapAreas.selectors';
-import { EntityIcon } from 'features/common/entityIcon';
-import { Enemy } from 'models/enemy';
-import { Item } from 'models/item';
+import { EntityIcon } from 'features/common/entityIcon/entityIcon';
 import { Card } from 'components/card';
-import {EntityListItem} from "../../components/entityListItem/entityListItem";
+import { EntityListItem } from "components/entityListItem/entityListItem";
 
 export const AreaCellDisplay = () => {
   const dispatch = useDispatch();
-
   const cellType = useSelector(getCurrentCellType);
   const items = useSelector(getItemsAtPlayerPos);
   const enemies = useSelector(getEnemiesAtPlayerPos);
@@ -45,19 +41,11 @@ export const AreaCellDisplay = () => {
   const resourceNodes = useSelector(getResourceNodesAtPlayerPos);
   const canHarvest = useSelector(getPlayerCanHarvestResources);
 
-  const itemClicked = (item: Item) => {
-    dispatch(pickUpItemFromCurrentMapCell(item));
-  };
-
-  const enemyClicked = (enemy: Enemy) => {
-    dispatch(playerStartCombat(enemy));
-  };
-
   let areaName = AreaCellDisplayDefs[cellType].name;
   if (town) {
     areaName = `${areaName} [${town.race}]`;
   }
-  // <span className={AreaCellDisplayDefs[cellType].cssClass}>
+
   const areaLabel = (
     <span>
       {areaName}
@@ -76,7 +64,7 @@ export const AreaCellDisplay = () => {
             <EntityListItem
               key={enemy.id}
               label={enemy.name}
-              buttons={<Button colorScheme='red' onClick={() => enemyClicked(enemy)}>Attack</Button>}/>
+              buttons={<Button colorScheme='red' onClick={() => dispatch(playerStartCombat(enemy))}>Attack</Button>}/>
           )}
           {town?.facilities.map(facility =>
             <EntityListItem
@@ -97,7 +85,7 @@ export const AreaCellDisplay = () => {
               key={item.id}
               label={item.name}
               icon={<EntityIcon item={item} />}
-              buttons={<Button onClick={() => itemClicked(item)} colorScheme="teal" variant="solid">Pick Up</Button>}/>
+              buttons={<Button onClick={() => dispatch(pickUpItemFromCurrentMapCell(item))} colorScheme="teal" variant="solid">Pick Up</Button>}/>
           )}
         </Stack>
       </Box>
