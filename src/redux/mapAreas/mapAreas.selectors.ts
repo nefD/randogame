@@ -71,29 +71,37 @@ export const getMapViewBounds = createSelector(
   }
 );
 
-export const getCurrentMapCells = createSelector(
+export const getCurrentMapSize = createSelector(
   getCurrentMapArea,
-  getMapViewBounds,
-  (mapArea, bounds) => {
-    const cellTypes: Array<AREA_CELL_TYPES[]> = [];
-    if (!mapArea) return cellTypes;
+  (mapArea) => ({ width: mapArea?.width || 0, height: mapArea?.height || 0 }),
+);
 
+export const getCurrentMapCellTypes = createSelector(
+  getCurrentMapArea,
+  (mapArea) => mapArea?.cellTypes || [],
+);
+
+export const getCurrentMapCells = createSelector(
+  getCurrentMapSize,
+  getCurrentMapCellTypes,
+  getMapViewBounds,
+  (mapSize, cellTypes, bounds) => {
+    const cells: Array<AREA_CELL_TYPES[]> = [];
     let n = 0;
     let column: AREA_CELL_TYPES[] = [];
     for (let x = bounds.left; x < bounds.right; x++) {
       column = [];
       for (let y = bounds.top; y < bounds.bottom; y++) {
-        if (x < 0 || x > mapArea.width - 1 || y < 0 || y > mapArea.height - 1) {
+        if (x < 0 || x > mapSize.width - 1 || y < 0 || y > mapSize.height - 1) {
           column.push(AREA_CELL_TYPES.None);
         } else {
-          n = fromXY(x, y, mapArea);
-          column.push(mapArea.cellTypes[n]);
+          n = fromXY(x, y, mapSize.width);
+          column.push(cellTypes[n]);
         }
       }
-      cellTypes.push(column);
+      cells.push(column);
     }
-
-    return cellTypes;
+    return cells;
   },
 );
 

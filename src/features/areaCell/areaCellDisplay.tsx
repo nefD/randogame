@@ -76,7 +76,7 @@ export const AreaCellDisplay = () => {
             <EntityListItem
               key={enemy.id}
               label={enemy.name}
-              buttons={<Button onClick={() => enemyClicked(enemy)}>Attack</Button>}/>
+              buttons={<Button colorScheme='red' onClick={() => enemyClicked(enemy)}>Attack</Button>}/>
           )}
           {town?.facilities.map(facility =>
             <EntityListItem

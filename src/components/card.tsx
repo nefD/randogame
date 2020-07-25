@@ -1,6 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { Box, useStyleConfig } from '@chakra-ui/core';
 
+type CardProps = {
+  w?: string;
+  h?: string;
+};
+
 const styleConfig = {
   baseStyle: (args: any) => ({
     container: {
@@ -13,7 +18,7 @@ const styleConfig = {
 
 };
 
-export const Card: FunctionComponent = (props) => {
+export const Card: FunctionComponent<CardProps> = (props) => {
   const styles = useStyleConfig('Box', { styleConfig });
   return <Box as={Box} sx={styles.container} {...props} />
 }

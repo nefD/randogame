@@ -93,6 +93,7 @@ import {
 } from 'models/character';
 import { ItemFactory } from 'models/item';
 import {EffectType} from "models/character/effects";
+import {rng} from "utilities/random.utilities";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMovingNorth.match),
@@ -336,14 +337,19 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
     }
 
     if (nodeDef.yieldsItem) {
-      const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
-      actions.push(itemCreated(harvestedItem));
-      actions.push(addToInventory(harvestedItem));
+      if (!nodeDef.yieldBaseChance || rng(100) <= nodeDef.yieldBaseChance) {
+        const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
+        actions.push(
+          itemCreated(harvestedItem),
+          addToInventory(harvestedItem),
+          addMessage({ content: `Successfully harvested the ${node.name} and gathered ${harvestedItem.name}` }),
+        );
+      } else {
+        actions.push(addMessage({ content: `Failed to harvest the ${node.name}` }));
+      }
     }
 
-    // actions.push(addSkillPoints(SKILL_KEYS.Woodcutting, 1));
     actions.push(playerSkillIncreased(SKILL_KEYS.Woodcutting, 1));
-    actions.push(addMessage({ content: `Harvesting the ${node!.name}...`}));
     return actions;
   }),
 );
@@ -351,21 +357,24 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
 export const playerEquippedItem$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerEquippedItem.match),
   withLatestFrom(
-    state$.pipe(select(getPlayerInventory)),
     state$.pipe(select(getPlayerEquipment)),
+    state$.pipe(select(getPlayerInventory)),
   ),
-  filter(([{ payload: equipItem }, inventory, equipment]) => !!(equipItem.equipProps && inventory.find(i => i.id === equipItem.id))),
-  mergeMap(([{ payload: equipItem }, inventory, equipment]) => {
+  filter(([{ payload: equipItem },, inventory]) => !!(equipItem.equipProps && inventory.find(i => i.id === equipItem.id))),
+  mergeMap(([{ payload: equipItem }, equipment]) => {
     const actions: Action[] = [];
+    const existingItem = equipment[equipItem.equipProps!.slotKey];
 
-    console.log(`equipping item:`, equipItem);
+    if (existingItem !== null) {
+      actions.push(addToInventory(existingItem))
+    }
 
-    return [
+    return actions.concat(
       removeFromInventory(equipItem),
       updateEquipment({
         [equipItem.equipProps!.slotKey]: equipItem.id,
       }),
-    ];
+    );
   }),
 );
 

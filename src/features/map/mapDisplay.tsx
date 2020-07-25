@@ -22,9 +22,7 @@ import {
 import { rng } from 'utilities/random.utilities';
 
 export const MapDisplay = () => {
-  const dispatch = useDispatch();
   const areaCells = useSelector(getCurrentMapCells);
-  const mapArea = useSelector(getCurrentMapArea);
   const translatedPlayerPos = useSelector(getTranslatedPlayerMapPos);
 
   const renderMapCell = (cellType: AREA_CELL_TYPES, x: number, y: number) => {
@@ -55,7 +53,6 @@ export const MapDisplay = () => {
     let content = <span style={inlineStyle}>{AreaCellDisplayDefs[cellType].content}</span>;
     const def = AreaCellDisplayDefs[cellType];
     if (def.icon) {
-      // content = <def.icon></def.icon>;
       return (
         <div key={`${x},${y}`} className="mapCell">
           <Flex align='center' justify='center' className={"cellIcon " + AreaCellDisplayDefs[cellType].iconClass} style={inlineStyle}>
@@ -75,7 +72,7 @@ export const MapDisplay = () => {
   }
 
   const rows: Array<JSX.Element[]> = [];
-  if (mapArea) {
+  if (areaCells[0].length) {
     for (let y = 0; y < areaCells[0].length; y++) {
       let row: JSX.Element[] = [];
       for (let x = 0; x < areaCells.length; x++) {

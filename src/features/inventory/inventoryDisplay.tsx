@@ -41,7 +41,7 @@ export const InventoryDisplay = () => {
   }
 
   return (
-    <Stack spacing={1}>
+    <Stack h='100%' maxH='100%' overflowY='auto' spacing={1}>
       {items.map(item =>
         <EntityListItem key={item.id} icon={<EntityIcon item={item}/>} label={getLabel(item)} buttons={getButtons(item)}/>
       )}

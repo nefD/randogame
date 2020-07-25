@@ -14,6 +14,7 @@ export interface ResourceNodeDef {
   type: NODE_KEYS;
   requiresTool?: ItemKey;
   yieldsItem: ItemKey;
+  yieldBaseChance?: number;
   remainingResources: number;
 }
 export const ResourceNodeDefs: { [key in NODE_KEYS]: ResourceNodeDef} = {
@@ -22,6 +23,7 @@ export const ResourceNodeDefs: { [key in NODE_KEYS]: ResourceNodeDef} = {
     type: NODE_KEYS.Tree,
     requiresTool: ITEM_KEYS.WoodAxe,
     yieldsItem: ITEM_KEYS.Wood,
+    yieldBaseChance: 30,
     remainingResources: 6,
   },
 };

@@ -38,6 +38,7 @@ import { ItemFactory } from 'models/item';
 import { useColorMode, ChakraProvider, CSSReset, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel, Button } from '@chakra-ui/core';
 import { Card } from 'components/card';
 import { MapNavigation } from 'features/map/mapNavigation';
+import {Resizable} from "re-resizable";
 // import Button from 'chakra/components/button';
 
 function App() {
@@ -117,35 +118,38 @@ function App() {
             {mainDisplay}
           </Box>
 
-          <Card>
-            <Tabs variant="line">
-              <TabList>
-                <Tab>Messages</Tab>
-                <Tab>Inventory</Tab>
-                <Tab>Equipment</Tab>
-                <Tab>Skills</Tab>
-              </TabList>
+          {/*<Box>*/}
+          {/*<Resizable>*/}
+            <Card>
+              <Tabs variant="line" flex='1'>
+                <TabList>
+                  <Tab>Messages</Tab>
+                  <Tab>Inventory</Tab>
+                  <Tab>Equipment</Tab>
+                  <Tab>Skills</Tab>
+                </TabList>
 
-              <TabPanels>
-                <TabPanel>
-                  <MessagesDisplay/>
-                </TabPanel>
+                <TabPanels>
+                  <TabPanel>
+                    <MessagesDisplay/>
+                  </TabPanel>
 
-                <TabPanel>
-                  <InventoryDisplay/>
-                </TabPanel>
+                  <TabPanel>
+                    <InventoryDisplay/>
+                  </TabPanel>
 
-                <TabPanel>
-                  <Equipment/>
-                </TabPanel>
+                  <TabPanel>
+                    <Equipment/>
+                  </TabPanel>
 
-                <TabPanel>
-                  <Skills/>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Card>
-
+                  <TabPanel>
+                    <Skills/>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Card>
+          {/*</Resizable>*/}
+          {/*</Box>*/}
         </Stack>
       </Flex>
     </Box>

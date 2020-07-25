@@ -23,10 +23,10 @@ export function MessagesDisplay() {
         <Button onClick={() => dispatch(clearMessages())}>Clear</Button>
       </Flex>
 
-      <Flex direction="column-reverse" h="20vh" overflowY="auto">
+      <Flex direction="column-reverse" overflowY="auto">
         <Stack spacing={1}>
           {messages.map((message, i) =>
-            <Flex key={i}>
+            <Flex key={i} direction='row'>
               {message.timestamp &&
                 <Box marginRight={2}>{`[${message.timestamp}] `}</Box>
               }
