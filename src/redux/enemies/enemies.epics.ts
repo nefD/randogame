@@ -24,17 +24,14 @@ import { rollLootTables } from 'redux/items/items.slice';
 
 export const enemyAttacked$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(enemyAttacked.match),
-  map((action) => {
-    const health = Math.max(0, action.payload.enemy.health - action.payload.damage);
-    if (health <= 0) {
-      return enemyKilled(action.payload.enemy);
-    }
-    return enemyUpdated({
-      ...action.payload.enemy,
-      health: action.payload.enemy.health - action.payload.damage,
-    });
-  }),
-);
+  map(({ payload: { enemy, damage } }) =>
+    (Math.max(0, enemy.health - damage) <= 0)
+      ? enemyKilled(enemy)
+      : enemyUpdated({
+        ...enemy,
+        health: enemy.health - damage,
+      }),
+  ));
 
 export const enemyKilled$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(enemyKilled.match),
@@ -42,13 +39,13 @@ export const enemyKilled$: Epic<Action, Action, RootState> = (actions$, state$) 
     state$.pipe(select(getCurrentMapId)),
     state$.pipe(select(getPlayerMapPos)),
   ),
-  mergeMap(([action, mapId, playerPos]) => {
+  mergeMap(([{ payload: enemy }, mapId, playerPos]) => {
     const actions: Action[] = [
       combatCompleted(),
-      removeEnemyFromMapCell(mapId, playerPos.x, playerPos.y, action.payload),
-      enemyDeleted(action.payload.id),
+      removeEnemyFromMapCell(mapId, playerPos.x, playerPos.y, enemy),
+      enemyDeleted(enemy.id),
     ];
-    if (action.payload.lootTables.length) actions.push(rollLootTables(action.payload.lootTables));
+    if (enemy.lootTables.length) actions.push(rollLootTables(enemy.lootTables));
     return actions;
   }),
 );

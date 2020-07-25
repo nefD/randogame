@@ -9,7 +9,7 @@ import {
   itemCreated,
   rollLootTables,
 } from 'redux/items/items.slice';
-import { LootTables } from 'data/loot.consts';
+import {LootTableKey, LootTables} from 'data/loot.consts';
 import { rng } from 'utilities/random.utilities';
 import { ItemDefs } from 'data/item.consts';
 import {
@@ -17,20 +17,18 @@ import {
 } from 'redux/character/character.slice';
 import { ItemFactory } from 'models/item';
 
-export const rollLootTables$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+export const rollLootTables$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(rollLootTables.match),
-  mergeMap((action) => {
-    const actions: Action[] = [];
-
-    action.payload.forEach(key => {
-      LootTables[key].items.forEach(lootItem => {
-        if (rng(100) <= lootItem.chance) {
-          const item = ItemFactory(ItemDefs[lootItem.itemDef]);
-          actions.push(itemCreated(item));
-          actions.push(addToInventory(item));
-        }
-      });
+  mergeMap(({ payload: lootTableKeys }) => lootTableKeys.reduce((actions: Action[], tableKey: LootTableKey) => {
+    LootTables[tableKey].items.forEach(lootItem => {
+      if (rng(100) <= lootItem.chance) {
+        const item = ItemFactory(ItemDefs[lootItem.itemDef]);
+        actions.push(
+          itemCreated(item),
+          addToInventory(item)
+        );
+      }
     });
     return actions;
-  }),
+  }, [])),
 );

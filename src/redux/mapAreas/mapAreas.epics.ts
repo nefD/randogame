@@ -53,7 +53,7 @@ import { ItemFactory } from 'models/item';
 
 export const playerMoved$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMoved.match),
-  map((action) => spawnMapCell()),
+  map(() => spawnMapCell()),
 );
 
 export const spawnMapCell$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -64,36 +64,40 @@ export const spawnMapCell$: Epic<Action, Action, RootState> = (actions$, state$)
     state$.pipe(select(getItemsAtPlayerPos)),
     state$.pipe(select(getResourceNodesAtPlayerPos)),
   ),
-  mergeMap(([action, mapArea, playerLoc, cellItems, resourceNodes]) => {
+  filter(([, mapArea]) => !!mapArea),
+  mergeMap(([, mapArea, playerLoc, cellItems, resourceNodes]) => {
     const actions: Action[] = [];
-    const cellType = mapArea?.cellTypes[fromXY(playerLoc.coords.x, playerLoc.coords.y, mapArea.width)];
-    if (mapArea && cellType) {
-      const resourceDefs = AreaCellResourceDefs[cellType] || [];
-      resourceDefs.forEach(resourceDef => {
-
-        if (resourceDef.itemKey) {
-          if (cellItems.filter(i => i.key === resourceDef.itemKey).length >= resourceDef.max) return;
-          if (rng(100) < resourceDef.chance) {
-            const item = ItemFactory(ItemDefs[resourceDef.itemKey]);
-            actions.push(itemCreated(item));
-            actions.push(addItemToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, item));
-          }
+    const cellType = mapArea!.cellTypes[fromXY(playerLoc.coords.x, playerLoc.coords.y, mapArea!.width)];
+    const resourceDefs = AreaCellResourceDefs[cellType] || [];
+    resourceDefs.forEach(resourceDef => {
+      if (resourceDef.itemKey && cellItems.filter(i => i.key === resourceDef.itemKey).length < resourceDef.max) {
+        if (rng(100) < resourceDef.chance) {
+          const item = ItemFactory(ItemDefs[resourceDef.itemKey]);
+          actions.push(
+            itemCreated(item),
+            addItemToMapCell(mapArea!.id, playerLoc.coords.x, playerLoc.coords.y, item)
+          );
         }
+      }
 
-        if (resourceDef.nodeKey) {
-          if (resourceNodes.filter(n => n.key === resourceDef.nodeKey).length >= resourceDef.max) return;
-          if (rng(100) < resourceDef.chance) {
-            const node = ResourceNodeFactory(ResourceNodeDefs.Tree);
-            actions.push(addResourceNodeToMapCell(mapArea.id, playerLoc.coords.x, playerLoc.coords.y, node));
-          }
+      if (resourceDef.nodeKey && resourceNodes.filter(n => n.key === resourceDef.nodeKey).length < resourceDef.max) {
+        if (rng(100) < resourceDef.chance) {
+          actions.push(addResourceNodeToMapCell(
+            mapArea!.id,
+            playerLoc.coords.x,
+            playerLoc.coords.y,
+            ResourceNodeFactory(ResourceNodeDefs.Tree),
+          ));
         }
-      });
-    }
+      }
+    });
+
     return actions;
   }),
 )
 
-export const generateMap$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+// Mostly temporary, just here to generate a scenario which makes testing easy
+export const generateMap$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(generateMap.match),
   mergeMap(() => {
     let actions: Action[] = [];
@@ -113,8 +117,6 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$, state$) 
       itemCreated(item),
       enemyCreated(enemy),
       mapAreaUpdated(mapArea),
-      // areaCellsAdded(cells),
-
       playerMoved(MapLocationFactory(mapArea.id, playerX, playerY)),
     );
 

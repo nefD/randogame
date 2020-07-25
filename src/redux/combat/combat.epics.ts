@@ -26,12 +26,12 @@ import {
   select,
 } from 'utilities/redux.utilities';
 
-export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(combatPlayerFleeing.match),
   map(() => playerExitCombat()),
 );
 
-export const combatCompleted$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+export const combatCompleted$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(combatCompleted.match),
   map(() => playerExitCombat()),
 );
@@ -39,11 +39,10 @@ export const combatCompleted$: Epic<Action, Action, RootState> = (actions$, stat
 export const combatPlayerAttacking$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(combatPlayerAttacking.match),
   withLatestFrom(
-    state$.pipe(select(getCharacterObject)),
     state$.pipe(select(getPlayerCombatEnemy))
   ),
-  filter(([,, enemy]) => !!enemy),
-  mergeMap(([, character, enemy]) => [
+  filter(([, enemy]) => !!enemy),
+  mergeMap(([, enemy]) => [
     enemyAttacked(enemy!, 2),
     combatEnemyAttacking(),
   ]),
@@ -52,13 +51,8 @@ export const combatPlayerAttacking$: Epic<Action, Action, RootState> = (actions$
 export const combatEnemyAttacking$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(combatEnemyAttacking.match),
   withLatestFrom(
-    state$.pipe(select(getCharacterObject)),
     state$.pipe(select(getPlayerCombatEnemy))
   ),
-  filter(([,,enemy]) => !!enemy && enemy.health > 0),
-  map(([, character, enemy]) => {
-    console.log(`combatEnemyAttacking$`);
-    // return NullAction();
-    return playerAttacked(enemy!, 1);
-  })
+  filter(([,enemy]) => !!enemy && enemy.health > 0),
+  map(([, enemy]) => playerAttacked(enemy!, 1)),
 );

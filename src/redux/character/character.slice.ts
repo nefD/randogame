@@ -59,7 +59,7 @@ const initialState: CharacterState = {
   gold: 100,
   skills: [],
   stats: StatsFactory({
-    health: 5, healthMax: 20,
+    health: 20, healthMax: 20,
     hunger: 100, hungerMax: 100,
     mana: 10, manaMax: 10,
     attack: 4,
