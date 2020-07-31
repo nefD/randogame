@@ -25,7 +25,7 @@ export function Equipment() {
     let buttonContent;
     const item = equipment[slotKey];
     if (item) {
-      itemContent = <Box color='white'>{item.name}</Box>;
+      itemContent = <Box>{item.name}</Box>;
       buttonContent = <Button onClick={() => dispatch(playerUnequippedItem(item))}>Remove</Button>;
     }
     return (

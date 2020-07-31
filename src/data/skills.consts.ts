@@ -1,27 +1,24 @@
-import React from 'react';
+import {Skill} from "models/character/skill";
 
-export enum SKILL_KEYS {
+export enum SKILL_KEY {
   Empty = 'Empty',
-  Woodcutting = 'Woodcutting'
+  Daggers = 'Daggers',
+  Woodcutting = 'Woodcutting',
 }
 
-export type SkillKey = keyof typeof SKILL_KEYS;
+export type SkillKey = keyof typeof SKILL_KEY;
 
-export interface SkillDefinition {
-  key: SkillKey;
-  name: string;
-  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  iconClass?: string;
-  description?: string;
-}
-
-export const SkillDefs: { [key in SKILL_KEYS]: SkillDefinition } = {
-  [SKILL_KEYS.Empty]: {
-    key: SKILL_KEYS.Empty,
-    name: 'Empty',
+export const SkillDefs: { [key in SKILL_KEY]: Skill } = {
+  [SKILL_KEY.Empty]: {
+    key: SKILL_KEY.Empty,
+    name: 'Empty Skill',
   },
-  [SKILL_KEYS.Woodcutting]: {
-    key: SKILL_KEYS.Woodcutting,
+  [SKILL_KEY.Daggers]: {
+    key: SKILL_KEY.Daggers,
+    name: 'Daggers & Knives',
+  },
+  [SKILL_KEY.Woodcutting]: {
+    key: SKILL_KEY.Woodcutting,
     name: 'Woodcutting',
   }
 };

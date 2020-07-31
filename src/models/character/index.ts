@@ -1,29 +1,10 @@
-import {
-  SKILL_KEYS,
-  SkillKey,
-} from 'data/skills.consts';
-import { Item } from 'models/item';
+import {Item} from 'models/item';
 
 export enum CharacterGameState {
   Travel,
   Combat,
   Facility,
 }
-
-export interface CharacterSkill {
-  skillKey: SkillKey;
-  level: number;
-  points: number;
-  pointsToLevel: number;
-}
-
-export const CharacterSkillFactory = (config?: Partial<CharacterSkill>): CharacterSkill => ({
-  skillKey: SKILL_KEYS.Empty,
-  level: 0,
-  points: 0,
-  pointsToLevel: 10,
-  ...config,
-});
 
 export enum EquipmentSlots {
   Head = 'Head',

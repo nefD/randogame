@@ -151,19 +151,41 @@
     }
 }
 
-.cellWater {
+.cellIcon.icon-waves,.cellWater {
     color: #4679c2;
     background-color: #4679c266;
-    &.cellIcon > * {
-        display: inline-block;
-        transform-origin: 50% 50%;
-        animation: waterSway 2s infinite alternate ease-in-out;
+    &.cellIcon {
+        > * {
+            //display: inline-block;
+            color: #4679c2;
+            //fill: #4679c2;
+            width: 100%;
+            height: 100%;
+            transform-origin: 50% 50%;
+            animation: waterSway 2s infinite alternate ease-in-out;
+        }
+        .waves0__stop0 {
+            stop-color: #6f9ad6;
+            stop-opacity: 1;
+        }
+        .waves0__stop1 {
+            stop-color: #6f9ad6;
+            stop-opacity: 0;
+        }
+        .waves1__stop0 {
+            stop-color: #316ab0;
+            stop-opacity: 1;
+        }
+        .waves1__stop1 {
+            stop-color: #316ab0;
+            stop-opacity: 0;
+        }
     }
 }
 @keyframes waterSway {
-    0% { transform: skewY(-10deg) translateY(-2px); }
-    50% { transform: translateY(2px)}
-    100% { transform: skewY(10deg) translateY(-2px) }
+    0% { transform: skewY(-10deg) translateY(-2px); opacity: 0.5; }
+    50% { transform: translateY(2px); opacity: 1.0; }
+    100% { transform: skewY(10deg) translateY(-2px); opacity: 0.5; }
 }
 
 .cellEmpty {

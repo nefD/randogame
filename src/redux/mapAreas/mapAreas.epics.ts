@@ -102,8 +102,8 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$) => actio
   mergeMap(() => {
     let actions: Action[] = [];
 
-    const mapWidth = 10;
-    const mapHeight = 10;
+    const mapWidth = 20;
+    const mapHeight = 20;
     const playerX = Math.floor(mapWidth / 2);
     const playerY = Math.floor(mapHeight / 2);
     const mapArea = generateMapArea(mapWidth, mapHeight);

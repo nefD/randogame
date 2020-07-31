@@ -16,4 +16,7 @@ export { ReactComponent as IconGold } from 'icons/two-coins.svg';
 export { ReactComponent as IconHealth } from 'icons/hearts.svg';
 export { ReactComponent as IconMana } from 'icons/round-star.svg';
 export { ReactComponent as IconHunger } from 'icons/eating.svg';
-
+export { ReactComponent as IconDagger } from 'icons/plain-dagger.svg';
+export { ReactComponent as IconWaves } from 'icons/waves.svg';
+export { ReactComponent as IconBigWave } from 'icons/big-wave.svg';
+export { ReactComponent as IconCube } from 'icons/cube.svg';

@@ -1,20 +1,22 @@
 import React from 'react';
 import * as icons from 'data/icons.consts';
-import { EquipmentSlots } from 'models/character';
-import { Item } from 'models/item';
-import { STATS } from 'models/character/stats';
-import { EffectType } from 'models/character/effects';
+import {EquipmentSlots} from 'models/character';
+import {Item} from 'models/item';
+import {STATS} from 'models/character/stats';
+import {EffectType} from 'models/character/effects';
+import {SKILL_KEY} from "data/skills.consts";
 
 export enum ITEM_KEYS {
+  Dagger = 'Dagger',
   Empty = 'Empty',
-  TestItem = 'TestItem',
-  Sand = 'Sand',
-  Stick = 'Stick',
-  Plant = 'Plant',
-  WoodAxe = 'WoodAxe',
-  Wood = 'Wood',
   Hat = 'Hat',
   HealingPotion = 'HealingPotion',
+  Plant = 'Plant',
+  Sand = 'Sand',
+  Stick = 'Stick',
+  TestItem = 'TestItem',
+  Wood = 'Wood',
+  WoodAxe = 'WoodAxe',
 }
 
 export type ItemKey = keyof typeof ITEM_KEYS;
@@ -110,5 +112,18 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
         ],
       },
     },
-  }
+  },
+  [ITEM_KEYS.Dagger]: {
+    icon: icons.IconDagger,
+    iconClass: 'dagger',
+    config: {
+      key: ITEM_KEYS.Dagger,
+      name: 'Dagger',
+      equipProps: {
+        slotKey: EquipmentSlots.Weapon,
+        skillKey: SKILL_KEY.Daggers,
+        damage: 3,
+      },
+    },
+  },
 };

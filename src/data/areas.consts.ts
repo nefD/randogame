@@ -9,7 +9,7 @@ import {
   IconForest, IconInn,
   IconMountain,
   IconPlains, IconShop, IconTavern,
-  IconTown,
+  IconTown, IconWaves,
 } from 'data/icons.consts';
 
 export enum AREA_CELL_TYPES {
@@ -42,6 +42,15 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
     content: '~',
     cssClass: 'cellEmpty',
     name: 'Water',
+    icon: IconWaves,
+    iconClass: 'icon-waves',
+  },
+  [AREA_CELL_TYPES.Water]: {
+    content: '~',
+    cssClass: 'cellWater',
+    name: 'Water',
+    icon: IconWaves,
+    iconClass: 'icon-waves',
   },
   [AREA_CELL_TYPES.Plains]: {
     content: 'P',
@@ -75,11 +84,6 @@ export const AreaCellDisplayDefs: Record<AREA_CELL_TYPES, CellDisplayDefinition>
     name: 'Mountain',
     icon: IconMountain,
     iconClass: 'icon-mountain',
-  },
-  [AREA_CELL_TYPES.Water]: {
-    content: '~',
-    cssClass: 'cellWater',
-    name: 'Water',
   },
   [AREA_CELL_TYPES.Town]: {
     content: '$',

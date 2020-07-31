@@ -23,5 +23,6 @@ export function EntityIcon({ item, resourceNode, facility}: EntityIconProps) {
   } else if (facility) {
     icon = FacilityIcons[facility.type];
   }
-  return icon ? <Icon icon={icon} /> : null;
+  // return icon ? <Icon icon={icon} /> : null;
+  return <Icon icon={icon} />
 }

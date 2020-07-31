@@ -15,6 +15,7 @@ import {
 } from 'data/item.consts';
 import { itemCreated } from 'redux/items/items.slice';
 import {
+  addAbility,
   inventoryAdded,
 
 } from 'redux/character/character.slice';
@@ -39,6 +40,8 @@ import { useColorMode, ChakraProvider, CSSReset, Flex, Box, Stack, Tabs, TabList
 import { Card } from 'components/card';
 import { MapNavigation } from 'features/map/mapNavigation';
 import {Resizable} from "re-resizable";
+import {ABILITY_KEY} from "data/abilities.consts";
+import { Abilities } from "features/abilities/abilities";
 // import Button from 'chakra/components/button';
 
 function App() {
@@ -62,6 +65,12 @@ function App() {
     const potion = ItemFactory(ItemDefs[ITEM_KEYS.HealingPotion].config);
     dispatch(itemCreated(potion));
     dispatch(inventoryAdded(potion));
+
+    const dagger = ItemFactory(ItemDefs[ITEM_KEYS.Dagger].config);
+    dispatch(itemCreated(dagger));
+    dispatch(inventoryAdded(dagger));
+
+    dispatch(addAbility(ABILITY_KEY.Puncture));
   }
 
   let mainDisplay;
@@ -127,6 +136,7 @@ function App() {
                   <Tab>Inventory</Tab>
                   <Tab>Equipment</Tab>
                   <Tab>Skills</Tab>
+                  <Tab>Abilities</Tab>
                 </TabList>
 
                 <TabPanels>
@@ -144,6 +154,10 @@ function App() {
 
                   <TabPanel>
                     <Skills/>
+                  </TabPanel>
+
+                  <TabPanel>
+                    <Abilities/>
                   </TabPanel>
                 </TabPanels>
               </Tabs>

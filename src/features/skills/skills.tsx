@@ -6,13 +6,13 @@ import {
 import { getPlayerSkills } from 'redux/character/character.selectors';
 import { useSelector } from 'react-redux';
 import { SkillDefs } from 'data/skills.consts';
-import { CharacterSkill } from 'models/character';
+import {CharacterSkill} from "models/character/skill";
 
 const renderSkill = (playerSkill: CharacterSkill) => {
   const skill = SkillDefs[playerSkill.skillKey];
   return (
     <Flex key={playerSkill.skillKey}>
-      <Box>{skill.name} ({playerSkill.level}, points: {playerSkill.points}/{playerSkill.pointsToLevel})</Box>
+      <Box>{skill.name} (level: {playerSkill.level}, points: {playerSkill.points}/{playerSkill.pointsToLevel})</Box>
     </Flex>
   );
 };

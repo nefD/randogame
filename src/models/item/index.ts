@@ -11,6 +11,7 @@ import {
   Effect,
   EffectType,
 } from 'models/character/effects';
+import {SKILL_KEY} from "data/skills.consts";
 
 export interface UsableItemProperties {
   effects: Effect[],
@@ -29,6 +30,8 @@ export interface EquipmentBonus {
 export interface EquipmentItemProperties {
   slotKey: EquipSlotKey;
   bonuses?: EquipmentBonus[];
+  skillKey?: SKILL_KEY;
+  damage?: number;
 }
 
 export interface Item {

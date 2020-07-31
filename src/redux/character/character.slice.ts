@@ -6,15 +6,11 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { clamp } from 'utilities/math.utilities';
-import { SkillKey } from 'data/skills.consts';
+import { SKILL_KEY, SkillKey } from 'data/skills.consts';
 import {
   CharacterEquipment,
   CharacterEquipmentFactory,
   CharacterGameState,
-  CharacterSkill,
-  CharacterSkillFactory,
-
-
 } from 'models/character';
 import { MapLocation } from 'models/map';
 import { Enemy } from 'models/enemy';
@@ -26,6 +22,9 @@ import {
 } from 'models/character/stats';
 import { Effect } from 'models/character/effects';
 import {isStatKey} from "utilities/stats.utilities";
+import {CharacterSkill, CharacterSkillFactory} from "models/character/skill";
+import {AbilityKey} from "data/abilities.consts";
+import {uniqueArray} from "utilities/array.utilities";
 
 export interface CombatState {
   enemy: string;
@@ -40,6 +39,7 @@ export interface CharacterState {
   age: number;
   gold: number;
   skills: CharacterSkill[];
+  abilities: AbilityKey[];
   stats: Stats;
   location: MapLocation;
   equipment: CharacterEquipment;
@@ -57,7 +57,13 @@ const initialState: CharacterState = {
   xp: 0,
   age: 0,
   gold: 100,
-  skills: [],
+  skills: [
+    CharacterSkillFactory({
+      skillKey: SKILL_KEY.Daggers,
+      level: 2,
+    }),
+  ],
+  abilities: [],
   stats: StatsFactory({
     health: 20, healthMax: 20,
     hunger: 100, hungerMax: 100,
@@ -166,7 +172,10 @@ const characterSlice = createSlice({
         ...state.equipment,
         ...updatedEquipment,
       };
-    }
+    },
+    addAbility(state, action: PayloadAction<AbilityKey>) {
+      state.abilities = uniqueArray(state.abilities.concat(action.payload));
+    },
   },
 });
 
@@ -187,6 +196,7 @@ export const addSkillPoints = characterSlice.actions.addSkillPoints;
 export const updateSkill = characterSlice.actions.updateSkill;
 export const updateEquipment = characterSlice.actions.updateEquipment;
 export const playerStatsModified = characterSlice.actions.playerStatsModified;
+export const addAbility = characterSlice.actions.addAbility;
 
 export const playerMovingNorth = createAction('character/movingNorth');
 export const playerMovingEast = createAction('character/movingEast');

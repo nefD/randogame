@@ -29,13 +29,13 @@ import {
 import { ResourceNodeDefs } from 'data/resources.consts';
 import { ItemDefs } from 'data/item.consts';
 import {
-  SKILL_KEYS,
+  SKILL_KEY,
   SkillDefs,
 } from 'data/skills.consts';
-import { CharacterSkillFactory } from 'models/character';
 import { ItemFactory } from 'models/item';
 import { EffectType } from "models/character/effects";
 import { rng } from "utilities/random.utilities";
+import {CharacterSkillFactory} from "models/character/skill";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(characterActions.playerMovingNorth.match),
@@ -275,7 +275,7 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
       }
     }
 
-    actions.push(characterActions.playerSkillIncreased(SKILL_KEYS.Woodcutting, 1));
+    actions.push(characterActions.playerSkillIncreased(SKILL_KEY.Woodcutting, 1));
     return actions;
   }),
 );
