@@ -41,7 +41,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     },
   },
   [ITEM_KEYS.Sand]: {
-    icon: icons.IconSand,
+    icon: icons.IconPowder,
     iconClass: 'sand',
     config: {
       key: ITEM_KEYS.Sand,

@@ -1,4 +1,5 @@
 import {Skill} from "models/character/skill";
+import { IconDagger } from "data/icons.consts";
 
 export enum SKILL_KEY {
   Empty = 'Empty',
@@ -16,6 +17,7 @@ export const SkillDefs: { [key in SKILL_KEY]: Skill } = {
   [SKILL_KEY.Daggers]: {
     key: SKILL_KEY.Daggers,
     name: 'Daggers & Knives',
+    icon: IconDagger,
   },
   [SKILL_KEY.Woodcutting]: {
     key: SKILL_KEY.Woodcutting,

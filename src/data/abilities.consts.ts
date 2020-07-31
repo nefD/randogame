@@ -1,5 +1,6 @@
 import { Ability, ABILITY_TARGET } from "models/character/ability";
 import { SKILL_KEY } from "data/skills.consts";
+import { IconFlyingDagger } from "data/icons.consts";
 
 export enum ABILITY_KEY {
   Empty = 'Empty',
@@ -24,6 +25,7 @@ export const AbilityDefs: { [key in ABILITY_KEY]: Ability } = {
     key: ABILITY_KEY.Puncture,
     name: 'Pierce',
     skillKey: SKILL_KEY.Daggers,
+    icon: IconFlyingDagger,
     isSpell: false,
     usableInCombat: true,
     usableOutsideCombat: false,

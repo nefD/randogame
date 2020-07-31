@@ -137,7 +137,7 @@ export const dropItemFromInventory$: Epic<Action, Action, RootState> = (actions$
 );
 
 export const playerAttacked$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
-  filter(characterActions.playerAttacked.match),
+  filter(characterActions.playerWasAttacked.match),
   map((action) => characterActions.playerTakingDamage(action.payload.damage)),
 );
 

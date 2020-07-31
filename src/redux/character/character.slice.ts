@@ -205,7 +205,7 @@ export const playerMovingWest = createAction('character/movingWest');
 export const pickUpItemFromCurrentMapCell = createAction<Item>('character/pickUpItemFromCurrentMapCell');
 export const addToInventory = createAction<Item>('character/addToInventory');
 export const dropItemFromInventory = createAction<Item>('character/dropItemFromInventory');
-export const playerAttacked = createAction(
+export const playerWasAttacked = createAction(
   'character/playerAttacked',
   (enemy: Enemy, damage: number) => ({ payload: { enemy, damage }}),
 );

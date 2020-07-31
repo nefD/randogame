@@ -1,5 +1,5 @@
 export { ReactComponent as IconWood } from 'icons/log.svg';
-export { ReactComponent as IconSand } from 'icons/sand.svg';
+export { ReactComponent as IconPowder } from 'icons/powder.svg';
 export { ReactComponent as IconStick } from 'icons/wood-stick.svg';
 export { ReactComponent as IconPlant } from 'icons/zigzag-leaf.svg';
 export { ReactComponent as IconWoodAxe } from 'icons/axe-in-log.svg';
@@ -20,3 +20,4 @@ export { ReactComponent as IconDagger } from 'icons/plain-dagger.svg';
 export { ReactComponent as IconWaves } from 'icons/waves.svg';
 export { ReactComponent as IconBigWave } from 'icons/big-wave.svg';
 export { ReactComponent as IconCube } from 'icons/cube.svg';
+export { ReactComponent as IconFlyingDagger } from 'icons/flying-dagger.svg';

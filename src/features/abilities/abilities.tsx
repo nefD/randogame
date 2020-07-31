@@ -1,15 +1,17 @@
 import React from 'react';
 import { getPlayerAbilities } from "redux/character/character.selectors";
 import { useSelector } from "react-redux";
-import { Box, Flex } from '@chakra-ui/core';
+import { Box, Flex, Stack } from '@chakra-ui/core';
 import { AbilityDefs, AbilityKey } from "data/abilities.consts";
+import { EntityIcon } from "features/common/entityIcon/entityIcon";
 
 const renderAbility = (abilityKey: AbilityKey) => {
   const ability = AbilityDefs[abilityKey];
   return (
-    <Flex key={ability.key}>
-      <Box>{ability.name}</Box>
-    </Flex>
+    <Stack spacing={4} direction='row' align='center' key={ability.key}>
+      <EntityIcon ability={ability}/>
+      <Box flex='1'>{ability.name}</Box>
+    </Stack>
   );
 }
 

@@ -2,7 +2,7 @@ import { Epic } from 'redux-observable';
 import { Action } from 'redux';
 import { RootState } from 'app/rootReducer';
 import {
-  enemyAttacked,
+  enemyWasAttacked,
   enemyDeleted,
   enemyKilled,
   enemyUpdated,
@@ -23,7 +23,7 @@ import { select } from 'utilities/redux.utilities';
 import { rollLootTables } from 'redux/items/items.slice';
 
 export const enemyAttacked$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
-  filter(enemyAttacked.match),
+  filter(enemyWasAttacked.match),
   map(({ payload: { enemy, damage } }) =>
     (Math.max(0, enemy.health - damage) <= 0)
       ? enemyKilled(enemy)

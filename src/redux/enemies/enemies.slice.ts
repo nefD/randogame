@@ -22,7 +22,7 @@ const enemiesSlice = createSlice({
 export const enemyCreated = enemiesSlice.actions.enemyCreated;
 export const enemyUpdated = enemiesSlice.actions.enemyUpdated;
 export const enemyDeleted = enemiesSlice.actions.enemyDeleted;
-export const enemyAttacked = createAction(
+export const enemyWasAttacked = createAction(
   'enemy/enemyAttacked',
   (enemy: Enemy, damage: number) => ({ payload: { enemy, damage }}),
 );

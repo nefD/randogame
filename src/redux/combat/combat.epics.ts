@@ -15,21 +15,22 @@ import {
   combatUseAbility,
 } from 'redux/combat/combat.actions';
 import {
-  playerAttacked,
-  playerExitCombat,
+  playerWasAttacked,
+  playerExitCombat, playerSkillIncreased,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject, getPlayerAbilities,
   getPlayerCombatEnemy, getPlayerEquipment, getPlayerSkills, getPlayerStats, getPlayerWeapon,
 } from 'redux/character/character.selectors';
-import { enemyAttacked } from 'redux/enemies/enemies.slice';
+import { enemyWasAttacked } from 'redux/enemies/enemies.slice';
 import {
   NullAction,
   select,
 } from 'utilities/redux.utilities';
 import { AbilityDefs, AbilityKey } from "data/abilities.consts";
-import { CharacterSkill } from "models/character/skill";
+import { CharacterSkill, CharacterSkillFactory } from "models/character/skill";
 import { log } from "util";
+import * as characterSelectors from "redux/character/character.selectors";
 
 export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(combatPlayerFleeing.match),
@@ -44,13 +45,23 @@ export const combatCompleted$: Epic<Action, Action, RootState> = (actions$) => a
 export const combatPlayerAttacking$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(combatPlayerAttacking.match),
   withLatestFrom(
-    state$.pipe(select(getPlayerCombatEnemy))
+    state$.pipe(select(getPlayerCombatEnemy)),
+    state$.pipe(select(getPlayerWeapon)),
+    state$.pipe(select(characterSelectors.getPlayerSkills)),
   ),
   filter(([, enemy]) => !!enemy),
-  mergeMap(([, enemy]) => [
-    enemyAttacked(enemy!, 2),
-    combatEnemyAttacking(),
-  ]),
+  mergeMap(([, enemy, weapon, skills]) => {
+    const actions: Action[] = [
+      enemyWasAttacked(enemy!, 2),
+      combatEnemyAttacking(),
+    ];
+
+    if (weapon && weapon.equipProps!.skillKey) {
+      actions.push(playerSkillIncreased(weapon.equipProps!.skillKey, 1));
+    }
+
+    return actions;
+  }),
 );
 
 export const combatEnemyAttacking$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -59,7 +70,7 @@ export const combatEnemyAttacking$: Epic<Action, Action, RootState> = (actions$,
     state$.pipe(select(getPlayerCombatEnemy))
   ),
   filter(([,enemy]) => !!enemy && enemy.health > 0),
-  map(([, enemy]) => playerAttacked(enemy!, 1)),
+  map(([, enemy]) => playerWasAttacked(enemy!, 1)),
 );
 
 export const combatUseAbility$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -91,27 +102,20 @@ export const combatUseAbility$: Epic<Action, Action, RootState> = (actions$, sta
 
     if (ability.damageProps) {
       let damage = 0;
-      let baseDamage = 0;
+      let baseDamage = ability.damageProps.baseDamage || 0;
       let skillMultiDamage = 0;
       let weaponMultiDamage = 0;
 
-      // damage += ability.damageProps.baseDamage || 0;
-      console.log(`base damage: ${baseDamage}`);
-
       if (ability.damageProps.skillMultiDamage && relatedSkill) {
         skillMultiDamage = relatedSkill.level * ability.damageProps.skillMultiDamage;
-        console.log(`skill multiplier damage: ${skillMultiDamage}`);
       }
 
       if (ability.damageProps.weaponMultiDamage && weapon) {
         weaponMultiDamage = (weapon.equipProps!.damage || 0) * ability.damageProps.weaponMultiDamage;
-        console.log(`weapon multiplier damage: ${weaponMultiDamage}`);
       }
 
       damage += baseDamage + skillMultiDamage + weaponMultiDamage;
-      console.log(`final damage: ${damage}`);
-
-      actions.push(enemyAttacked(enemy!, damage));
+      actions.push(enemyWasAttacked(enemy!, damage));
     }
 
     return actions.concat(combatEnemyAttacking());
