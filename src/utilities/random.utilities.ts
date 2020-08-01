@@ -3,10 +3,17 @@ import { v4 as uuidv4 } from 'uuid';
 export const uuid = uuidv4;
 
 /**
- * Returns a random number between 0 and outOf (non-inclusive)
+ * Returns a random float between 0 and outOf (non-inclusive)
  * @param outOf
  */
 export const rng = (outOf = 1) => Math.floor(Math.random() * outOf);
+
+/**
+ * Returns a random float between from and to (inclusive)
+ * @param from
+ * @param to
+ */
+export const between = (from: number, to: number) => rng(to - from) + 1 + (from - 1);
 
 export const randomKeyFromObj = (obj: Object) => {
   const keys = Object.keys(obj);

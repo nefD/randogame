@@ -11,6 +11,7 @@ import {
   Progress,
   SimpleGrid,
   Stack,
+  useColorModeValue,
 } from '@chakra-ui/core';
 import {
   getCharacterObject,
@@ -39,7 +40,7 @@ export const CombatDisplay = () => {
   };
 
   return (
-    <Stack className="combatContainer" p={2}>
+    <Stack className='combatContainer' p={2}>
       <Box>
         {enemy?.name}
         {enemyHealthBar}
@@ -64,10 +65,10 @@ export const CombatDisplay = () => {
           </SimpleGrid>
         )}
         {showAbilities && (
-          <Box>
+          <Stack spacing={4}>
             <CombatAbilities onUseAbility={useAbility}/>
             <Button onClick={() => setShowAbilities(false)}>Cancel</Button>
-          </Box>
+          </Stack>
         )}
       </Box>
     </Stack>

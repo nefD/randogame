@@ -10,7 +10,7 @@ const styleConfig = {
   baseStyle: (args: any) => ({
     bg: args.colorMode === 'dark' ? 'gray.700' : 'gray.50',
     border: '1px',
-    borderColor: args.colorMode === 'dark' ? 'gray.500' : 'gray.200',
+    borderColor: args.colorMode === 'dark' ? 'gray.500' : 'gray.300',
     padding: 2,
   }),
 

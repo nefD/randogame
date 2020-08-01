@@ -122,7 +122,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
       equipProps: {
         slotKey: EquipmentSlots.Weapon,
         skillKey: SKILL_KEY.Daggers,
-        damage: 3,
+        damage: 4,
       },
     },
   },

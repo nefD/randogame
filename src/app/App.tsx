@@ -83,7 +83,9 @@ function App() {
     }
     case CharacterGameState.Combat: {
       mainDisplay = (
-        <Flex direction="row"><Box flex="1"><CombatDisplay /></Box></Flex>
+        <Card>
+          <Flex direction="row"><Box flex="1"><CombatDisplay /></Box></Flex>
+        </Card>
       );
       break;
     }
@@ -129,6 +131,7 @@ function App() {
 
           {/*<Box>*/}
           {/*<Resizable>*/}
+          {playerGameState !== CharacterGameState.Combat &&
             <Card>
               <Tabs variant="line" flex='1'>
                 <TabList>
@@ -162,6 +165,7 @@ function App() {
                 </TabPanels>
               </Tabs>
             </Card>
+          }
           {/*</Resizable>*/}
           {/*</Box>*/}
         </Stack>

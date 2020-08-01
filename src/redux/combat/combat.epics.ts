@@ -31,6 +31,8 @@ import { AbilityDefs, AbilityKey } from "data/abilities.consts";
 import { CharacterSkill, CharacterSkillFactory } from "models/character/skill";
 import { log } from "util";
 import * as characterSelectors from "redux/character/character.selectors";
+import { between } from "utilities/random.utilities";
+import { rollWeaponDamage } from "utilities/item.utilities";
 
 export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(combatPlayerFleeing.match),
@@ -49,17 +51,16 @@ export const combatPlayerAttacking$: Epic<Action, Action, RootState> = (actions$
     state$.pipe(select(getPlayerWeapon)),
     state$.pipe(select(characterSelectors.getPlayerSkills)),
   ),
-  filter(([, enemy]) => !!enemy),
+  filter(([, enemy, weapon]) => !!(enemy && weapon!.equipProps!.damage)),
   mergeMap(([, enemy, weapon, skills]) => {
+    const damage = rollWeaponDamage(weapon);
     const actions: Action[] = [
-      enemyWasAttacked(enemy!, 2),
+      enemyWasAttacked(enemy!, damage),
       combatEnemyAttacking(),
     ];
-
     if (weapon && weapon.equipProps!.skillKey) {
       actions.push(playerSkillIncreased(weapon.equipProps!.skillKey, 1));
     }
-
     return actions;
   }),
 );
