@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import 'app/App.scss';
 import {
   useDispatch,
@@ -20,6 +20,7 @@ import { useColorMode, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel
 import { ITEM_KEYS } from "data/item.keys";
 import { WorldView } from "features/worldView/worldView";
 import { CharacterView } from "features/characterView/characterView";
+
 
 function App() {
   const dispatch = useDispatch();

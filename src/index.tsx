@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 // import theme from "@chakra-ui/theme"
@@ -10,6 +10,22 @@ import store from './app/store';
 
 import 'index.scss';
 import MyTheme from 'mytheme';
+import { useLocalStorage, writeStorage } from '@rehooks/local-storage';
+import { Message } from "models/messages";
+
+const gameMessagesContextDefault = [[] as Message[], (newValue: Message[]) => {}, () => {}];
+const GameMessagesContext = React.createContext(gameMessagesContextDefault);
+
+export const GameMessagesProvider = (props: React.PropsWithChildren<{}>) => {
+  const ctxValue = useLocalStorage('gameMessages', [] as Message[]);
+  return (
+    <GameMessagesContext.Provider value={ctxValue}>
+      {props.children}
+    </GameMessagesContext.Provider>
+  )
+};
+
+export const useGameMessages = () => useContext(GameMessagesContext);
 
 const render = () => {
   const App = require('./app/App').default;
@@ -18,7 +34,9 @@ const render = () => {
     <Provider store={store}>
       <ChakraProvider theme={MyTheme}>
         <CSSReset />
-        <App />
+        <GameMessagesProvider>
+          <App />
+        </GameMessagesProvider>
       </ChakraProvider>
     </Provider>,
     document.getElementById('root'),

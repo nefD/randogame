@@ -20,7 +20,6 @@ import {
   addItemToShop,
 } from 'redux/mapAreas/mapAreas.slice';
 import { FACILITY_TYPE } from 'data/areas.consts';
-import { addMessage } from 'redux/messages/messages.slice';
 import { ResourceNodeDefs } from 'data/resources.consts';
 import { getItemDef, ItemDefs } from 'data/item.consts';
 import {
@@ -34,6 +33,9 @@ import {CharacterSkillFactory} from "models/character/skill";
 import { addAbilities, addRecipes, usedTool } from "redux/character/character.slice";
 import { getPlayerInventory, getPlayerRecipes } from "redux/character/character.selectors";
 import { getRecipe } from "data/recipes.consts";
+import { setLocalStorageItem } from "utilities/sessionStorage.utilities";
+import { writeStorage } from '@rehooks/local-storage';
+import { addGameMessage } from "utilities/messages.utilities";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(characterActions.playerMovingNorth.match),
@@ -114,11 +116,13 @@ export const pickUpItemFromAreaCell$: Epic<Action, Action, RootState> = (actions
     state$.pipe(select(characterSelectors.getCurrentMapId)),
     state$.pipe(select(characterSelectors.getPlayerMapPos))
   ),
-  mergeMap(([{ payload: item }, mapId, playerPos]) => [
-    removeItemFromMapCell(mapId, playerPos.x, playerPos.y, item),
-    characterActions.addToInventory([item]),
-    addMessage({ content: `Picked up ${item.name}.` }),
-  ]),
+  mergeMap(([{ payload: item }, mapId, playerPos]) => {
+    addGameMessage(`Picked up ${item.name}.`);
+    return [
+      removeItemFromMapCell(mapId, playerPos.x, playerPos.y, item),
+      characterActions.addToInventory([item]),
+    ];
+  }),
 );
 
 export const dropItemFromInventory$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -127,11 +131,13 @@ export const dropItemFromInventory$: Epic<Action, Action, RootState> = (actions$
     state$.pipe(select(characterSelectors.getCurrentMapId)),
     state$.pipe(select(characterSelectors.getPlayerMapPos))
   ),
-  mergeMap(([{ payload: item }, mapId, playerPos]) => [
-    addItemsToMapCell(mapId, playerPos.x, playerPos.y, [item]),
-    characterActions.removeFromInventory([item]),
-    addMessage({ content: `Dropped ${item.name} from inventory.` }),
-  ]),
+  mergeMap(([{ payload: item }, mapId, playerPos]) => {
+    addGameMessage(`Dropped ${item.name} from inventory.`);
+    return [
+      addItemsToMapCell(mapId, playerPos.x, playerPos.y, [item]),
+      characterActions.removeFromInventory([item]),
+    ]
+  }),
 );
 
 export const playerAttacked$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
@@ -145,12 +151,14 @@ export const playerUsedTavern$: Epic<Action, Action, RootState> = (actions$, sta
     state$.pipe(select(characterSelectors.getCharacterObject)),
     state$.pipe(select(mapAreaSelectors.getPlayerTavernCost)),
   ),
-  mergeMap(([, character, cost]) => [
-    characterActions.playerHungerModified(character.stats.hungerMax),
-    characterActions.playerGoldModified(-cost),
-    characterActions.playerLeavingFacility(),
-    addMessage({ content: `You enjoy a fine meal at the Tavern.` }),
-  ]),
+  mergeMap(([, character, cost]) => {
+    addGameMessage(`You enjoy a fine meal at the Tavern.`);
+    return [
+      characterActions.playerHungerModified(character.stats.hungerMax),
+      characterActions.playerGoldModified(-cost),
+      characterActions.playerLeavingFacility(),
+    ]
+  }),
 );
 
 export const playerUsedInn$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -159,13 +167,15 @@ export const playerUsedInn$: Epic<Action, Action, RootState> = (actions$, state$
     state$.pipe(select(characterSelectors.getCharacterObject)),
     state$.pipe(select(mapAreaSelectors.getPlayerInnCost)),
   ),
-  mergeMap(([, character, cost]) => [
-    characterActions.playerHealthModified(character.stats.healthMax),
-    characterActions.playerManaModified(character.stats.manaMax),
-    characterActions.playerGoldModified(-cost),
-    characterActions.playerLeavingFacility(),
-    addMessage({ content: `You rest at the Inn and wake up feeling refreshed.` }),
-  ]),
+  mergeMap(([, character, cost]) => {
+    addGameMessage(`You rest at the Inn and wake up feeling refreshed.`);
+    return [
+      characterActions.playerHealthModified(character.stats.healthMax),
+      characterActions.playerManaModified(character.stats.manaMax),
+      characterActions.playerGoldModified(-cost),
+      characterActions.playerLeavingFacility(),
+    ]
+  }),
 );
 
 export const addToInventory$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -192,12 +202,14 @@ export const buyItemFromShop$: Epic<Action, Action, RootState> = (actions$, stat
     && facility.shopItems.includes(item)
     && playerGold >= item.goldValue
   )),
-  mergeMap(([{ payload: item }, playerLocation, facility]) => [
-    characterActions.addToInventory([item]),
-    characterActions.playerGoldModified(-item.goldValue),
-    removeItemFromShop(playerLocation.mapId, facility!.id, item),
-    addMessage({ content: `Bought ${item.name} for ${item.goldValue} Gold.` }),
-  ]),
+  mergeMap(([{ payload: item }, playerLocation, facility]) => {
+    addGameMessage(`Bought ${item.name} for ${item.goldValue} Gold.`);
+    return [
+      characterActions.addToInventory([item]),
+      characterActions.playerGoldModified(-item.goldValue),
+      removeItemFromShop(playerLocation.mapId, facility!.id, item),
+    ]
+  }),
 );
 
 export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -207,12 +219,14 @@ export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state
     state$.pipe(select(mapAreaSelectors.getPlayersCurrentFacility)),
   ),
   filter(([,,facility]) => !!(facility && facility.type === FACILITY_TYPE.Shop)),
-  mergeMap(([{ payload: item }, playerLocation, facility]) => [
-    characterActions.removeFromInventory([item]),
-    characterActions.playerGoldModified(item.goldValue),
-    addItemToShop(playerLocation.mapId, facility!.id, item),
-    addMessage({ content: `Sold ${item.name} for ${item.goldValue} Gold.` }),
-  ]),
+  mergeMap(([{ payload: item }, playerLocation, facility]) => {
+    addGameMessage(`Sold ${item.name} for ${item.goldValue} Gold.`);
+    return [
+      characterActions.removeFromInventory([item]),
+      characterActions.playerGoldModified(item.goldValue),
+      addItemToShop(playerLocation.mapId, facility!.id, item),
+    ]
+  }),
 );
 
 export const playerSkillIncreased$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
@@ -231,7 +245,7 @@ export const playerSkillIncreased$: Epic<Action, Action, RootState> = (actions$,
     if (newSkill.points >= newSkill.pointsToLevel) {
       newSkill.points -= newSkill.pointsToLevel;
       newSkill.level++;
-      actions.push(addMessage({ content: `Your ${SkillDefs[newSkill.skillKey].name} skill has leveled up to ${newSkill.level}!` }));
+      addGameMessage(`Your ${SkillDefs[newSkill.skillKey].name} skill has leveled up to ${newSkill.level}!`);
     }
 
     return actions.concat(characterActions.updateSkill(newSkill));
@@ -263,12 +277,12 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
     if (nodeDef.yieldsItem) {
       if (!nodeDef.yieldBaseChance || rng(100) <= nodeDef.yieldBaseChance) {
         const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
+        addGameMessage(`Successfully harvested the ${node!.name} and gathered ${harvestedItem.name}`);
         actions.push(
           characterActions.addToInventory([harvestedItem]),
-          addMessage({ content: `Successfully harvested the ${node!.name} and gathered ${harvestedItem.name}` }),
         );
       } else {
-        actions.push(addMessage({ content: `Failed to harvest the ${node!.name}` }));
+        addGameMessage(`Failed to harvest the ${node!.name}`);
       }
     }
 
