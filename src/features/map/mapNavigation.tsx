@@ -42,4 +42,4 @@ export function MapNavigation() {
       </Box>
     </Stack>
   );
-};
+}

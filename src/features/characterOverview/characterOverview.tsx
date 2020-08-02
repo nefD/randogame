@@ -31,17 +31,17 @@ export const CharacterOverview = () => {
         </Stack>
 
         <Stack direction="row" spacing={2} align="center">
-          {/*<Icon size='sm' icon={IconHealth} />*/}
+          <Icon size='sm' icon={IconHealth} />
           <Flex flex="1" direction='column'>
             <Box fontSize='sm'>Health: {stats.health} / {stats.healthMax}</Box>
             <Progress colorScheme='red' size='sm' hasStripe value={(stats.health / stats.healthMax) * 100} />
           </Flex>
-          {/*<Icon size='sm' icon={IconMana} />*/}
+          <Icon size='sm' icon={IconMana} />
           <Flex flex="1" direction='column'>
             <Box fontSize='sm'>Mana: {stats.mana} / {stats.manaMax}</Box>
             <Progress colorScheme="blue" size='sm' value={(stats.mana / stats.manaMax) * 100} />
           </Flex>
-          {/*<Icon size='sm' icon={IconHunger} />*/}
+          <Icon size='sm' icon={IconHunger} />
           <Flex flex="1" direction='column'>
             <Box fontSize='sm'>Hunger: {stats.hunger} / {stats.hungerMax}</Box>
             <Progress colorScheme="yellow" size='sm' value={(stats.hunger / stats.hungerMax) * 100} />
