@@ -11,9 +11,25 @@ import {
   playerMovingWest,
 } from 'redux/character/character.slice';
 import { useDispatch } from 'react-redux';
+import { useKeyPress } from "utilities/hooks.utilities";
 
 export const MapNavigation = () => {
   const dispatch = useDispatch();
+
+  const upArrow = useKeyPress('ArrowUp');
+  const downArrow = useKeyPress('ArrowDown');
+  const leftArrow = useKeyPress('ArrowLeft');
+  const rightArrow = useKeyPress('ArrowRight');
+
+  if (upArrow) {
+    dispatch(playerMovingNorth());
+  } else if (downArrow) {
+    dispatch(playerMovingSouth());
+  } else if (leftArrow) {
+    dispatch(playerMovingWest());
+  } else if (rightArrow) {
+    dispatch(playerMovingEast());
+  }
 
   return (
     <Stack p={2} direction='row' justify='center' align='center'>
