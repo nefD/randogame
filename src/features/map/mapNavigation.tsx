@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useKeyPress } from "utilities/hooks.utilities";
 
-export const MapNavigation = () => {
+export function MapNavigation() {
   const dispatch = useDispatch();
 
   const upArrow = useKeyPress('ArrowUp');
@@ -21,15 +21,12 @@ export const MapNavigation = () => {
   const leftArrow = useKeyPress('ArrowLeft');
   const rightArrow = useKeyPress('ArrowRight');
 
-  if (upArrow) {
-    dispatch(playerMovingNorth());
-  } else if (downArrow) {
-    dispatch(playerMovingSouth());
-  } else if (leftArrow) {
-    dispatch(playerMovingWest());
-  } else if (rightArrow) {
-    dispatch(playerMovingEast());
-  }
+  useEffect(() => {
+    upArrow && dispatch(playerMovingNorth());
+    downArrow && dispatch(playerMovingSouth());
+    leftArrow && dispatch(playerMovingWest());
+    rightArrow && dispatch(playerMovingEast());
+  });
 
   return (
     <Stack p={2} direction='row' justify='center' align='center'>
@@ -37,7 +34,7 @@ export const MapNavigation = () => {
         <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingWest())}>West</Button>
       </Box>
       <Stack direction='column'>
-        <Button colorScheme='blue' variant="outline"size='lg' onClick={() => dispatch(playerMovingNorth())}>North</Button>
+        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingNorth())}>North</Button>
         <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingSouth())}>South</Button>
       </Stack>
       <Box>

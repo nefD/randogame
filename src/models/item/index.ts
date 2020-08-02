@@ -45,6 +45,7 @@ export interface Item {
   id: string;
   goldValue: number;
   stackable: boolean;
+  quantity: number;
   toolProps?: ToolItemProperties;
   equipProps?: EquipmentItemProperties;
   useProps?: UsableItemProperties;
@@ -61,6 +62,7 @@ export const ItemFactory = (config?: Partial<Item> | ItemDefinition): Item => {
     goldValue: 1,
     key: ITEM_KEYS.Empty,
     stackable: false,
+    quantity: 1,
     ...config,
   };
 };

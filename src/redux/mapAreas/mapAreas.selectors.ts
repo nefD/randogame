@@ -8,7 +8,6 @@ import {
 import { createSelector } from 'reselect';
 import {
   getEnemiesState,
-  getItemsState,
   getMapAreasState,
 } from 'app/baseSelectors';
 import {

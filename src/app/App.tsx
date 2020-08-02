@@ -70,34 +70,32 @@ function App() {
     dispatch(inventoryAdded(tome));
   }
 
-  let mainDisplay;
-  switch (playerGameState) {
-    case CharacterGameState.Facility: {
-      mainDisplay = (
-        <Flex direction="row"><Box flex="1"><FacilityDisplay /></Box></Flex>
-      );
-      break;
-    }
-    case CharacterGameState.Combat: {
-      mainDisplay = (
-        <Card>
-          <Flex direction="row"><Box flex="1"><CombatDisplay /></Box></Flex>
-        </Card>
-      );
-      break;
-    }
-    case CharacterGameState.Travel:
-    default: {
-      mainDisplay = (
-        <Stack maxH="50vw" overflowY="auto" direction="row" spacing={4}>
+  const getMainDisplay = () => {
+    switch (playerGameState) {
+      case CharacterGameState.Facility: {
+        return (
+          <Flex direction="row"><Box flex="1"><FacilityDisplay/></Box></Flex>
+        );
+      }
+      case CharacterGameState.Combat: {
+        return (
           <Card>
-            <MapDisplay/>
-            <MapNavigation/>
+            <Flex direction="row"><Box flex="1"><CombatDisplay/></Box></Flex>
           </Card>
-          <Box flex="1"><AreaCellDisplay /></Box>
-        </Stack>
-      );
-      break;
+        );
+      }
+      case CharacterGameState.Travel:
+      default: {
+        return (
+          <Stack maxH="50vw" overflowY="auto" direction="row" spacing={4}>
+            <Card>
+              <MapDisplay/>
+              <MapNavigation/>
+            </Card>
+            <Box flex="1"><AreaCellDisplay/></Box>
+          </Stack>
+        );
+      }
     }
   }
 
@@ -124,7 +122,7 @@ function App() {
           <Box><CharacterOverview /></Box>
 
           <Box>
-            {mainDisplay}
+            {getMainDisplay()}
           </Box>
 
           {/*<Box>*/}

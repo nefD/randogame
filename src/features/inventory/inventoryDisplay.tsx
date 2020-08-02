@@ -31,7 +31,7 @@ export const InventoryDisplay = () => {
   );
 
   const getLabel = (item: Item) => {
-    let label = `${item.name}`;
+    let label = `${item.name} (Qty: ${item.quantity})`;
     if (item.toolProps) {
       label = `${label} (Uses: ${item.toolProps.remainingUses}/${item.toolProps.maxUses})`;
     }

@@ -100,16 +100,16 @@ const characterSlice = createSlice({
       state.location = { ...action.payload };
     },
     inventoryAdded(state, { payload: item }: PayloadAction<Item>) {
-      // @TODO - Handle stackable items
+      const existing = state.inventory.find(i => i.key === item.key);
+      if (item.stackable && existing) {
+        existing.quantity++;
+        return;
+      }
       state.inventory.push(item);
     },
-    // removeFromInventory(state, action: PayloadAction<Item>) {
-    //   state.inventory = state.inventory.filter(i => i !== action.payload.id);
-    //   // @TODO - Handle stackable items
-    // },
     removeFromInventory: {
       reducer(state, { payload: { item, quantity } }: PayloadAction<{ item: Item, quantity: number }>) {
-        // @TODO - Handle stackable items
+        // @TODO - Handle dropping a quantity of stackable items
         state.inventory = state.inventory.filter(i => i.id !== item.id);
       },
       prepare(item: Item, quantity = 1) {
@@ -198,7 +198,6 @@ const characterSlice = createSlice({
       if (!tool) return;
       if (tool.toolProps) {
         tool.toolProps.remainingUses = Math.max(0, tool.toolProps.remainingUses - 1);
-        console.log(`remaining uses is now:`, tool.toolProps.remainingUses);
       }
     },
   },
