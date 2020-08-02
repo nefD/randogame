@@ -32,19 +32,11 @@ function App() {
   if (!currentMapId) {
     dispatch(generateMap());
     const axe = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
-    dispatch(inventoryAdded(axe));
-
     const hat = ItemFactory(ItemDefs[ITEM_KEYS.Hat].config);
-    dispatch(inventoryAdded(hat));
-
     const potion = ItemFactory(ItemDefs[ITEM_KEYS.HealingPotion].config);
-    dispatch(inventoryAdded(potion));
-
     const dagger = ItemFactory(ItemDefs[ITEM_KEYS.Dagger].config);
-    dispatch(inventoryAdded(dagger));
-
     const tome = ItemFactory(ItemDefs[ITEM_KEYS.TomeTesting].config);
-    dispatch(inventoryAdded(tome));
+    dispatch(inventoryAdded([tome, hat, potion, dagger, axe]));
   }
 
   return (

@@ -3,7 +3,7 @@ import { ItemKey } from "data/item.keys";
 
 export interface CraftingRecipeComponent {
   itemKey: ItemKey;
-  amount: number;
+  quantity: number;
 }
 
 export interface CraftingRecipe {

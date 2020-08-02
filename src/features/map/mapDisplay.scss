@@ -4,21 +4,6 @@
     overflow: hidden;
 }
 
-//.mapControls {
-//    display: flex;
-//    flex-direction: row;
-//    justify-content: center;
-//    align-items: center;
-//}
-
-//.mapControlBox button {
-//    display: block;
-//    font-size: 1em;
-//    height: 4em;
-//    width: 4em;
-//    padding: 0.5em 0;
-//}
-
 .mapRow {
     display: flex;
     flex-direction: row;
@@ -71,6 +56,10 @@
         height: 100%;
         position: relative;
         top: -35%;
+
+        path {
+            fill: #1d9b21;
+        }
     }
     img {
         display: inline-block;
@@ -93,6 +82,9 @@
         width: 70%;
         height: 70%;
 
+        path {
+            fill: #9ac364;
+        }
     }
     img {
         display: inline-block;

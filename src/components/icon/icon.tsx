@@ -9,18 +9,11 @@ type IconProps = {
 
 export function Icon(props: IconProps) {
   const { size = 'md' } = props;
-
-  // const bg = useColorModeValue("gray.200", "gray.800");
-  // const iconFill = useColorModeValue("black", "white");
-
-  const bg = 'gray.200';
+  const bg = useColorModeValue("gray.200", "gray.500");
+  const borderColor = useColorModeValue("gray.500", "gray.300");
   const iconFill = 'white';
-
   const containerSize = size === 'sm' ? '1.5em' : '2.5rem';
   const iconSize = size === 'sm' ? '1em' : '2rem';
-
-  // const containerSize = '2.5rem';
-  // const iconSize = '1.75rem';
 
   const svgStyles = {
     fill: iconFill,
@@ -31,7 +24,7 @@ export function Icon(props: IconProps) {
   }
 
   return (
-    <Center bg={bg} borderColor='gray.500' borderWidth='1px' borderRadius='md' boxSize={containerSize}>
+    <Center bg={bg} borderColor={borderColor} borderWidth='1px' borderRadius='md' boxSize={containerSize}>
       {props.icon
         ? <props.icon style={svgStyles} />
         : <IconCube style={svgStyles} />

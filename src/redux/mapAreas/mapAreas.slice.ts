@@ -31,27 +31,22 @@ const mapAreasSlice = createSlice({
   initialState: mapAreasAdapter.getInitialState(),
   reducers: {
     mapAreaUpdated: mapAreasAdapter.upsertOne,
-    addItemToMapCell: {
-      reducer(state, { payload: { id, x, y, item } }: PayloadAction<{id: string, x: number, y: number, item: Item}>) {
-        const mapArea = state.entities[id];
-        if (!mapArea) return;
-        const idx = fromXY(x, y, mapArea);
-        const existing = (mapArea.items[idx] || []).find(i => i.key === item.key);
-        if (item.stackable && existing) {
-          existing.quantity += item.quantity;
-          return;
-        }
-        mapArea.items[idx] = (mapArea.items[idx] || []).concat(item);
-        // mapAreasAdapter.upsertOne(state, {
-        //   ...mapArea,
-        //   items: {
-        //     ...mapArea.items,
-        //     [idx]: (mapArea.items[idx] || []).concat(item),
-        //   },
-        // });
+    addItemsToMapCell: {
+      reducer(state, { payload: { id, x, y, items } }: PayloadAction<{id: string, x: number, y: number, items: Item[]}>) {
+          items.forEach(item => {
+          const mapArea = state.entities[id];
+          if (!mapArea) return;
+          const idx = fromXY(x, y, mapArea);
+          const existing = (mapArea.items[idx] || []).find(i => i.key === item.key);
+          if (item.stackable && existing) {
+            existing.quantity += item.quantity;
+            return;
+          }
+          mapArea.items[idx] = (mapArea.items[idx] || []).concat(item);
+        });
       },
-      prepare(id: string, x: number, y: number, item: Item) {
-        return { payload: { id, x, y, item }};
+      prepare(id: string, x: number, y: number, items: Item[]) {
+        return { payload: { id, x, y, items }};
       },
     },
     addEnemyToMapCell: {
@@ -151,7 +146,7 @@ const mapAreasSlice = createSlice({
 
 export const generateMap = createAction('mapAreas/generateMap');
 export const mapAreaUpdated = mapAreasSlice.actions.mapAreaUpdated;
-export const addItemToMapCell = mapAreasSlice.actions.addItemToMapCell;
+export const addItemsToMapCell = mapAreasSlice.actions.addItemsToMapCell;
 export const addEnemyToMapCell = mapAreasSlice.actions.addEnemyToMapCell;
 export const addResourceNodeToMapCell = mapAreasSlice.actions.addResourceNodeToMapCell;
 export const removeItemFromMapCell = mapAreasSlice.actions.removeItemFromMapCell;

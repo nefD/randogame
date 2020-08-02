@@ -11,19 +11,18 @@ import { RootState } from 'app/rootReducer';
 import { Epic } from 'redux-observable';
 import * as mapAreaSelectors from 'redux/mapAreas/mapAreas.selectors';
 import {
-  NullAction,
   select,
 } from 'utilities/redux.utilities';
 import {
   removeItemFromMapCell,
-  addItemToMapCell,
+  addItemsToMapCell,
   removeItemFromShop,
   addItemToShop,
 } from 'redux/mapAreas/mapAreas.slice';
 import { FACILITY_TYPE } from 'data/areas.consts';
 import { addMessage } from 'redux/messages/messages.slice';
 import { ResourceNodeDefs } from 'data/resources.consts';
-import { ItemDefs } from 'data/item.consts';
+import { getItemDef, ItemDefs } from 'data/item.consts';
 import {
   SKILL_KEY,
   SkillDefs,
@@ -33,7 +32,8 @@ import { EffectType } from "models/character/effects";
 import { rng } from "utilities/random.utilities";
 import {CharacterSkillFactory} from "models/character/skill";
 import { addAbilities, addRecipes, usedTool } from "redux/character/character.slice";
-import { getPlayerInventory } from "redux/character/character.selectors";
+import { getPlayerInventory, getPlayerRecipes } from "redux/character/character.selectors";
+import { getRecipe } from "data/recipes.consts";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(characterActions.playerMovingNorth.match),
@@ -116,7 +116,7 @@ export const pickUpItemFromAreaCell$: Epic<Action, Action, RootState> = (actions
   ),
   mergeMap(([{ payload: item }, mapId, playerPos]) => [
     removeItemFromMapCell(mapId, playerPos.x, playerPos.y, item),
-    characterActions.addToInventory(item),
+    characterActions.addToInventory([item]),
     addMessage({ content: `Picked up ${item.name}.` }),
   ]),
 );
@@ -128,8 +128,8 @@ export const dropItemFromInventory$: Epic<Action, Action, RootState> = (actions$
     state$.pipe(select(characterSelectors.getPlayerMapPos))
   ),
   mergeMap(([{ payload: item }, mapId, playerPos]) => [
-    addItemToMapCell(mapId, playerPos.x, playerPos.y, item),
-    characterActions.removeFromInventory(item),
+    addItemsToMapCell(mapId, playerPos.x, playerPos.y, [item]),
+    characterActions.removeFromInventory([item]),
     addMessage({ content: `Dropped ${item.name} from inventory.` }),
   ]),
 );
@@ -173,9 +173,9 @@ export const addToInventory$: Epic<Action, Action, RootState> = (actions$, state
   withLatestFrom(
     state$.pipe(select(characterSelectors.getCharacterObject)),
   ),
-  map(([{ payload: item }, character]) => (character.inventory.length >= character.inventoryMax)
-    ? addItemToMapCell(character.location.mapId, character.location.coords.x, character.location.coords.y, item)
-    : characterActions.inventoryAdded(item),
+  map(([{ payload: items }, character]) => (character.inventory.length >= character.inventoryMax)
+    ? addItemsToMapCell(character.location.mapId, character.location.coords.x, character.location.coords.y, items)
+    : characterActions.inventoryAdded(items),
   ),
 );
 
@@ -193,7 +193,7 @@ export const buyItemFromShop$: Epic<Action, Action, RootState> = (actions$, stat
     && playerGold >= item.goldValue
   )),
   mergeMap(([{ payload: item }, playerLocation, facility]) => [
-    characterActions.addToInventory(item),
+    characterActions.addToInventory([item]),
     characterActions.playerGoldModified(-item.goldValue),
     removeItemFromShop(playerLocation.mapId, facility!.id, item),
     addMessage({ content: `Bought ${item.name} for ${item.goldValue} Gold.` }),
@@ -208,7 +208,7 @@ export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state
   ),
   filter(([,,facility]) => !!(facility && facility.type === FACILITY_TYPE.Shop)),
   mergeMap(([{ payload: item }, playerLocation, facility]) => [
-    characterActions.removeFromInventory(item),
+    characterActions.removeFromInventory([item]),
     characterActions.playerGoldModified(item.goldValue),
     addItemToShop(playerLocation.mapId, facility!.id, item),
     addMessage({ content: `Sold ${item.name} for ${item.goldValue} Gold.` }),
@@ -264,7 +264,7 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
       if (!nodeDef.yieldBaseChance || rng(100) <= nodeDef.yieldBaseChance) {
         const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
         actions.push(
-          characterActions.addToInventory(harvestedItem),
+          characterActions.addToInventory([harvestedItem]),
           addMessage({ content: `Successfully harvested the ${node!.name} and gathered ${harvestedItem.name}` }),
         );
       } else {
@@ -289,11 +289,11 @@ export const playerEquippedItem$: Epic<Action, Action, RootState> = (actions$, s
     const existingItem = equipment[equipItem.equipProps!.slotKey];
 
     if (existingItem !== null) {
-      actions.push(characterActions.addToInventory(existingItem))
+      actions.push(characterActions.addToInventory([existingItem]))
     }
 
     return actions.concat(
-      characterActions.removeFromInventory(equipItem),
+      characterActions.removeFromInventory([equipItem]),
       characterActions.updateEquipment({
         [equipItem.equipProps!.slotKey]: equipItem,
       }),
@@ -309,7 +309,7 @@ export const playerUnequippedItem$: Epic<Action, Action, RootState> = (actions$,
   filter(([{ payload: item }, equipment]) => !!(item.equipProps && equipment[item.equipProps.slotKey]?.id === item.id)),
   mergeMap(([{ payload: item }]) => {
     return [
-      characterActions.addToInventory(item),
+      characterActions.addToInventory([item]),
       characterActions.updateEquipment({ [item.equipProps!.slotKey]: null }),
     ];
   }),
@@ -323,13 +323,12 @@ export const playerUsedItem$: Epic<Action, Action, RootState> = (actions$, state
   filter(([{ payload: item }, inventory]) => !!(item.useProps && inventory.find(i => i.id === item.id))),
   mergeMap(([{ payload: item }]) => {
     const actions: Action[] = [
-      characterActions.removeFromInventory(item),
+      characterActions.removeFromInventory([item]),
     ];
     if (item.useProps!.giveAbilities) {
       actions.push(addAbilities(item.useProps!.giveAbilities));
     }
     if (item.useProps!.giveRecipes) {
-      console.log(`adding recipes..`);
       actions.push(addRecipes(item.useProps!.giveRecipes));
     }
     if (item.useProps!.effects) {
@@ -356,9 +355,19 @@ export const craftRecipe$: Epic<Action, Action, RootState> = (actions$, state$) 
   filter(characterActions.craftRecipe.match),
   withLatestFrom(
     state$.pipe(select(getPlayerInventory)),
+    state$.pipe(select(getPlayerRecipes)),
   ),
-  mergeMap(([{ payload: recipeKey }, inventory]) => {
-    // ensure player has required items
-    return [NullAction()];
-  }),
+  filter(([{ payload: recipeKey }, inventory, recipes]) =>
+    recipes.includes(recipeKey)
+    && getRecipe(recipeKey).requires.every(c => (inventory.find(i => i.key === c.itemKey)?.quantity || 0) >= c.quantity),
+  ),
+  mergeMap(([{ payload: recipeKey }]) => [
+    characterActions.removeFromInventoryByKey(getRecipe(recipeKey).requires),
+    characterActions.addToInventory(
+      getRecipe(recipeKey).yields.map(y => ItemFactory({
+        ...getItemDef(y.itemKey),
+        quantity: y.quantity,
+      })),
+    ),
+  ]),
 );

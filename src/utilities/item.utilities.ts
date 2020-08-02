@@ -14,8 +14,9 @@ export const rollWeaponDamage = (weapon?: Item | null) => {
   return dmg;
 };
 
-// @TODO - Finish me!
-// export const recipeIsCraftable = (recipeKey: RecipeKey, inventory: Item[]): boolean => {
-//   return CraftingRecipes[recipeKey].requires.every(c => inventory.find(i => i.key === c.itemKey).
-//
-// };
+export const recipeIsCraftable = (recipeKey: RecipeKey, inventory: Item[]): boolean => {
+  return CraftingRecipes[recipeKey].requires.every(c => {
+    const invItem = inventory.find(i => i.key === c.itemKey);
+    return (invItem && invItem.quantity >= c.quantity);
+  });
+};

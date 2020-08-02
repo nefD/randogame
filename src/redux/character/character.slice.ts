@@ -26,6 +26,7 @@ import {CharacterSkill, CharacterSkillFactory} from "models/character/skill";
 import {AbilityKey} from "data/abilities.consts";
 import {uniqueArray} from "utilities/array.utilities";
 import { RECIPE_KEYS, RecipeKey } from "data/recipes.consts";
+import { ItemKey } from "data/item.keys";
 
 export interface CombatState {
   enemy: string;
@@ -99,22 +100,45 @@ const characterSlice = createSlice({
       state.age += 1;
       state.location = { ...action.payload };
     },
-    inventoryAdded(state, { payload: item }: PayloadAction<Item>) {
-      const existing = state.inventory.find(i => i.key === item.key);
-      if (item.stackable && existing) {
-        existing.quantity += item.quantity;
-        return;
-      }
-      state.inventory.push(item);
+    inventoryAdded(state, { payload: items }: PayloadAction<Item[]>) {
+        items.forEach(item => {
+        const existing = state.inventory.find(i => i.key === item.key);
+        if (item.stackable && existing) {
+          existing.quantity += item.quantity;
+        } else {
+          state.inventory.push(item);
+        }
+      });
     },
     removeFromInventory: {
-      reducer(state, { payload: { item, quantity } }: PayloadAction<{ item: Item, quantity: number }>) {
-        // @TODO - Handle dropping a quantity of stackable items
-        state.inventory = state.inventory.filter(i => i.id !== item.id);
+      reducer(state, { payload: { items } }: PayloadAction<{ items: Item[] }>) {
+        items.forEach(item => {
+          if (!item.stackable) {
+            state.inventory = state.inventory.filter(i => i.id !== item.id);
+            return;
+          }
+
+          const invItem = state.inventory.find(i => i.key === item.key);
+          if (!invItem) return;
+          invItem.quantity -= item.quantity;
+          if (invItem.quantity <= 0) {
+            state.inventory = state.inventory.filter(i => i.id !== invItem.id);
+          }
+        });
       },
-      prepare(item: Item, quantity = 1) {
-        return { payload: { item, quantity }};
+      prepare(items: Item[]) {
+        return { payload: { items }};
       }
+    },
+    removeFromInventoryByKey(state, { payload: items }: PayloadAction<{ itemKey: ItemKey, quantity: number}[]>) {
+      items.forEach(({ itemKey, quantity}) => {
+        const invItem = state.inventory.find(i => i.key === itemKey);
+        if (!invItem) return;
+        invItem.quantity -= quantity;
+        if (invItem.quantity <= 0) {
+          state.inventory = state.inventory.filter(i => i.id !== invItem.id);
+        }
+      });
     },
     playerStartCombat(state, action: PayloadAction<Enemy>) {
       state.gameState = CharacterGameState.Combat;
@@ -207,6 +231,7 @@ export const createCharacter = characterSlice.actions.createCharacter;
 export const playerMoved = characterSlice.actions.playerMoved;
 export const inventoryAdded = characterSlice.actions.inventoryAdded;
 export const removeFromInventory = characterSlice.actions.removeFromInventory;
+export const removeFromInventoryByKey = characterSlice.actions.removeFromInventoryByKey;
 export const playerStartCombat = characterSlice.actions.playerStartCombat;
 export const playerExitCombat = characterSlice.actions.playerExitCombat;
 export const playerTakingDamage = characterSlice.actions.playerTakingDamage;
@@ -228,7 +253,7 @@ export const playerMovingEast = createAction('character/movingEast');
 export const playerMovingSouth = createAction('character/movingSouth');
 export const playerMovingWest = createAction('character/movingWest');
 export const pickUpItemFromCurrentMapCell = createAction<Item>('character/pickUpItemFromCurrentMapCell');
-export const addToInventory = createAction<Item>('character/addToInventory');
+export const addToInventory = createAction<Item[]>('character/addToInventory');
 export const dropItemFromInventory = createAction<Item>('character/dropItemFromInventory');
 export const playerWasAttacked = createAction(
   'character/playerAttacked',

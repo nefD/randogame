@@ -34,7 +34,7 @@ import * as characterSelectors from "redux/character/character.selectors";
 import { between, rng } from "utilities/random.utilities";
 import { rollWeaponDamage } from "utilities/item.utilities";
 import { LootTableKey, LootTables } from "data/loot.consts";
-import { ItemFactory } from "models/item";
+import { Item, ItemFactory } from "models/item";
 import { ItemDefs } from "data/item.consts";
 
 export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
@@ -131,13 +131,17 @@ export const combatUseAbility$: Epic<Action, Action, RootState> = (actions$, sta
 
 export const rollLootTables$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(rollLootTables.match),
-  mergeMap(({ payload: lootTableKeys }) => lootTableKeys.reduce((actions: Action[], tableKey: LootTableKey) => {
-    LootTables[tableKey].items.forEach(lootItem => {
-      if (rng(100) <= lootItem.chance) {
-        const item = ItemFactory(ItemDefs[lootItem.itemDef]);
-        actions.push(addToInventory(item));
-      }
-    });
-    return actions;
-  }, [])),
+  map(({ payload: lootTableKeys }) => {
+    const items = lootTableKeys.reduce((items: Item[], tableKey: LootTableKey) => {
+      const addItems: Item[] = [];
+      LootTables[tableKey].items.forEach(lootItem => {
+        if (rng(100) <= lootItem.chance) {
+          const item = ItemFactory(ItemDefs[lootItem.itemDef]);
+          items.push(item);
+        }
+      });
+      return items;
+    }, []);
+    return addToInventory(items);
+  }),
 );

@@ -21,3 +21,4 @@ export { ReactComponent as IconWaves } from 'icons/waves.svg';
 export { ReactComponent as IconBigWave } from 'icons/big-wave.svg';
 export { ReactComponent as IconCube } from 'icons/cube.svg';
 export { ReactComponent as IconFlyingDagger } from 'icons/flying-dagger.svg';
+export { ReactComponent as IconBook } from 'icons/book-cover.svg';
