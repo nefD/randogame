@@ -25,6 +25,7 @@ import {isStatKey} from "utilities/stats.utilities";
 import {CharacterSkill, CharacterSkillFactory} from "models/character/skill";
 import {AbilityKey} from "data/abilities.consts";
 import {uniqueArray} from "utilities/array.utilities";
+import { RecipeKey } from "data/recipes.consts";
 
 export interface CombatState {
   enemy: string;
@@ -40,6 +41,7 @@ export interface CharacterState {
   gold: number;
   skills: CharacterSkill[];
   abilities: AbilityKey[];
+  recipes: RecipeKey[],
   stats: Stats;
   location: MapLocation;
   equipment: CharacterEquipment;
@@ -64,6 +66,7 @@ const initialState: CharacterState = {
     }),
   ],
   abilities: [],
+  recipes: [],
   stats: StatsFactory({
     health: 20, healthMax: 20,
     hunger: 100, hungerMax: 100,
@@ -173,9 +176,12 @@ const characterSlice = createSlice({
         ...updatedEquipment,
       };
     },
-    addAbility(state, action: PayloadAction<AbilityKey>) {
-      state.abilities = uniqueArray(state.abilities.concat(action.payload));
+    addAbilities(state, { payload: abilityKeys }: PayloadAction<AbilityKey[]>) {
+      state.abilities = uniqueArray(state.abilities.concat(abilityKeys));
     },
+    addRecipes(state, { payload: recipeKeys }: PayloadAction<RecipeKey[]>) {
+      state.recipes = uniqueArray(state.recipes.concat(recipeKeys));
+    }
   },
 });
 
@@ -196,7 +202,8 @@ export const addSkillPoints = characterSlice.actions.addSkillPoints;
 export const updateSkill = characterSlice.actions.updateSkill;
 export const updateEquipment = characterSlice.actions.updateEquipment;
 export const playerStatsModified = characterSlice.actions.playerStatsModified;
-export const addAbility = characterSlice.actions.addAbility;
+export const addAbilities = characterSlice.actions.addAbilities;
+export const addRecipes = characterSlice.actions.addRecipes;
 
 export const playerMovingNorth = createAction('character/movingNorth');
 export const playerMovingEast = createAction('character/movingEast');

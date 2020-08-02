@@ -119,6 +119,9 @@ export const combatUseAbility$: Epic<Action, Action, RootState> = (actions$, sta
       actions.push(enemyWasAttacked(enemy!, damage));
     }
 
-    return actions.concat(combatEnemyAttacking());
+    return actions.concat(
+      combatEnemyAttacking(),
+      playerSkillIncreased(ability.skillKey, 1),
+    );
   }),
 );

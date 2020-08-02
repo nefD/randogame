@@ -19,7 +19,6 @@ import {
 
 } from 'utilities/mapAreas.utilities';
 import {
-  ITEM_KEYS,
   ItemDefs,
 } from 'data/item.consts';
 import { itemCreated } from 'redux/items/items.slice';
@@ -50,6 +49,7 @@ import { ResourceNodeFactory } from 'utilities/resources.utilities';
 import { MapLocationFactory } from 'models/map';
 import { EnemyFactory } from 'models/enemy';
 import { ItemFactory } from 'models/item';
+import { ITEM_KEYS } from "data/item.keys";
 
 export const playerMoved$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMoved.match),

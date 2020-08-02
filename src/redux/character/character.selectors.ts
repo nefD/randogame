@@ -16,6 +16,7 @@ import {
 import { Item } from 'models/item';
 import { STATS, Stats, StatsKey } from 'models/character/stats';
 import { AbilityDefs, AbilityKey } from "data/abilities.consts";
+import { RecipeKey } from "data/recipes.consts";
 
 export const getCharacterObject = createSelector(getCharacter, char => char);
 export const getCharacterName = createSelector(getCharacter, state => state.name);
@@ -30,6 +31,7 @@ export const getPlayerMapPos = createSelector(getPlayerMapLocation, location => 
 export const getPlayerGameState = createSelector(getCharacter, state => state.gameState);
 export const getPlayerCombatState = createSelector(getCharacter, state => state.combatState);
 export const getPlayerAbilities = createSelector(getCharacter, state => state.abilities as AbilityKey[]);
+export const getPlayerRecipes = createSelector(getCharacter, state => state.recipes as RecipeKey[]);
 
 export const getPlayerEquipment = createSelector(
   getCharacter,

@@ -1,25 +1,13 @@
 import React from 'react';
 import * as icons from 'data/icons.consts';
-import {EquipmentSlots} from 'models/character';
-import {Item} from 'models/item';
-import {STATS} from 'models/character/stats';
-import {EffectType} from 'models/character/effects';
-import {SKILL_KEY} from "data/skills.consts";
-
-export enum ITEM_KEYS {
-  Dagger = 'Dagger',
-  Empty = 'Empty',
-  Hat = 'Hat',
-  HealingPotion = 'HealingPotion',
-  Plant = 'Plant',
-  Sand = 'Sand',
-  Stick = 'Stick',
-  TestItem = 'TestItem',
-  Wood = 'Wood',
-  WoodAxe = 'WoodAxe',
-}
-
-export type ItemKey = keyof typeof ITEM_KEYS;
+import { EquipmentSlots } from 'models/character';
+import { Item } from 'models/item';
+import { STATS } from 'models/character/stats';
+import { EffectType } from 'models/character/effects';
+import { SKILL_KEY } from "data/skills.consts";
+import { ABILITY_KEY } from "data/abilities.consts";
+import { RECIPE_KEYS } from "data/recipes.consts";
+import { ITEM_KEYS } from "data/item.keys";
 
 export interface ItemDefinition {
   config: Partial<Item>;
@@ -110,6 +98,16 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
             statModifiers: [{ statKey: STATS.health, amount: 10 }],
           },
         ],
+      },
+    },
+  },
+  [ITEM_KEYS.TomeTesting]: {
+    config: {
+      key: ITEM_KEYS.TomeTesting,
+      name: 'Tome of Testing',
+      useProps: {
+        giveAbilities: [ABILITY_KEY.Puncture],
+        giveRecipes: [RECIPE_KEYS.Test],
       },
     },
   },

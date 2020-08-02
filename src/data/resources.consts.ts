@@ -1,9 +1,6 @@
-import {
-  ITEM_KEYS,
-  ItemKey,
-} from 'data/item.consts';
 import React from "react";
 import {IconForest} from "./icons.consts";
+import { ITEM_KEYS, ItemKey } from "data/item.keys";
 
 export enum NODE_KEYS {
   Tree = 'Tree',

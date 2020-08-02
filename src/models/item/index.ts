@@ -1,7 +1,6 @@
 import {
-  ITEM_KEYS,
   ItemDefinition,
-  ItemKey,
+
 } from 'data/item.consts';
 import { EquipSlotKey } from 'models/character';
 import { uuid } from 'utilities/random.utilities';
@@ -12,9 +11,15 @@ import {
   EffectType,
 } from 'models/character/effects';
 import {SKILL_KEY} from "data/skills.consts";
+import { AbilityKey } from "data/abilities.consts";
+import { CraftingRecipe } from "models/item/recipe";
+import { RecipeKey } from "data/recipes.consts";
+import { ITEM_KEYS, ItemKey } from "data/item.keys";
 
 export interface UsableItemProperties {
-  effects: Effect[],
+  effects?: Effect[];
+  giveAbilities?: AbilityKey[];
+  giveRecipes?: RecipeKey[];
 }
 
 export interface ToolItemProperties {

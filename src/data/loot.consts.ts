@@ -1,7 +1,4 @@
-import {
-  ITEM_KEYS,
-  ItemKey,
-} from 'data/item.consts';
+import { ITEM_KEYS, ItemKey } from "data/item.keys";
 
 export interface ILootItem {
   itemDef: ItemKey;

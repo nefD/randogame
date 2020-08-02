@@ -36,6 +36,8 @@ import { ItemFactory } from 'models/item';
 import { EffectType } from "models/character/effects";
 import { rng } from "utilities/random.utilities";
 import {CharacterSkillFactory} from "models/character/skill";
+import { ABILITY_KEY } from "data/abilities.consts";
+import { addAbilities, addRecipes } from "redux/character/character.slice";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(characterActions.playerMovingNorth.match),
@@ -325,10 +327,20 @@ export const playerUsedItem$: Epic<Action, Action, RootState> = (actions$, state
   ),
   filter(([{ payload: item }, inventory]) => !!(item.useProps && inventory.find(i => i.id === item.id))),
   mergeMap(([{ payload: item }]) => {
-    return [
-      characterActions.applyEffectsToPlayer(item.useProps!.effects),
+    const actions: Action[] = [
       characterActions.removeFromInventory(item),
     ];
+    if (item.useProps!.giveAbilities) {
+      actions.push(addAbilities(item.useProps!.giveAbilities));
+    }
+    if (item.useProps!.giveRecipes) {
+      console.log(`adding recipes..`);
+      actions.push(addRecipes(item.useProps!.giveRecipes));
+    }
+    if (item.useProps!.effects) {
+      actions.push(characterActions.applyEffectsToPlayer(item.useProps!.effects));
+    }
+    return actions;
   }),
 );
 

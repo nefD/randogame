@@ -10,12 +10,11 @@ import { generateMap } from 'redux/mapAreas/mapAreas.slice';
 import { AreaCellDisplay } from 'features/areaCell/areaCellDisplay';
 import { InventoryDisplay } from 'features/inventory/inventoryDisplay';
 import {
-  ITEM_KEYS,
   ItemDefs,
 } from 'data/item.consts';
 import { itemCreated } from 'redux/items/items.slice';
 import {
-  addAbility,
+  addAbilities,
   inventoryAdded,
 
 } from 'redux/character/character.slice';
@@ -42,6 +41,8 @@ import { MapNavigation } from 'features/map/mapNavigation';
 import {Resizable} from "re-resizable";
 import {ABILITY_KEY} from "data/abilities.consts";
 import { Abilities } from "features/abilities/abilities";
+import { ITEM_KEYS } from "data/item.keys";
+import { Recipes } from "features/recipes/recipes";
 // import Button from 'chakra/components/button';
 
 function App() {
@@ -70,7 +71,9 @@ function App() {
     dispatch(itemCreated(dagger));
     dispatch(inventoryAdded(dagger));
 
-    dispatch(addAbility(ABILITY_KEY.Puncture));
+    const tome = ItemFactory(ItemDefs[ITEM_KEYS.TomeTesting].config);
+    dispatch(itemCreated(tome));
+    dispatch(inventoryAdded(tome));
   }
 
   let mainDisplay;
@@ -119,9 +122,10 @@ function App() {
       }
 
       <Flex p={4} direction="row" justify="center">
-        <Button onClick={toggleColorMode}>
+        <Button colorScheme='red' onClick={toggleColorMode}>
           Toggle {colorMode === "light" ? "Dark" : "Light"}
         </Button>
+
         <Stack direction="column" spacing={4} w="80vw">
           <Box><CharacterOverview /></Box>
 
@@ -140,6 +144,7 @@ function App() {
                   <Tab>Equipment</Tab>
                   <Tab>Skills</Tab>
                   <Tab>Abilities</Tab>
+                  <Tab>Recipes</Tab>
                 </TabList>
 
                 <TabPanels>
@@ -162,6 +167,10 @@ function App() {
                   <TabPanel>
                     <Abilities/>
                   </TabPanel>
+
+                    <TabPanel>
+                      <Recipes/>
+                    </TabPanel>
                 </TabPanels>
               </Tabs>
             </Card>

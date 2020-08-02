@@ -1,8 +1,4 @@
 import { NODE_KEYS } from 'data/resources.consts';
-import {
-  ITEM_KEYS,
-  ItemKey,
-} from 'data/item.consts';
 import React from 'react';
 import {
   IconBeach,
@@ -11,6 +7,7 @@ import {
   IconPlains, IconShop, IconTavern,
   IconTown, IconWaves,
 } from 'data/icons.consts';
+import { ITEM_KEYS, ItemKey } from "data/item.keys";
 
 export enum AREA_CELL_TYPES {
   None,
