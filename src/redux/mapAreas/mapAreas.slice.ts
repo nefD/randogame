@@ -36,13 +36,19 @@ const mapAreasSlice = createSlice({
         const mapArea = state.entities[id];
         if (!mapArea) return;
         const idx = fromXY(x, y, mapArea);
-        mapAreasAdapter.upsertOne(state, {
-          ...mapArea,
-          items: {
-            ...mapArea.items,
-            [idx]: (mapArea.items[idx] || []).concat(item),
-          },
-        });
+        const existing = (mapArea.items[idx] || []).find(i => i.key === item.key);
+        if (item.stackable && existing) {
+          existing.quantity += item.quantity;
+          return;
+        }
+        mapArea.items[idx] = (mapArea.items[idx] || []).concat(item);
+        // mapAreasAdapter.upsertOne(state, {
+        //   ...mapArea,
+        //   items: {
+        //     ...mapArea.items,
+        //     [idx]: (mapArea.items[idx] || []).concat(item),
+        //   },
+        // });
       },
       prepare(id: string, x: number, y: number, item: Item) {
         return { payload: { id, x, y, item }};

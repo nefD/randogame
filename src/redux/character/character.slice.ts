@@ -102,7 +102,7 @@ const characterSlice = createSlice({
     inventoryAdded(state, { payload: item }: PayloadAction<Item>) {
       const existing = state.inventory.find(i => i.key === item.key);
       if (item.stackable && existing) {
-        existing.quantity++;
+        existing.quantity += item.quantity;
         return;
       }
       state.inventory.push(item);

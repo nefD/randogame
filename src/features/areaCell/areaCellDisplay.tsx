@@ -83,7 +83,7 @@ export const AreaCellDisplay = () => {
           {items.map(item =>
             <EntityListItem
               key={item.id}
-              label={item.name}
+              label={`${item.name} (Qty: ${item.quantity})`}
               icon={<EntityIcon item={item} />}
               buttons={<Button onClick={() => dispatch(pickUpItemFromCurrentMapCell(item))} colorScheme="teal" variant="solid">Pick Up</Button>}/>
           )}
