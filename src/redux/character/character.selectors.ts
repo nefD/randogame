@@ -1,19 +1,13 @@
 import { createSelector } from 'reselect';
 import {
-  itemSelectors,
-} from '../items/items.selectors';
-import {
   getCharacter,
   getEnemiesState,
-  getItemsState,
 } from 'app/baseSelectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { NODE_KEYS } from 'data/resources.consts';
 import {
-  CharacterEquipmentItemsFactory,
   EquipmentSlots,
 } from 'models/character';
-import { Item } from 'models/item';
 import { STATS, Stats, StatsKey } from 'models/character/stats';
 import { AbilityDefs, AbilityKey } from "data/abilities.consts";
 import { RecipeKey } from "data/recipes.consts";
@@ -32,23 +26,9 @@ export const getPlayerGameState = createSelector(getCharacter, state => state.ga
 export const getPlayerCombatState = createSelector(getCharacter, state => state.combatState);
 export const getPlayerAbilities = createSelector(getCharacter, state => state.abilities as AbilityKey[]);
 export const getPlayerRecipes = createSelector(getCharacter, state => state.recipes as RecipeKey[]);
+export const getPlayerInventory = createSelector(getCharacter, state => state.inventory);
 
-export const getPlayerEquipment = createSelector(
-  getCharacter,
-  getItemsState,
-  ({ equipment }, itemsState) => {
-    const eqItems = CharacterEquipmentItemsFactory();
-    Object.values(EquipmentSlots).forEach(eqKey => {
-      if (!equipment[eqKey]) return
-      const item = itemSelectors.selectById(itemsState, equipment[eqKey]!);
-      if (item) {
-        eqItems[eqKey] = item;
-      }
-    });
-    return eqItems;
-  },
-);
-
+export const getPlayerEquipment = createSelector(getCharacter, state => state.equipment);
 export const getPlayerWeapon = createSelector(getPlayerEquipment, equipment => equipment[EquipmentSlots.Weapon]);
 
 export const getPlayerStats = createSelector(
@@ -89,17 +69,17 @@ export const getPlayerIsDead = createSelector(
   stats => stats.health <= 0 || stats.hunger <= 0,
 );
 
-export const getPlayerInventory = createSelector(
-  getCharacter,
-  getItemsState,
-  (character, itemsState) => character.inventory.reduce((list: Item[], id: string) => {
-    const item = itemSelectors.selectById(itemsState, id);
-    if (item) {
-      list.push(item);
-    }
-    return list;
-  }, []),
-);
+// export const getPlayerInventory = createSelector(
+//   getCharacter,
+//   getItemsState,
+//   (character, itemsState) => character.inventory.reduce((list: Item[], id: string) => {
+//     const item = itemSelectors.selectById(itemsState, id);
+//     if (item) {
+//       list.push(item);
+//     }
+//     return list;
+//   }, []),
+// );
 
 export const getPlayerCombatEnemy = createSelector(
   getPlayerCombatState,

@@ -16,10 +16,8 @@ import {
   FACILITY_TYPE,
 } from 'data/areas.consts';
 import { fromXY } from 'utilities/mapAreas.utilities';
-import { itemSelectors } from 'redux/items/items.selectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { Enemy } from 'models/enemy';
-import { Item } from 'models/item';
 
 export const {
   selectById: selectMapAreaById,
@@ -110,10 +108,7 @@ export const getTranslatedPlayerMapPos = createSelector(
 export const getItemsAtPlayerPos = createSelector(
   getCurrentMapArea,
   getPlayerMapPos,
-  getItemsState,
-  (mapArea, playerPos, itemsState) =>
-    (mapArea?.items[fromXY(playerPos.x, playerPos.y, mapArea)] || [])
-      .reduce((list: Item[], id: string) => list.concat(itemSelectors.selectById(itemsState, id) || []), []),
+  (mapArea, playerPos) => mapArea?.items[fromXY(playerPos.x, playerPos.y, mapArea)] || [],
 );
 
 export const getEnemiesAtPlayerPos = createSelector(
@@ -145,11 +140,8 @@ export const getPlayersCurrentFacility = createSelector(
 
 export const getCurrentShopInventory = createSelector(
   getPlayersCurrentFacility,
-  getItemsState,
-  (facility, itemsState) =>
-    (facility && facility.type === FACILITY_TYPE.Shop)
-      ? facility.shopItems.reduce((list: Item[], id: string) => list.concat(itemSelectors.selectById(itemsState, id) || []), [])
-      : null,
+  (facility) =>
+    (facility && facility.type === FACILITY_TYPE.Shop) ? facility.shopItems : null,
 );
 
 export const getPlayerInnCost = createSelector(

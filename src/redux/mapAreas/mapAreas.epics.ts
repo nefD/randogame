@@ -74,7 +74,6 @@ export const spawnMapCell$: Epic<Action, Action, RootState> = (actions$, state$)
         if (rng(100) < resourceDef.chance) {
           const item = ItemFactory(ItemDefs[resourceDef.itemKey]);
           actions.push(
-            itemCreated(item),
             addItemToMapCell(mapArea!.id, playerLoc.coords.x, playerLoc.coords.y, item)
           );
         }
@@ -109,12 +108,11 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$) => actio
     const mapArea = generateMapArea(mapWidth, mapHeight);
 
     const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand]);
-    mapArea.items[fromXY(playerX, playerY, mapWidth)] = [item.id];
+    mapArea.items[fromXY(playerX, playerY, mapWidth)] = [item];
     const enemy = EnemyFactory(EnemyDefs.TestEnemy.config);
     mapArea.enemies[fromXY(playerX, playerY, mapWidth)] = [enemy.id];
 
     actions = actions.concat(
-      itemCreated(item),
       enemyCreated(enemy),
       mapAreaUpdated(mapArea),
       playerMoved(MapLocationFactory(mapArea.id, playerX, playerY)),
@@ -123,11 +121,9 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$) => actio
     Object.values(mapArea.towns).forEach(town => {
       town.facilities.filter(f => f.type === FACILITY_TYPE.Shop).forEach(shop => {
         const shopItem1 = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe]);
-        shop.shopItems.push(shopItem1.id);
-        actions.push(itemCreated(shopItem1));
+        shop.shopItems.push(shopItem1);
         const shopItem2 = ItemFactory(ItemDefs[ITEM_KEYS.Plant]);
-        shop.shopItems.push(shopItem2.id);
-        actions.push(itemCreated(shopItem2));
+        shop.shopItems.push(shopItem2);
       });
     });
 

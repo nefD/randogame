@@ -40,7 +40,7 @@ const mapAreasSlice = createSlice({
           ...mapArea,
           items: {
             ...mapArea.items,
-            [idx]: (mapArea.items[idx] || []).concat(item.id),
+            [idx]: (mapArea.items[idx] || []).concat(item),
           },
         });
       },
@@ -91,7 +91,7 @@ const mapAreasSlice = createSlice({
           ...mapArea,
           items: {
             ...mapArea.items,
-            [idx]: (mapArea.items[idx] || []).filter(id => id !== item.id),
+            [idx]: (mapArea.items[idx] || []).filter(i => i.id !== item.id),
           },
         });
       },
@@ -117,27 +117,27 @@ const mapAreasSlice = createSlice({
       },
     },
     removeItemFromShop: {
-      reducer(state, { payload: { mapId, facilityId, itemId } }: PayloadAction<{ mapId: string, facilityId: string, itemId: string }>) {
+      reducer(state, { payload: { mapId, facilityId, item } }: PayloadAction<{ mapId: string, facilityId: string, item: Item }>) {
         const mapArea = state.entities[mapId];
         if (!mapArea) return;
         const facility = findFacilityInMapArea(mapArea, facilityId);
         if (!facility) return;
-        facility.shopItems = facility.shopItems.filter(id => id !== itemId);
+        facility.shopItems = facility.shopItems.filter(i => i.id !== item.id);
       },
-      prepare(mapId: string, facilityId: string, itemId: string) {
-        return { payload: { mapId, facilityId, itemId } };
+      prepare(mapId: string, facilityId: string, item: Item) {
+        return { payload: { mapId, facilityId, item } };
       }
     },
     addItemToShop: {
-      reducer(state, { payload: { mapId, facilityId, itemId } }: PayloadAction<{ mapId: string, facilityId: string, itemId: string }>) {
+      reducer(state, { payload: { mapId, facilityId, item } }: PayloadAction<{ mapId: string, facilityId: string, item: Item }>) {
         const mapArea = state.entities[mapId];
         if (!mapArea) return;
         const facility = findFacilityInMapArea(mapArea, facilityId);
         if (!facility) return;
-        facility.shopItems.push(itemId);
+        facility.shopItems.push(item);
       },
-      prepare(mapId: string, facilityId: string, itemId: string) {
-        return { payload: { mapId, facilityId, itemId } };
+      prepare(mapId: string, facilityId: string, item: Item) {
+        return { payload: { mapId, facilityId, item } };
       },
     },
   },

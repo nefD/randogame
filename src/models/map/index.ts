@@ -6,12 +6,13 @@ import {
 import { ResourceNode } from 'redux/mapAreas/mapAreas.slice';
 import { uuid } from 'utilities/random.utilities';
 import { Coords } from 'data/commonTypes';
+import { Item } from "models/item";
 
 export interface Facility {
   id: string;
   name: string;
   type: FACILITY_TYPE;
-  shopItems: string[];
+  shopItems: Item[];
 }
 
 export const FacilityFactory = (config?: Partial<Facility>): Facility => ({
@@ -39,7 +40,7 @@ export interface MapArea {
   width: number;
   height: number;
   cellTypes: AREA_CELL_TYPES[];
-  items: { [key: string]: string[] };
+  items: { [key: string]: Item[] };
   enemies: { [key: string]: string[] };
   towns: { [key: string]: Town };
   resourceNodes: { [key: string]: ResourceNode[] };

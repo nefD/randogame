@@ -12,7 +12,6 @@ import { InventoryDisplay } from 'features/inventory/inventoryDisplay';
 import {
   ItemDefs,
 } from 'data/item.consts';
-import { itemCreated } from 'redux/items/items.slice';
 import {
   addAbilities,
   inventoryAdded,
@@ -56,23 +55,18 @@ function App() {
   if (!currentMapId) {
     dispatch(generateMap());
     const axe = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe].config);
-    dispatch(itemCreated(axe));
     dispatch(inventoryAdded(axe));
 
     const hat = ItemFactory(ItemDefs[ITEM_KEYS.Hat].config);
-    dispatch(itemCreated(hat));
     dispatch(inventoryAdded(hat));
 
     const potion = ItemFactory(ItemDefs[ITEM_KEYS.HealingPotion].config);
-    dispatch(itemCreated(potion));
     dispatch(inventoryAdded(potion));
 
     const dagger = ItemFactory(ItemDefs[ITEM_KEYS.Dagger].config);
-    dispatch(itemCreated(dagger));
     dispatch(inventoryAdded(dagger));
 
     const tome = ItemFactory(ItemDefs[ITEM_KEYS.TomeTesting].config);
-    dispatch(itemCreated(tome));
     dispatch(inventoryAdded(tome));
   }
 

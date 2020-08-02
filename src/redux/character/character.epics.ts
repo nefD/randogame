@@ -22,10 +22,6 @@ import {
 } from 'redux/mapAreas/mapAreas.slice';
 import { FACILITY_TYPE } from 'data/areas.consts';
 import { addMessage } from 'redux/messages/messages.slice';
-import {
-  itemCreated,
-  toolUsed,
-} from 'redux/items/items.slice';
 import { ResourceNodeDefs } from 'data/resources.consts';
 import { ItemDefs } from 'data/item.consts';
 import {
@@ -36,8 +32,8 @@ import { ItemFactory } from 'models/item';
 import { EffectType } from "models/character/effects";
 import { rng } from "utilities/random.utilities";
 import {CharacterSkillFactory} from "models/character/skill";
-import { ABILITY_KEY } from "data/abilities.consts";
-import { addAbilities, addRecipes } from "redux/character/character.slice";
+import { addAbilities, addRecipes, usedTool } from "redux/character/character.slice";
+import { getPlayerInventory } from "redux/character/character.selectors";
 
 export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(characterActions.playerMovingNorth.match),
@@ -193,13 +189,13 @@ export const buyItemFromShop$: Epic<Action, Action, RootState> = (actions$, stat
   filter(([{ payload: item },, facility, playerGold]) => !!(
     facility
     && facility.type === FACILITY_TYPE.Shop
-    && facility.shopItems.includes(item.id)
+    && facility.shopItems.includes(item)
     && playerGold >= item.goldValue
   )),
   mergeMap(([{ payload: item }, playerLocation, facility]) => [
     characterActions.addToInventory(item),
     characterActions.playerGoldModified(-item.goldValue),
-    removeItemFromShop(playerLocation.mapId, facility!.id, item.id),
+    removeItemFromShop(playerLocation.mapId, facility!.id, item),
     addMessage({ content: `Bought ${item.name} for ${item.goldValue} Gold.` }),
   ]),
 );
@@ -214,7 +210,7 @@ export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state
   mergeMap(([{ payload: item }, playerLocation, facility]) => [
     characterActions.removeFromInventory(item),
     characterActions.playerGoldModified(item.goldValue),
-    addItemToShop(playerLocation.mapId, facility!.id, item.id),
+    addItemToShop(playerLocation.mapId, facility!.id, item),
     addMessage({ content: `Sold ${item.name} for ${item.goldValue} Gold.` }),
   ]),
 );
@@ -261,14 +257,13 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
     if (nodeDef.requiresTool) {
       const tool = inventory.find(i => i.key === nodeDef.requiresTool && i.toolProps && i.toolProps.remainingUses > 0);
       if (!tool) return[];
-      actions.push(toolUsed(tool));
+      actions.push(usedTool(tool));
     }
 
     if (nodeDef.yieldsItem) {
       if (!nodeDef.yieldBaseChance || rng(100) <= nodeDef.yieldBaseChance) {
         const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
         actions.push(
-          itemCreated(harvestedItem),
           characterActions.addToInventory(harvestedItem),
           addMessage({ content: `Successfully harvested the ${node!.name} and gathered ${harvestedItem.name}` }),
         );
@@ -300,7 +295,7 @@ export const playerEquippedItem$: Epic<Action, Action, RootState> = (actions$, s
     return actions.concat(
       characterActions.removeFromInventory(equipItem),
       characterActions.updateEquipment({
-        [equipItem.equipProps!.slotKey]: equipItem.id,
+        [equipItem.equipProps!.slotKey]: equipItem,
       }),
     );
   }),
@@ -354,5 +349,16 @@ export const applyEffects$: Epic<Action, Action, RootState> = (actions$, state$)
       }
     });
     return actions;
+  }),
+);
+
+export const craftRecipe$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(characterActions.craftRecipe.match),
+  withLatestFrom(
+    state$.pipe(select(getPlayerInventory)),
+  ),
+  mergeMap(([{ payload: recipeKey }, inventory]) => {
+    // ensure player has required items
+    return [NullAction()];
   }),
 );

@@ -12,11 +12,11 @@ import {
   combatEnemyAttacking,
   combatPlayerAttacking,
   combatPlayerFleeing,
-  combatUseAbility,
+  combatUseAbility, rollLootTables,
 } from 'redux/combat/combat.actions';
 import {
   playerWasAttacked,
-  playerExitCombat, playerSkillIncreased,
+  playerExitCombat, playerSkillIncreased, addToInventory,
 } from 'redux/character/character.slice';
 import {
   getCharacterObject, getPlayerAbilities,
@@ -31,8 +31,11 @@ import { AbilityDefs, AbilityKey } from "data/abilities.consts";
 import { CharacterSkill, CharacterSkillFactory } from "models/character/skill";
 import { log } from "util";
 import * as characterSelectors from "redux/character/character.selectors";
-import { between } from "utilities/random.utilities";
+import { between, rng } from "utilities/random.utilities";
 import { rollWeaponDamage } from "utilities/item.utilities";
+import { LootTableKey, LootTables } from "data/loot.consts";
+import { ItemFactory } from "models/item";
+import { ItemDefs } from "data/item.consts";
 
 export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(combatPlayerFleeing.match),
@@ -124,4 +127,17 @@ export const combatUseAbility$: Epic<Action, Action, RootState> = (actions$, sta
       playerSkillIncreased(ability.skillKey, 1),
     );
   }),
+);
+
+export const rollLootTables$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
+  filter(rollLootTables.match),
+  mergeMap(({ payload: lootTableKeys }) => lootTableKeys.reduce((actions: Action[], tableKey: LootTableKey) => {
+    LootTables[tableKey].items.forEach(lootItem => {
+      if (rng(100) <= lootItem.chance) {
+        const item = ItemFactory(ItemDefs[lootItem.itemDef]);
+        actions.push(addToInventory(item));
+      }
+    });
+    return actions;
+  }, [])),
 );

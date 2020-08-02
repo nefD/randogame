@@ -25,7 +25,7 @@ import {isStatKey} from "utilities/stats.utilities";
 import {CharacterSkill, CharacterSkillFactory} from "models/character/skill";
 import {AbilityKey} from "data/abilities.consts";
 import {uniqueArray} from "utilities/array.utilities";
-import { RecipeKey } from "data/recipes.consts";
+import { RECIPE_KEYS, RecipeKey } from "data/recipes.consts";
 
 export interface CombatState {
   enemy: string;
@@ -45,7 +45,7 @@ export interface CharacterState {
   stats: Stats;
   location: MapLocation;
   equipment: CharacterEquipment;
-  inventory: string[];
+  inventory: Item[];
   inventoryMax: number;
   gameState: CharacterGameState;
   combatState: CombatState;
@@ -99,11 +99,22 @@ const characterSlice = createSlice({
       state.age += 1;
       state.location = { ...action.payload };
     },
-    inventoryAdded(state, action: PayloadAction<Item>) {
-      state.inventory.push(action.payload.id);
+    inventoryAdded(state, { payload: item }: PayloadAction<Item>) {
+      // @TODO - Handle stackable items
+      state.inventory.push(item);
     },
-    removeFromInventory(state, action: PayloadAction<Item>) {
-      state.inventory = state.inventory.filter(i => i !== action.payload.id);
+    // removeFromInventory(state, action: PayloadAction<Item>) {
+    //   state.inventory = state.inventory.filter(i => i !== action.payload.id);
+    //   // @TODO - Handle stackable items
+    // },
+    removeFromInventory: {
+      reducer(state, { payload: { item, quantity } }: PayloadAction<{ item: Item, quantity: number }>) {
+        // @TODO - Handle stackable items
+        state.inventory = state.inventory.filter(i => i.id !== item.id);
+      },
+      prepare(item: Item, quantity = 1) {
+        return { payload: { item, quantity }};
+      }
     },
     playerStartCombat(state, action: PayloadAction<Enemy>) {
       state.gameState = CharacterGameState.Combat;
@@ -181,7 +192,15 @@ const characterSlice = createSlice({
     },
     addRecipes(state, { payload: recipeKeys }: PayloadAction<RecipeKey[]>) {
       state.recipes = uniqueArray(state.recipes.concat(recipeKeys));
-    }
+    },
+    usedTool(state, { payload: item }: PayloadAction<Item>) {
+      const tool = state.inventory.find(i => i.id === item.id);
+      if (!tool) return;
+      if (tool.toolProps) {
+        tool.toolProps.remainingUses = Math.max(0, tool.toolProps.remainingUses - 1);
+        console.log(`remaining uses is now:`, tool.toolProps.remainingUses);
+      }
+    },
   },
 });
 
@@ -229,5 +248,8 @@ export const playerEquippedItem = createAction<Item>('character/playerEquippedIt
 export const playerUnequippedItem = createAction<Item>('character/playerUnequippedItem');
 export const playerUsedItem = createAction<Item>('character/playerUsedItem');
 export const applyEffectsToPlayer = createAction<Effect[]>('character/applyEffectsToPlayer');
+export const craftRecipe = createAction<RecipeKey>('character/craftRecipe');
+export const usedTool = characterSlice.actions.usedTool;
+
 
 export default characterSlice.reducer;

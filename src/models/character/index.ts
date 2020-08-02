@@ -1,4 +1,5 @@
 import {Item} from 'models/item';
+import { ITEM_KEYS, ItemKey } from "data/item.keys";
 
 export enum CharacterGameState {
   Travel,
@@ -16,10 +17,6 @@ export enum EquipmentSlots {
 export type EquipSlotKey = keyof typeof EquipmentSlots;
 
 export type CharacterEquipment = {
-  [key in EquipSlotKey]: string | null;
-}
-
-export type CharacterEquipmentItems = {
   [key in EquipSlotKey]: Item | null;
 }
 
@@ -31,13 +28,3 @@ export const CharacterEquipmentFactory = (config?: Partial<CharacterEquipment>):
   [EquipmentSlots.Shield]: null,
   ...config,
 });
-
-export const CharacterEquipmentItemsFactory = (config?: Partial<CharacterEquipmentItems>): CharacterEquipmentItems => ({
-  [EquipmentSlots.Head]: null,
-  [EquipmentSlots.Body]: null,
-  [EquipmentSlots.Feet]: null,
-  [EquipmentSlots.Weapon]: null,
-  [EquipmentSlots.Shield]: null,
-  ...config,
-});
-

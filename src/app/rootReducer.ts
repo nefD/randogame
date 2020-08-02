@@ -8,14 +8,12 @@ import enemiesReducer from 'redux/enemies/enemies.slice';
 import messagesReducer from 'redux/messages/messages.slice';
 import * as combatEpics from 'redux/combat/combat.epics';
 import * as characterEpics from 'redux/character/character.epics';
-import * as itemEpics from 'redux/items/items.epics';
 import * as enemyEpics from 'redux/enemies/enemies.epics';
 import * as mapAreaEpics from 'redux/mapAreas/mapAreas.epics';
 
 const rootReducer = combineReducers({
   character: characterReducer,
   mapAreas: mapAreasReducer,
-  items: itemsReducer,
   enemies: enemiesReducer,
   messages: messagesReducer,
 });
@@ -28,5 +26,4 @@ export const rootEpic = combineEpics(
   ...Object.values(enemyEpics),
   ...Object.values(combatEpics),
   ...Object.values(characterEpics),
-  ...Object.values(itemEpics),
 );

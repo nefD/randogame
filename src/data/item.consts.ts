@@ -26,6 +26,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.TestItem,
       name: 'Test Item',
+      stackable: false,
     },
   },
   [ITEM_KEYS.Sand]: {
@@ -34,6 +35,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.Sand,
       name: 'Sand',
+      stackable: true,
     },
   },
   [ITEM_KEYS.Stick]: {
@@ -42,6 +44,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.Stick,
       name: 'Stick',
+      stackable: true,
     },
   },
   [ITEM_KEYS.Plant]: {
@@ -50,6 +53,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.Plant,
       name: 'Plant',
+      stackable: true,
     },
   },
   [ITEM_KEYS.WoodAxe]: {
@@ -58,6 +62,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.WoodAxe,
       name: 'Wood Axe',
+      stackable: false,
       toolProps: {
         remainingUses: 6,
         maxUses: 6,
@@ -70,12 +75,14 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.Wood,
       name: 'Wood',
+      stackable: true,
     },
   },
   [ITEM_KEYS.Hat]: {
     config: {
       key: ITEM_KEYS.Hat,
       name: 'Hat',
+      stackable: false,
       equipProps: {
         slotKey: EquipmentSlots.Head,
         bonuses: [
@@ -90,6 +97,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.HealingPotion,
       name: 'Healing Potion',
+      stackable: true,
       useProps: {
         effects: [
           {
@@ -105,6 +113,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.TomeTesting,
       name: 'Tome of Testing',
+      stackable: false,
       useProps: {
         giveAbilities: [ABILITY_KEY.Puncture],
         giveRecipes: [RECIPE_KEYS.Test],
@@ -117,6 +126,7 @@ export const ItemDefs: { [key in ITEM_KEYS]: ItemDefinition } = {
     config: {
       key: ITEM_KEYS.Dagger,
       name: 'Dagger',
+      stackable: false,
       equipProps: {
         slotKey: EquipmentSlots.Weapon,
         skillKey: SKILL_KEY.Daggers,

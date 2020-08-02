@@ -13,14 +13,13 @@ import {
   mergeMap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { combatCompleted } from 'redux/combat/combat.actions';
+import { combatCompleted, rollLootTables } from 'redux/combat/combat.actions';
 import { removeEnemyFromMapCell } from 'redux/mapAreas/mapAreas.slice';
 import {
   getCurrentMapId,
   getPlayerMapPos,
 } from 'redux/character/character.selectors';
 import { select } from 'utilities/redux.utilities';
-import { rollLootTables } from 'redux/items/items.slice';
 
 export const enemyAttacked$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(enemyWasAttacked.match),
