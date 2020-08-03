@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import 'app/App.scss';
 import {
   useDispatch,
@@ -9,9 +9,10 @@ import { generateMap } from 'redux/mapAreas/mapAreas.slice';
 import { ItemDefs } from 'data/item.consts';
 import { inventoryAdded } from 'redux/character/character.slice';
 import {
-  getCurrentMapId,
+  getCharacterName,
+  getCurrentMapId, getPlayerClass,
   getPlayerGameState,
-  getPlayerIsDead,
+  getPlayerIsDead, getPlayerLevel, getPlayerRace,
 } from 'redux/character/character.selectors';
 import { DeathScreen } from 'features/deathScreen/deathScreen';
 import { CharacterGameState } from 'models/character';
@@ -23,6 +24,8 @@ import { CharacterView } from "features/characterView/characterView";
 import store, { loadState } from 'app/store';
 import LZString from 'lz-string';
 import { getLocalStorageItem, setLocalStorageItem } from 'utilities/sessionStorage.utilities';
+import { SavedGame, SavedGameFactory } from "models/saves";
+import { LoadGame } from "features/loadGame/loadGame";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +34,8 @@ function App() {
   const playerGameState = useSelector(getPlayerGameState);
   const playerIsDead = useSelector(getPlayerIsDead);
   const currentMapId = useSelector(getCurrentMapId);
+
+  const [showLoadGame, setShowLoadGame] = useState(false);
 
   if (!currentMapId) {
     dispatch(generateMap());
@@ -43,25 +48,44 @@ function App() {
   }
 
   const saveState = () => {
-    const savedGames = getLocalStorageItem<string[]>('savedGames', []);
+    const savedGames = getLocalStorageItem<SavedGame[]>('savedGames', []);
     const state = store.getState();
     const stateText = JSON.stringify(state);
-    const compressed = LZString.compress(stateText);
-    savedGames.push(compressed);
+    const compressedData = LZString.compress(stateText);
+
+    getCharacterName(state);
+    // include character name, race, class, level
+
+    const save = SavedGameFactory({
+      compressedData,
+      characterInfo: {
+        name: getCharacterName(state),
+        race: getPlayerRace(state),
+        class: getPlayerClass(state),
+        level: getPlayerLevel(state),
+      }
+    });
+    savedGames.push(save);
     setLocalStorageItem('savedGames', savedGames);
   };
 
   const onLoadState = () => {
-    const savedGames = getLocalStorageItem<string[]>('savedGames', []);
-    if (!savedGames.length) return;
-    const saveText = savedGames[savedGames.length - 1];
-    const stateText = LZString.decompress(saveText);
-    const stateObj = JSON.parse(stateText || '');
-    dispatch(loadState(stateObj));
+    // const savedGames = getLocalStorageItem<SavedGame[]>('savedGames', []);
+    // if (!savedGames.length) return;
+    // const saveText = savedGames[savedGames.length - 1];
+    // const stateText = LZString.decompress(saveText.compressedData);
+    // const stateObj = JSON.parse(stateText || '');
+    // dispatch(loadState(stateObj));
+    setShowLoadGame(!showLoadGame);
   };
 
   const savedGames = getLocalStorageItem<string[]>('savedGames', []);
-  const showLoad = savedGames.length > 0;
+  const showLoadButton = savedGames.length > 0;
+
+  const onCloseLoadGame = () => {
+    console.log(`onCloseLoadGame`);
+    setShowLoadGame(!showLoadGame)
+  };
 
   return (
     <Box>
@@ -77,6 +101,20 @@ function App() {
         </Flex>
       }
 
+      {showLoadGame &&
+        <Flex
+          p={4}
+          bg="whiteAlpha.400"
+          zIndex={1}
+          direction="row" justify="center" align="center"
+          position="absolute" w="100%" h="100%"
+        >
+          <LoadGame
+            onClose={() => onCloseLoadGame()}
+          />
+        </Flex>
+      }
+
       <Flex p={4} direction="column" align="center">
         <Stack direction="column" spacing={4} w="80vw">
           <Box>
@@ -86,7 +124,7 @@ function App() {
 
             <Button onClick={() => saveState()}>Save</Button>
 
-            {showLoad && <Button onClick={() => onLoadState()}>Load</Button>}
+            {showLoadButton && <Button onClick={() => onLoadState()}>Load</Button>}
           </Box>
 
           <CharacterOverview />

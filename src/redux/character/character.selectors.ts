@@ -27,6 +27,7 @@ export const getPlayerCombatState = createSelector(getCharacter, state => state.
 export const getPlayerAbilities = createSelector(getCharacter, state => state.abilities as AbilityKey[]);
 export const getPlayerRecipes = createSelector(getCharacter, state => state.recipes as RecipeKey[]);
 export const getPlayerInventory = createSelector(getCharacter, state => state.inventory);
+export const getPlayerLevel = createSelector(getCharacter, state => state.level);
 
 export const getPlayerEquipment = createSelector(getCharacter, state => state.equipment);
 export const getPlayerWeapon = createSelector(getPlayerEquipment, equipment => equipment[EquipmentSlots.Weapon]);
