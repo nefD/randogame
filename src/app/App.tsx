@@ -20,7 +20,9 @@ import { useColorMode, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel
 import { ITEM_KEYS } from "data/item.keys";
 import { WorldView } from "features/worldView/worldView";
 import { CharacterView } from "features/characterView/characterView";
-
+import store, { loadState } from 'app/store';
+import LZString from 'lz-string';
+import { getLocalStorageItem, setLocalStorageItem } from 'utilities/sessionStorage.utilities';
 
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +41,27 @@ function App() {
     const tome = ItemFactory(ItemDefs[ITEM_KEYS.TomeTesting].config);
     dispatch(inventoryAdded([tome, hat, potion, dagger, axe]));
   }
+
+  const saveState = () => {
+    const savedGames = getLocalStorageItem<string[]>('savedGames', []);
+    const state = store.getState();
+    const stateText = JSON.stringify(state);
+    const compressed = LZString.compress(stateText);
+    savedGames.push(compressed);
+    setLocalStorageItem('savedGames', savedGames);
+  };
+
+  const onLoadState = () => {
+    const savedGames = getLocalStorageItem<string[]>('savedGames', []);
+    if (!savedGames.length) return;
+    const saveText = savedGames[savedGames.length - 1];
+    const stateText = LZString.decompress(saveText);
+    const stateObj = JSON.parse(stateText || '');
+    dispatch(loadState(stateObj));
+  };
+
+  const savedGames = getLocalStorageItem<string[]>('savedGames', []);
+  const showLoad = savedGames.length > 0;
 
   return (
     <Box>
@@ -60,6 +83,10 @@ function App() {
             <Button colorScheme='gray' onClick={toggleColorMode}>
               Toggle {colorMode === "light" ? "Dark" : "Light"}
             </Button>
+
+            <Button onClick={() => saveState()}>Save</Button>
+
+            {showLoad && <Button onClick={() => onLoadState()}>Load</Button>}
           </Box>
 
           <CharacterOverview />

@@ -1,6 +1,8 @@
 import {
   configureStore,
   getDefaultMiddleware,
+  createAction,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 
 import rootReducer, {
@@ -12,8 +14,15 @@ import { Action } from 'redux';
 
 const epicMiddleware = createEpicMiddleware<Action, Action, RootState>();
 
+export const loadState = createAction<RootState>('game/loadState');
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: (state: any, action: PayloadAction<any>) => {
+    if (loadState.match(action)) {
+      state = action.payload;
+    }
+    return rootReducer(state, action);
+  },
   middleware: [...getDefaultMiddleware(), epicMiddleware],
 });
 

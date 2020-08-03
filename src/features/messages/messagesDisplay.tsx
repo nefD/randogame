@@ -23,9 +23,8 @@ export function MessagesDisplay() {
 
   return (
     <Box>
-      <Flex direction="row" borderBottomWidth="1px" align="center">
-        <Box flex="1">Message Log</Box>
-        <Button onClick={() => clearGameMessages()}>Clear</Button>
+      <Flex direction="row" justify='flex-end'>
+        <Button size='sm' onClick={() => clearGameMessages()}>Clear</Button>
       </Flex>
 
       <Flex direction="column-reverse" overflowY="auto">
