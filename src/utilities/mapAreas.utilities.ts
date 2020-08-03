@@ -16,6 +16,7 @@ import {
   Town,
   TownFactory,
 } from 'models/map';
+import { ResourceNode } from "redux/mapAreas/mapAreas.slice";
 
 export function fromXY(x: number, y: number, width: number | MapArea = 0): number {
   if (typeof width !== 'number') {
@@ -204,3 +205,8 @@ export const findFacilityInMapArea = (mapArea: MapArea, facilityId: string) =>
   Object.values(mapArea.towns)
     .reduce((list: Facility[], town: Town) => list.concat(town.facilities), [])
     .find(facility => facility.id === facilityId);
+
+export const findResourceNodeInMapArea = (mapArea: MapArea, nodeId: string) =>
+  Object.values(mapArea.resourceNodes)
+    .reduce((list: ResourceNode[], nodes: ResourceNode[]) => list.concat(nodes), [])
+    .find(n => n.id === nodeId);

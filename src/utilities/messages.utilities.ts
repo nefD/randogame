@@ -13,14 +13,13 @@ export const addGameMessage = (content: string) => {
   let list: Message[];
   try {
     const val = window.localStorage.getItem('gameMessages');
-    console.log(`VAL: ${val}`);
     list = val ? JSON.parse(val) : [];
   } catch (error) {
     list = [];
   }
-  list.push(message);
+  list.unshift(message);
   if (list.length > MAX_GAME_MESSAGES) {
-    list.shift();
+    list.pop();
   }
   writeStorage('gameMessages', list);
 };

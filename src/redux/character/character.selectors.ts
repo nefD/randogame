@@ -28,6 +28,48 @@ export const getPlayerAbilities = createSelector(getCharacter, state => state.ab
 export const getPlayerRecipes = createSelector(getCharacter, state => state.recipes as RecipeKey[]);
 export const getPlayerInventory = createSelector(getCharacter, state => state.inventory);
 export const getPlayerLevel = createSelector(getCharacter, state => state.level);
+export const getPlayerAge = createSelector(getCharacter, state => state.age);
+
+export const NIGHT_TICKS = 4;
+export const MORNING_TICKS = 4;
+export const AFTERNOON_TICKS = 4;
+export const EVENING_TICKS = 4;
+export const DAY_TICKS = NIGHT_TICKS + MORNING_TICKS + AFTERNOON_TICKS + EVENING_TICKS;
+export const WEEK_TICKS = DAY_TICKS * 7;
+export const SEASON_TICKS = WEEK_TICKS * 4;
+export const YEAR_TICKS = SEASON_TICKS * 4;
+
+export const Seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
+export const DayPeriod = ['Night', 'Morning', 'Afternoon', 'Evening'];
+export const DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export const getGameDate = createSelector(
+  getPlayerAge,
+  (age) => {
+    const season = Seasons[Math.floor(age / SEASON_TICKS)];
+
+    const week = Math.floor((age % SEASON_TICKS) / WEEK_TICKS) + 1;
+    const totalDays = Math.floor(age / DAY_TICKS) + 1;
+
+    const dayOfSeason = Math.floor((age % SEASON_TICKS) / DAY_TICKS) + 1;
+    const dayOfTheWeek = DayNames[Math.floor(totalDays % WEEK_TICKS)];
+
+    const dayTicks = age % DAY_TICKS;
+    const dayPeriod = DayPeriod[Math.floor(dayTicks / 4)];
+
+    console.log(`season: ${season}, week: ${week}, dayPeriod: ${dayPeriod}, totalDays: ${totalDays}, dayOfTheWeek: ${dayOfTheWeek}`);
+
+    return {
+      totalDays,
+      season,
+      week,
+      dayOfTheWeek,
+      dayPeriod,
+      dayOfSeason,
+    };
+  },
+)
+
 
 export const getPlayerEquipment = createSelector(getCharacter, state => state.equipment);
 export const getPlayerWeapon = createSelector(getPlayerEquipment, equipment => equipment[EquipmentSlots.Weapon]);

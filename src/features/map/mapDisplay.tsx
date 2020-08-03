@@ -15,6 +15,7 @@ import {
   Flex,
 } from '@chakra-ui/core';
 import { rng } from 'utilities/random.utilities';
+import { RainOverlay } from "features/map/rainOverlay";
 
 export const MapDisplay = () => {
   const areaCells = useSelector(getCurrentMapCells);
@@ -78,7 +79,10 @@ export const MapDisplay = () => {
   }
 
   return (
-    <Box className="mapContainer">
+    <Box className="mapContainer" position='relative'>
+
+      {/*<RainOverlay/>*/}
+
       {rows.map((row, rowIdx) => (
         <div key={rowIdx} className="mapRow">
           {row.map(content => content)}

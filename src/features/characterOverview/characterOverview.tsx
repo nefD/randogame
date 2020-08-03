@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {
-  getCharacterObject,
+  getCharacterObject, getGameDate,
   getPlayerStats,
 } from 'redux/character/character.selectors';
 import './characterOverview.scss';
@@ -18,6 +18,11 @@ import { IconGold, IconHealth, IconHunger, IconMana } from "data/icons.consts";
 export const CharacterOverview = () => {
   const character = useSelector(getCharacterObject);
   const stats = useSelector(getPlayerStats);
+  const gameDate = useSelector(getGameDate);
+
+  function getOrdinalNum(n: number) {
+    return n + (n > 0 ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10] : '');
+  }
 
   return (
     <Stack direction="column" spacing={2}>
@@ -29,6 +34,11 @@ export const CharacterOverview = () => {
           <Box>Atk: {stats.attack}</Box>
           <Box>Def: {stats.defense}</Box>
         </Stack>
+        <Flex>
+          <Box>
+            {gameDate.dayOfTheWeek} the {getOrdinalNum(gameDate.dayOfSeason)}, Week {gameDate.week}, {gameDate.season}
+          </Box>
+        </Flex>
 
         <Stack direction="row" spacing={2} align="center">
           <Icon size='sm' icon={IconHealth} />

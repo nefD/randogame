@@ -1,0 +1,55 @@
+.rainContainer {
+  transform: rotate(-15deg);
+}
+
+.rain {
+  background: white;
+  background: linear-gradient(
+                  to bottom,
+                  #ffffff00 0%,
+                  #b5e1df 100%);
+  height: 50px;
+  position: absolute;
+  width: random(3) + 1px;
+  border-radius: 0 0 50% 50%;
+}
+
+$rain: 50;
+
+@for $i from 1 through $rain {
+  $top: (random(50) + 50) * 1%;
+  $left: random(100) * 1%;
+  $opacity: (random(20) + 30) * 0.01;
+  $delay: (random(20) * -1) - 1s;
+
+  $sizeMod: (random() * 4);
+  $duration: (4 - $sizeMod) + 2s;
+  $width: $sizeMod + 1px;
+
+  //$duration: 20s;
+  //$width: 15px;
+
+  .rain:nth-of-type(#{$i}) {
+    animation-name: rain-#{$i};
+    animation-delay: $delay;
+    animation-duration: $duration;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    left: $left;
+    opacity: $opacity;
+    top: -$top;
+    width: $width;
+  }
+
+  @Keyframes rain-#{$i} {
+    0% {
+      left: $left;
+      opacity: $opacity;
+      top: -$top;
+    }
+    100% {
+      opacity: 0;
+      top: $top + 40%;
+    }
+  }
+}

@@ -17,7 +17,7 @@ import {
   removeItemFromMapCell,
   addItemsToMapCell,
   removeItemFromShop,
-  addItemToShop,
+  addItemToShop, updateResourceNode, removeResourceNode,
 } from 'redux/mapAreas/mapAreas.slice';
 import { FACILITY_TYPE } from 'data/areas.consts';
 import { ResourceNodeDefs } from 'data/resources.consts';
@@ -255,18 +255,20 @@ export const playerSkillIncreased$: Epic<Action, Action, RootState> = (actions$,
 export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(characterActions.harvestResourceNode.match),
   withLatestFrom(
+    state$.pipe(select(characterSelectors.getCurrentMapId)),
     state$.pipe(select(mapAreaSelectors.getResourceNodesAtPlayerPos)),
     state$.pipe(select(characterSelectors.getPlayerCanHarvestResources)),
     state$.pipe(select(characterSelectors.getPlayerInventory)),
   ),
-  filter(([{ payload: nodeId }, resourceNodes, canHarvest]) => {
+  filter(([{ payload: nodeId },, resourceNodes, canHarvest]) => {
     const node = resourceNodes.find(node => node.id === nodeId);
     return !!(node && canHarvest[node.type]);
   }),
-  mergeMap(([{ payload: nodeId }, resourceNodes,,inventory]) => {
+  mergeMap(([{ payload: nodeId }, mapId, resourceNodes,,inventory]) => {
     const node = resourceNodes.find(n => n.id === nodeId);
     const actions: Action[] = [];
     const nodeDef = ResourceNodeDefs[node!.type];
+    let harvestMessage;
 
     if (nodeDef.requiresTool) {
       const tool = inventory.find(i => i.key === nodeDef.requiresTool && i.toolProps && i.toolProps.remainingUses > 0);
@@ -277,16 +279,28 @@ export const harvestResourceNode$: Epic<Action, Action, RootState> = (actions$, 
     if (nodeDef.yieldsItem) {
       if (!nodeDef.yieldBaseChance || rng(100) <= nodeDef.yieldBaseChance) {
         const harvestedItem = ItemFactory(ItemDefs[ResourceNodeDefs[node!.type].yieldsItem]);
-        addGameMessage(`Successfully harvested the ${node!.name} and gathered ${harvestedItem.name}`);
+        harvestMessage = `Successfully harvested the ${node!.name} and gathered (1x) ${harvestedItem.name}.`;
         actions.push(
           characterActions.addToInventory([harvestedItem]),
         );
       } else {
-        addGameMessage(`Failed to harvest the ${node!.name}`);
+        harvestMessage = `Failed to harvest the ${node!.name}.`;
       }
     }
 
+    const newRemainingUses = node!.remainingResources - 1;
+    if (newRemainingUses === 0) {
+      actions.push(removeResourceNode(mapId, nodeId));
+      harvestMessage = `${harvestMessage} The ${node!.name} has been used up.`;
+    } else {
+      actions.push(updateResourceNode(mapId, nodeId, {
+        remainingResources: newRemainingUses,
+      }))
+      harvestMessage = `${harvestMessage} It (${newRemainingUses}) remaining uses.`;
+    }
+
     actions.push(characterActions.playerSkillIncreased(SKILL_KEY.Woodcutting, 1));
+    addGameMessage(harvestMessage);
     return actions;
   }),
 );

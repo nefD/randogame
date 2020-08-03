@@ -17,7 +17,7 @@ import {
 import { DeathScreen } from 'features/deathScreen/deathScreen';
 import { CharacterGameState } from 'models/character';
 import { ItemFactory } from 'models/item';
-import { useColorMode, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel, Button } from '@chakra-ui/core';
+import { useColorMode, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel, Button, useColorModeValue } from '@chakra-ui/core';
 import { ITEM_KEYS } from "data/item.keys";
 import { WorldView } from "features/worldView/worldView";
 import { CharacterView } from "features/characterView/characterView";
@@ -31,7 +31,7 @@ function App() {
   const dispatch = useDispatch();
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const playerGameState = useSelector(getPlayerGameState);
+  // const playerGameState = useSelector(getPlayerGameState);
   const playerIsDead = useSelector(getPlayerIsDead);
   const currentMapId = useSelector(getCurrentMapId);
 
@@ -52,10 +52,7 @@ function App() {
     const state = store.getState();
     const stateText = JSON.stringify(state);
     const compressedData = LZString.compress(stateText);
-
     getCharacterName(state);
-    // include character name, race, class, level
-
     const save = SavedGameFactory({
       compressedData,
       characterInfo: {
@@ -70,12 +67,6 @@ function App() {
   };
 
   const onLoadState = () => {
-    // const savedGames = getLocalStorageItem<SavedGame[]>('savedGames', []);
-    // if (!savedGames.length) return;
-    // const saveText = savedGames[savedGames.length - 1];
-    // const stateText = LZString.decompress(saveText.compressedData);
-    // const stateObj = JSON.parse(stateText || '');
-    // dispatch(loadState(stateObj));
     setShowLoadGame(!showLoadGame);
   };
 
@@ -87,12 +78,14 @@ function App() {
     setShowLoadGame(!showLoadGame)
   };
 
+  const overlayBg = useColorModeValue('blackAlpha.600', 'whiteAlpha.600');
+
   return (
     <Box>
       {playerIsDead &&
         <Flex
           p={4}
-          bg="deathBackground"
+          bg={overlayBg}
           zIndex={1}
           direction="row" justify="center" align="center"
           position="absolute" w="100%" h="100%"
@@ -104,7 +97,7 @@ function App() {
       {showLoadGame &&
         <Flex
           p={4}
-          bg="whiteAlpha.400"
+          bg={overlayBg}
           zIndex={1}
           direction="row" justify="center" align="center"
           position="absolute" w="100%" h="100%"
@@ -117,7 +110,7 @@ function App() {
 
       <Flex p={4} direction="column" align="center">
         <Stack direction="column" spacing={4} w="80vw">
-          <Box>
+          <Stack direction="row" spacing={2}>
             <Button colorScheme='gray' onClick={toggleColorMode}>
               Toggle {colorMode === "light" ? "Dark" : "Light"}
             </Button>
@@ -125,7 +118,7 @@ function App() {
             <Button onClick={() => saveState()}>Save</Button>
 
             {showLoadButton && <Button onClick={() => onLoadState()}>Load</Button>}
-          </Box>
+          </Stack>
 
           <CharacterOverview />
 

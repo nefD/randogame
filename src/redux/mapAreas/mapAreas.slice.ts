@@ -7,6 +7,7 @@ import {
 import {
   findFacilityInMapArea,
   fromXY,
+  findResourceNodeInMapArea,
 } from 'utilities/mapAreas.utilities';
 import { NODE_KEYS } from 'data/resources.consts';
 import { MapArea } from 'models/map';
@@ -141,6 +142,31 @@ const mapAreasSlice = createSlice({
         return { payload: { mapId, facilityId, item } };
       },
     },
+    updateResourceNode: {
+      reducer(state, { payload: { mapId, nodeId, node } }: PayloadAction<{ mapId: string, nodeId: string, node: Partial<ResourceNode> }>) {
+        const mapArea = state.entities[mapId];
+        if (!mapArea) return;
+        const resourceNode = findResourceNodeInMapArea(mapArea, nodeId);
+        if (!resourceNode) return;
+        console.log(`found resource node to update:`, resourceNode);
+        Object.assign(resourceNode, node);
+      },
+      prepare(mapId: string, nodeId: string, node: Partial<ResourceNode>) {
+        return { payload: { mapId, nodeId, node } };
+      }
+    },
+    removeResourceNode: {
+      reducer(state, { payload: { mapId, nodeId } }: PayloadAction<{ mapId: string, nodeId: string}>) {
+        const mapArea = state.entities[mapId];
+        if (!mapArea) return;
+        Object.keys(mapArea.resourceNodes)
+          .filter(key => mapArea.resourceNodes[key].some(n => n.id === nodeId))
+          .map(nodesKey => mapArea.resourceNodes[nodesKey] = mapArea.resourceNodes[nodesKey].filter(n => n.id !== nodeId));
+      },
+      prepare(mapId: string, nodeId: string) {
+        return { payload: { mapId, nodeId } };
+      }
+    }
   },
 });
 
@@ -152,8 +178,10 @@ export const addResourceNodeToMapCell = mapAreasSlice.actions.addResourceNodeToM
 export const removeItemFromMapCell = mapAreasSlice.actions.removeItemFromMapCell;
 export const removeEnemyFromMapCell = mapAreasSlice.actions.removeEnemyFromMapCell;
 export const removeItemFromShop = mapAreasSlice.actions.removeItemFromShop;
+export const updateResourceNode = mapAreasSlice.actions.updateResourceNode;
 export const addItemToShop = mapAreasSlice.actions.addItemToShop;
 export const spawnMapCell = createAction('mapArea/spawnMapCell');
+export const removeResourceNode = mapAreasSlice.actions.removeResourceNode;
 
 export type mapAreaActionTypes =
   typeof mapAreaUpdated;
