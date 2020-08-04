@@ -4,3 +4,9 @@ export interface Coords {
 }
 export const coordsFactory = (x = 0, y = 0): Coords => ({ x, y });
 
+export enum DIRECTION {
+  north,
+  east,
+  south,
+  west,
+}

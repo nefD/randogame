@@ -1,0 +1,11 @@
+export const NIGHT_TICKS = 4;
+export const MORNING_TICKS = 4;
+export const AFTERNOON_TICKS = 4;
+export const EVENING_TICKS = 4;
+export const DAY_TICKS = NIGHT_TICKS + MORNING_TICKS + AFTERNOON_TICKS + EVENING_TICKS;
+export const WEEK_TICKS = DAY_TICKS * 7;
+export const SEASON_TICKS = WEEK_TICKS * 4;
+export const YEAR_TICKS = SEASON_TICKS * 4;
+export const Seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
+export const DayPeriod = ['Night', 'Morning', 'Afternoon', 'Evening'];
+export const DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

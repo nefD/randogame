@@ -4,14 +4,10 @@ import {
   Button,
   Stack,
 } from '@chakra-ui/core';
-import {
-  playerMovingEast,
-  playerMovingNorth,
-  playerMovingSouth,
-  playerMovingWest,
-} from 'redux/character/character.slice';
+import { playerMoving } from 'redux/character/character.slice';
 import { useDispatch } from 'react-redux';
 import { useKeyPress } from "utilities/hooks.utilities";
+import { DIRECTION } from "data/commonTypes";
 
 export function MapNavigation() {
   const dispatch = useDispatch();
@@ -22,23 +18,23 @@ export function MapNavigation() {
   const rightArrow = useKeyPress('ArrowRight');
 
   useEffect(() => {
-    upArrow && dispatch(playerMovingNorth());
-    downArrow && dispatch(playerMovingSouth());
-    leftArrow && dispatch(playerMovingWest());
-    rightArrow && dispatch(playerMovingEast());
+    upArrow && dispatch(playerMoving(DIRECTION.north));
+    downArrow && dispatch(playerMoving(DIRECTION.south));
+    leftArrow && dispatch(playerMoving(DIRECTION.west));
+    rightArrow && dispatch(playerMoving(DIRECTION.east));
   });
 
   return (
     <Stack p={2} direction='row' justify='center' align='center'>
       <Box>
-        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingWest())}>West</Button>
+        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMoving(DIRECTION.west))}>West</Button>
       </Box>
       <Stack direction='column'>
-        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingNorth())}>North</Button>
-        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingSouth())}>South</Button>
+        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMoving(DIRECTION.north))}>North</Button>
+        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMoving(DIRECTION.south))}>South</Button>
       </Stack>
       <Box>
-        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMovingEast())}>East</Button>
+        <Button colorScheme='blue' variant="outline" size='lg' onClick={() => dispatch(playerMoving(DIRECTION.east))}>East</Button>
       </Box>
     </Stack>
   );

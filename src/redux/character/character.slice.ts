@@ -27,6 +27,9 @@ import {AbilityKey} from "data/abilities.consts";
 import {uniqueArray} from "utilities/array.utilities";
 import { RECIPE_KEYS, RecipeKey } from "data/recipes.consts";
 import { ItemKey } from "data/item.keys";
+import { rng } from "utilities/random.utilities";
+import { YEAR_TICKS } from "data/gameDate.consts";
+import { DIRECTION } from "data/commonTypes";
 
 export interface CombatState {
   enemy: string;
@@ -39,6 +42,7 @@ export interface CharacterState {
   level: number;
   xp: number;
   age: number;
+  gameTime: number;
   gold: number;
   skills: CharacterSkill[];
   abilities: AbilityKey[];
@@ -59,6 +63,7 @@ const initialState: CharacterState = {
   level: 1,
   xp: 0,
   age: 0,
+  gameTime: rng(YEAR_TICKS),
   gold: 100,
   skills: [
     CharacterSkillFactory({
@@ -98,6 +103,7 @@ const characterSlice = createSlice({
     },
     playerMoved(state, action: PayloadAction<MapLocation>) {
       state.age += 1;
+      state.gameTime += 1;
       state.location = { ...action.payload };
     },
     inventoryAdded(state, { payload: items }: PayloadAction<Item[]>) {
@@ -144,6 +150,7 @@ const characterSlice = createSlice({
       state.gameState = CharacterGameState.Combat;
       state.combatState.enemy = action.payload.id;
       state.age += 1;
+      state.gameTime += 1;
     },
     playerExitCombat(state, action: PayloadAction) {
       state.gameState = CharacterGameState.Travel;
@@ -248,10 +255,7 @@ export const playerStatsModified = characterSlice.actions.playerStatsModified;
 export const addAbilities = characterSlice.actions.addAbilities;
 export const addRecipes = characterSlice.actions.addRecipes;
 
-export const playerMovingNorth = createAction('character/movingNorth');
-export const playerMovingEast = createAction('character/movingEast');
-export const playerMovingSouth = createAction('character/movingSouth');
-export const playerMovingWest = createAction('character/movingWest');
+export const playerMoving = createAction<DIRECTION>('character/playerMoving');
 export const pickUpItemFromCurrentMapCell = createAction<Item>('character/pickUpItemFromCurrentMapCell');
 export const addToInventory = createAction<Item[]>('character/addToInventory');
 export const dropItemFromInventory = createAction<Item>('character/dropItemFromInventory');

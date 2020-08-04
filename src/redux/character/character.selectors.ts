@@ -1,16 +1,12 @@
 import { createSelector } from 'reselect';
-import {
-  getCharacter,
-  getEnemiesState,
-} from 'app/baseSelectors';
+import { getCharacter, getEnemiesState, } from 'app/baseSelectors';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { NODE_KEYS } from 'data/resources.consts';
-import {
-  EquipmentSlots,
-} from 'models/character';
-import { STATS, Stats, StatsKey } from 'models/character/stats';
+import { EquipmentSlots, } from 'models/character';
+import { STATS, Stats } from 'models/character/stats';
 import { AbilityDefs, AbilityKey } from "data/abilities.consts";
 import { RecipeKey } from "data/recipes.consts";
+import { DAY_TICKS, DayNames, DayPeriod, SEASON_TICKS, Seasons, WEEK_TICKS } from "data/gameDate.consts";
 
 export const getCharacterObject = createSelector(getCharacter, char => char);
 export const getCharacterName = createSelector(getCharacter, state => state.name);
@@ -29,32 +25,20 @@ export const getPlayerRecipes = createSelector(getCharacter, state => state.reci
 export const getPlayerInventory = createSelector(getCharacter, state => state.inventory);
 export const getPlayerLevel = createSelector(getCharacter, state => state.level);
 export const getPlayerAge = createSelector(getCharacter, state => state.age);
-
-export const NIGHT_TICKS = 4;
-export const MORNING_TICKS = 4;
-export const AFTERNOON_TICKS = 4;
-export const EVENING_TICKS = 4;
-export const DAY_TICKS = NIGHT_TICKS + MORNING_TICKS + AFTERNOON_TICKS + EVENING_TICKS;
-export const WEEK_TICKS = DAY_TICKS * 7;
-export const SEASON_TICKS = WEEK_TICKS * 4;
-export const YEAR_TICKS = SEASON_TICKS * 4;
-
-export const Seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
-export const DayPeriod = ['Night', 'Morning', 'Afternoon', 'Evening'];
-export const DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+export const getPlayerGameTime = createSelector(getCharacter, state => state.gameTime);
 
 export const getGameDate = createSelector(
-  getPlayerAge,
-  (age) => {
-    const season = Seasons[Math.floor(age / SEASON_TICKS)];
+  getPlayerGameTime,
+  (ticks) => {
+    const season = Seasons[Math.floor(ticks / SEASON_TICKS)];
 
-    const week = Math.floor((age % SEASON_TICKS) / WEEK_TICKS) + 1;
-    const totalDays = Math.floor(age / DAY_TICKS) + 1;
+    const week = Math.floor((ticks % SEASON_TICKS) / WEEK_TICKS) + 1;
+    const totalDays = Math.floor(ticks / DAY_TICKS) + 1;
 
-    const dayOfSeason = Math.floor((age % SEASON_TICKS) / DAY_TICKS) + 1;
-    const dayOfTheWeek = DayNames[Math.floor(totalDays % WEEK_TICKS)];
+    const dayOfSeason = Math.floor((ticks % SEASON_TICKS) / DAY_TICKS) + 1;
+    const dayOfTheWeek = DayNames[Math.floor((ticks % WEEK_TICKS) / DAY_TICKS)];
 
-    const dayTicks = age % DAY_TICKS;
+    const dayTicks = ticks % DAY_TICKS;
     const dayPeriod = DayPeriod[Math.floor(dayTicks / 4)];
 
     console.log(`season: ${season}, week: ${week}, dayPeriod: ${dayPeriod}, totalDays: ${totalDays}, dayOfTheWeek: ${dayOfTheWeek}`);

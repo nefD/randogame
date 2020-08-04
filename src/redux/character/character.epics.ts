@@ -11,6 +11,7 @@ import { RootState } from 'app/rootReducer';
 import { Epic } from 'redux-observable';
 import * as mapAreaSelectors from 'redux/mapAreas/mapAreas.selectors';
 import {
+  NullAction,
   select,
 } from 'utilities/redux.utilities';
 import {
@@ -30,79 +31,32 @@ import { ItemFactory } from 'models/item';
 import { EffectType } from "models/character/effects";
 import { rng } from "utilities/random.utilities";
 import {CharacterSkillFactory} from "models/character/skill";
-import { addAbilities, addRecipes, usedTool } from "redux/character/character.slice";
+import { addAbilities, addRecipes, playerMoving, usedTool } from "redux/character/character.slice";
 import { getPlayerInventory, getPlayerRecipes } from "redux/character/character.selectors";
 import { getRecipe } from "data/recipes.consts";
 import { setLocalStorageItem } from "utilities/sessionStorage.utilities";
 import { writeStorage } from '@rehooks/local-storage';
 import { addGameMessage } from "utilities/messages.utilities";
+import { DIRECTION } from "data/commonTypes";
 
-export const playerMovingNorth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
-  filter(characterActions.playerMovingNorth.match),
-  withLatestFrom(state$),
-  filter(([, state]) => characterSelectors.getPlayerLocation(state).coords.y > 0),
-  map(([, state]) => {
-    const playerLocation = characterSelectors.getPlayerLocation(state);
+export const playerMoving$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(playerMoving.match),
+  withLatestFrom(
+    state$.pipe(select(characterSelectors.getPlayerLocation)),
+  ),
+  map(([{ payload: direction }, playerLocation]) => {
     const newLocation = {
       ...playerLocation,
-      coords: {
-        ...playerLocation.coords,
-        y: playerLocation.coords.y - 1,
-      },
+      coords: { ...playerLocation.coords },
     };
+    switch (direction) {
+      case DIRECTION.north: newLocation.coords.y -= 1; break;
+      case DIRECTION.east: newLocation.coords.x += 1; break;
+      case DIRECTION.south: newLocation.coords.y += 1; break;
+      case DIRECTION.west: newLocation.coords.x -= 1; break;
+    }
     return characterActions.playerMoved(newLocation);
-  })
-);
-
-export const playerMovingSouth$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
-  filter(characterActions.playerMovingSouth.match),
-  withLatestFrom(state$),
-  filter(([, state]) => characterSelectors.getPlayerLocation(state).coords.y < mapAreaSelectors.getCurrentMapAreaHeight(state) - 1),
-  map(([, state]) => {
-    const playerLocation = characterSelectors.getPlayerLocation(state);
-    const newLocation = {
-      ...playerLocation,
-      coords: {
-        ...playerLocation.coords,
-        y: playerLocation.coords.y + 1,
-      },
-    };
-    return characterActions.playerMoved(newLocation);
-  })
-);
-
-export const playerMovingEast$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
-  filter(characterActions.playerMovingEast.match),
-  withLatestFrom(state$),
-  filter(([, state]) => characterSelectors.getPlayerLocation(state).coords.x < mapAreaSelectors.getCurrentMapAreaWidth(state) - 1),
-  map(([, state]) => {
-    const playerLocation = characterSelectors.getPlayerLocation(state);
-    const newLocation = {
-      ...playerLocation,
-      coords: {
-        ...playerLocation.coords,
-        x: playerLocation.coords.x + 1,
-      },
-    };
-    return characterActions.playerMoved(newLocation);
-  })
-);
-
-export const playerMovingWest$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
-  filter(characterActions.playerMovingWest.match),
-  withLatestFrom(state$),
-  filter(([, state]) => characterSelectors.getPlayerLocation(state).coords.x > 0),
-  map(([, state]) => {
-    const playerLocation = characterSelectors.getPlayerLocation(state);
-    const newLocation = {
-      ...playerLocation,
-      coords: {
-        ...playerLocation.coords,
-        x: playerLocation.coords.x - 1,
-      },
-    };
-    return characterActions.playerMoved(newLocation);
-  })
+  }),
 );
 
 export const playerMoved$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
