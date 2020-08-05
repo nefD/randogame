@@ -19,7 +19,7 @@ export const WorldView = () => {
   return (
     <Box>
       {showTravel &&
-        <Stack maxH="50vw" overflowY="auto" direction="row" spacing={4}>
+        <Stack direction="row" spacing={4}>
           <Card>
             <MapDisplay/>
             <MapNavigation/>

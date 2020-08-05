@@ -1,5 +1,5 @@
 import { CraftingRecipe } from "models/item/recipe";
-import { ITEM_KEYS } from "data/item.keys";
+import { ITEM_KEYS } from "data/items.keys";
 
 
 export enum RECIPE_KEYS {

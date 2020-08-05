@@ -1,22 +1,11 @@
-import {
-  AREA_CELL_TYPES,
-  FACILITY_TYPE,
-} from 'data/areas.consts';
-import {
-  rng,
-  shuffleArray,
-  uuid,
-} from './random.utilities';
+import { AREA_CELL_TYPES, } from 'data/areas.consts';
+import { rng, shuffleArray, uuid, } from './random.utilities';
 import { Coords } from 'data/commonTypes';
-import {
-  Facility,
-  FacilityFactory,
-  MapArea,
-  MapAreaFactory,
-  Town,
-  TownFactory,
-} from 'models/map';
+import { MapArea, MapAreaFactory, } from 'models/map';
 import { ResourceNode } from "redux/mapAreas/mapAreas.slice";
+import { FACILITY_KEYS, getFacilityDefinition } from "data/facilities.consts";
+import { Facility, FacilityFactory } from "models/map/facility";
+import { Town, TownFactory } from "models/map/town";
 
 export function fromXY(x: number, y: number, width: number | MapArea = 0): number {
   if (typeof width !== 'number') {
@@ -178,9 +167,10 @@ export const generateMapArea = (
     cellsMap[site!.x][site!.y] = AREA_CELL_TYPES.Town;
 
     const town = TownFactory();
-    town.facilities.push(FacilityFactory({ name: 'Inn', type: FACILITY_TYPE.Inn }));
-    town.facilities.push(FacilityFactory({ name: 'Tavern', type: FACILITY_TYPE.Tavern }));
-    town.facilities.push(FacilityFactory({ name: 'General Store', type: FACILITY_TYPE.Shop }));
+    town.facilities.push(FacilityFactory(getFacilityDefinition(FACILITY_KEYS.Inn).config));
+    town.facilities.push(FacilityFactory(getFacilityDefinition(FACILITY_KEYS.Tavern).config));
+    town.facilities.push(FacilityFactory(getFacilityDefinition(FACILITY_KEYS.Shop).config));
+    town.facilities.push(FacilityFactory(getFacilityDefinition(FACILITY_KEYS.Stash).config));
     towns[fromXY(site!.x, site!.y, width)] = town;
   }
 
@@ -188,8 +178,6 @@ export const generateMapArea = (
   cellsMap.forEach((column, x) => column.forEach((cell, y) => {
     cellTypes[fromXY(x, y, width)] = cell;
   }));
-
-  // cellTypes[fromXY(10, 11, width)] = AREA_CELL_TYPES.Town;
 
   return MapAreaFactory({
     id,

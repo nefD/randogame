@@ -52,14 +52,23 @@ const mapAreasSlice = createSlice({
     },
     addEnemyToMapCell: {
       reducer(state, { payload: { id, x, y, enemy } }: PayloadAction<{id: string, x: number, y: number, enemy: Enemy}>) {
+
+        console.log(`addEnemyToMapCell`);
+
         const mapArea = state.entities[id];
         if (!mapArea) return;
         const idx = fromXY(x, y, mapArea);
+
+        console.log(`updating enemies to:`, {
+          ...mapArea.enemies,
+          [idx]: (mapArea.enemies[idx] || []).concat(enemy),
+        });
+
         mapAreasAdapter.upsertOne(state, {
           ...mapArea,
           enemies: {
             ...mapArea.enemies,
-            [idx]: (mapArea.enemies[idx] || []).concat(enemy.id),
+            [idx]: (mapArea.enemies[idx] || []).concat(enemy),
           },
         });
       },
@@ -110,7 +119,7 @@ const mapAreasSlice = createSlice({
           ...mapArea,
           enemies: {
             ...mapArea.enemies,
-            [idx]: (mapArea.enemies[idx] || []).filter(id => id !== enemy.id),
+            [idx]: (mapArea.enemies[idx] || []).filter(e => e.id !== enemy.id),
           },
         });
       },
@@ -180,7 +189,9 @@ export const removeEnemyFromMapCell = mapAreasSlice.actions.removeEnemyFromMapCe
 export const removeItemFromShop = mapAreasSlice.actions.removeItemFromShop;
 export const updateResourceNode = mapAreasSlice.actions.updateResourceNode;
 export const addItemToShop = mapAreasSlice.actions.addItemToShop;
-export const spawnMapCell = createAction('mapArea/spawnMapCell');
+export const refreshMapCell = createAction('mapArea/refreshMapCell');
+export const refreshMapCellResources = createAction('mapArea/refreshMapCellResources');
+export const refreshMapCellSpawns = createAction('mapArea/refreshMapCellSpawns');
 export const removeResourceNode = mapAreasSlice.actions.removeResourceNode;
 
 export type mapAreaActionTypes =

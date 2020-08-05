@@ -5,7 +5,7 @@ import {
 } from 'utilities/random.utilities';
 import {
   AREA_CELL_TYPES,
-  FACILITY_TYPE,
+
 } from 'data/areas.consts';
 import {
   fromXY,
@@ -14,12 +14,14 @@ import {
 } from 'utilities/mapAreas.utilities';
 import { Coords } from 'data/commonTypes';
 import {
-  FacilityFactory,
   MapArea,
   MapAreaFactory,
-  Town,
-  TownFactory,
+
+
 } from 'models/map';
+import { FACILITY_KEYS } from "data/facilities.consts";
+import { FacilityFactory } from "models/map/facility";
+import { Town, TownFactory } from "models/map/town";
 
 
 const directions = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, -1], [-1, 1], [1, 1]];
@@ -206,9 +208,9 @@ export const generateMapArea = (
     const site = townSites.pop();
     grid[site.x][site.y] = AREA_CELL_TYPES.Town;
     const town = TownFactory();
-    town.facilities.push(FacilityFactory({ name: 'Inn', type: FACILITY_TYPE.Inn }));
-    town.facilities.push(FacilityFactory({ name: 'Tavern', type: FACILITY_TYPE.Tavern }));
-    town.facilities.push(FacilityFactory({ name: 'General Store', type: FACILITY_TYPE.Shop }));
+    town.facilities.push(FacilityFactory({ name: 'Inn', key: FACILITY_KEYS.Inn }));
+    town.facilities.push(FacilityFactory({ name: 'Tavern', key: FACILITY_KEYS.Tavern }));
+    town.facilities.push(FacilityFactory({ name: 'General Store', key: FACILITY_KEYS.Shop }));
     towns[fromXY(site!.x, site!.y, width)] = town;
   }
 

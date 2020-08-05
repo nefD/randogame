@@ -3,16 +3,22 @@ import './rain.scss';
 import { Box } from '@chakra-ui/core';
 
 export const RainOverlay = () => {
-  const rainArray = Array.from(Array(50));
+  let elements: JSX.Element[] = [];
+  const targetCount = 15;
+  for (let i = 0; i < targetCount; i++) {
+    elements.push(
+      <div key={i} className='rain' />
+    );
+  }
 
   return (
     <Box
-      bg='blackAlpha.300'
+      className='rainOverlay'
       zIndex={1}
       position="absolute" w="100%" h="100%"
     >
       <Box w='100%' h='100%' className='rainContainer'>
-        {rainArray.map(i => <i key={i} className='rain' />)}
+        {elements}
       </Box>
     </Box>
   );

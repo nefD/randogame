@@ -14,12 +14,7 @@ import { clearGameMessages } from "utilities/messages.utilities";
 import { Message } from "models/messages";
 
 export function MessagesDisplay() {
-  // const dispatch = useDispatch();
-  // const messages = useSelector(getMessages);
-
   const [messages, setMessages] = useLocalStorage<Message[]>('gameMessages', []);
-
-  console.log(`session messages:`, messages);
 
   return (
     <Box>

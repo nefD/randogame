@@ -12,11 +12,12 @@ import {
 } from 'app/baseSelectors';
 import {
   AREA_CELL_TYPES,
-  FACILITY_TYPE,
+
 } from 'data/areas.consts';
 import { fromXY } from 'utilities/mapAreas.utilities';
 import { enemiesSelectors } from 'redux/enemies/enemies.selectors';
 import { Enemy } from 'models/enemy';
+import { FACILITY_KEYS } from "data/facilities.consts";
 
 export const {
   selectById: selectMapAreaById,
@@ -110,13 +111,19 @@ export const getItemsAtPlayerPos = createSelector(
   (mapArea, playerPos) => mapArea?.items[fromXY(playerPos.x, playerPos.y, mapArea)] || [],
 );
 
+// export const getEnemiesAtPlayerPosOld = createSelector(
+//   getCurrentMapArea,
+//   getPlayerMapPos,
+//   getEnemiesState,
+//   (mapArea, playerPos, enemiesState) =>
+//     (mapArea?.enemies[fromXY(playerPos.x, playerPos.y, mapArea)] || [])
+//       .reduce((list: Enemy[], id: string) => list.concat(enemiesSelectors.selectById(enemiesState, id) || []), []),
+// );
+
 export const getEnemiesAtPlayerPos = createSelector(
   getCurrentMapArea,
   getPlayerMapPos,
-  getEnemiesState,
-  (mapArea, playerPos, enemiesState) =>
-    (mapArea?.enemies[fromXY(playerPos.x, playerPos.y, mapArea)] || [])
-      .reduce((list: Enemy[], id: string) => list.concat(enemiesSelectors.selectById(enemiesState, id) || []), []),
+  (mapArea, playerPos) => mapArea?.enemies[fromXY(playerPos.x, playerPos.y, mapArea)] || [],
 );
 
 export const getResourceNodesAtPlayerPos = createSelector(
@@ -124,6 +131,12 @@ export const getResourceNodesAtPlayerPos = createSelector(
   getPlayerMapPos,
   (mapArea, playerPos) => mapArea?.resourceNodes[fromXY(playerPos.x, playerPos.y, mapArea)] || [],
 );
+
+export const getSpawnsAtPlayerPos = createSelector(
+  getCurrentMapArea,
+  getPlayerMapPos,
+  (mapArea, playerPos) => mapArea?.spawns[fromXY(playerPos.x, playerPos.y, mapArea)] || [],
+)
 
 export const getTownAtPlayerPos = createSelector(
   getCurrentMapArea,
@@ -140,7 +153,7 @@ export const getPlayersCurrentFacility = createSelector(
 export const getCurrentShopInventory = createSelector(
   getPlayersCurrentFacility,
   (facility) =>
-    (facility && facility.type === FACILITY_TYPE.Shop) ? facility.shopItems : null,
+    (facility && facility.key === FACILITY_KEYS.Shop) ? facility.shopItems : null,
 );
 
 export const getPlayerInnCost = createSelector(

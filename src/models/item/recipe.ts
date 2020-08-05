@@ -1,5 +1,5 @@
 import { SkillKey } from "data/skills.consts";
-import { ItemKey } from "data/item.keys";
+import { ItemKey } from "data/items.keys";
 
 export interface CraftingRecipeComponent {
   itemKey: ItemKey;

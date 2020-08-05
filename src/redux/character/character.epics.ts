@@ -20,9 +20,8 @@ import {
   removeItemFromShop,
   addItemToShop, updateResourceNode, removeResourceNode,
 } from 'redux/mapAreas/mapAreas.slice';
-import { FACILITY_TYPE } from 'data/areas.consts';
 import { ResourceNodeDefs } from 'data/resources.consts';
-import { getItemDef, ItemDefs } from 'data/item.consts';
+import { getItemDef, ItemDefs } from 'data/items.consts';
 import {
   SKILL_KEY,
   SkillDefs,
@@ -38,6 +37,7 @@ import { setLocalStorageItem } from "utilities/sessionStorage.utilities";
 import { writeStorage } from '@rehooks/local-storage';
 import { addGameMessage } from "utilities/messages.utilities";
 import { DIRECTION } from "data/commonTypes";
+import { FACILITY_KEYS } from "data/facilities.consts";
 
 export const playerMoving$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
   filter(playerMoving.match),
@@ -152,7 +152,7 @@ export const buyItemFromShop$: Epic<Action, Action, RootState> = (actions$, stat
   ),
   filter(([{ payload: item },, facility, playerGold]) => !!(
     facility
-    && facility.type === FACILITY_TYPE.Shop
+    && facility.key === FACILITY_KEYS.Shop
     && facility.shopItems.includes(item)
     && playerGold >= item.goldValue
   )),
@@ -172,7 +172,7 @@ export const sellItemToShop$: Epic<Action, Action, RootState> = (actions$, state
     state$.pipe(select(characterSelectors.getPlayerLocation)),
     state$.pipe(select(mapAreaSelectors.getPlayersCurrentFacility)),
   ),
-  filter(([,,facility]) => !!(facility && facility.type === FACILITY_TYPE.Shop)),
+  filter(([,,facility]) => !!(facility && facility.key === FACILITY_KEYS.Shop)),
   mergeMap(([{ payload: item }, playerLocation, facility]) => {
     addGameMessage(`Sold ${item.name} for ${item.goldValue} Gold.`);
     return [

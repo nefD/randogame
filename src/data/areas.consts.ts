@@ -1,13 +1,6 @@
-import { NODE_KEYS } from 'data/resources.consts';
 import React from 'react';
-import {
-  IconBeach,
-  IconForest, IconInn,
-  IconMountain,
-  IconPlains, IconShop, IconTavern,
-  IconTown, IconWaves,
-} from 'data/icons.consts';
-import { ITEM_KEYS, ItemKey } from "data/item.keys";
+import { IconBeach, IconForest, IconMountain, IconPlains, IconTown, IconWaves, } from 'data/icons.consts';
+import { ITEM_KEYS, ItemKey } from "data/items.keys";
 
 export enum AREA_CELL_TYPES {
   None,
@@ -99,7 +92,7 @@ export enum AreaResourceType {
 export interface CellResourceDefinition {
   type: AreaResourceType;
   itemKey?: ItemKey;
-  nodeKey?: string;
+  nodeKey?: string; // @TODO this should be a strongly typed value
   max: number;
   chance: number;
 }
@@ -132,7 +125,7 @@ export const AreaCellResourceDefs: Record<AREA_CELL_TYPES, CellResourceDefinitio
   [AREA_CELL_TYPES.Forest]: [
     {
       type: AreaResourceType.Node,
-      nodeKey: 'Tree', // this should be a strongly typed value
+      nodeKey: 'Tree', // @TODO this should be a strongly typed value
       max: 1,
       chance: 100,
     },
@@ -153,15 +146,3 @@ export const AreaCellResourceDefs: Record<AREA_CELL_TYPES, CellResourceDefinitio
   [AREA_CELL_TYPES.Swamp]: [],
 };
 
-export enum FACILITY_TYPE {
-  Inn,
-  Tavern,
-  Shop,
-  Stash,
-}
-
-export const FacilityIcons: { [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>> } = {
-  [FACILITY_TYPE.Inn]: IconInn,
-  [FACILITY_TYPE.Tavern]: IconTavern,
-  [FACILITY_TYPE.Shop]: IconShop,
-};

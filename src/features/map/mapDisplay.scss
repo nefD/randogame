@@ -1,208 +1,207 @@
 .mapContainer {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .mapRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .mapCell {
-    width: 3rem;
-    height: 3rem;
-    background: rgb(62,54,48);
-    background: radial-gradient(circle, rgba(62,54,48,1) 40%, rgba(98,89,83,1) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: rgb(62,54,48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cellIcon {
-    font-size: 2.25em;
-    color: white;
-    font-weight: 900;
+  font-size: 2.25em;
+  color: white;
+  font-weight: 900;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: inline-block;
+
+  img {
     width: 100%;
-    height: 100%;
-    text-align: center;
-    display: inline-block;
+  }
 
-    img {
-        width: 100%;
-    }
-
-    svg {
-        max-width: 100%;
-        max-height: 100%;
-    }
+  svg {
+    max-width: 100%;
+    max-height: 100%;
+  }
 }
 
 .cellPlayer {
-    color: #fff92f
+  color: #fff92f
 }
 
 .cellIcon.icon-forest, .cellForest {
-    color: #3e8340;
-    background-color: #37583785;
+  color: #3e8340;
+  background-color: #37583785;
+  width: 100%;
+  height: 100%;
+
+  &.cellIcon > * {
+    transform-origin: 50% 100%;
+    animation: treesway 1.5s infinite alternate ease-in-out;
     width: 100%;
     height: 100%;
+    position: relative;
+    top: -35%;
 
-    &.cellIcon > * {
-        transform-origin: 50% 100%;
-        animation: treesway 1.5s infinite alternate ease-in-out;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        top: -35%;
-
-        path {
-            fill: #1d9b21;
-        }
+    path {
+      fill: #1d9b21;
     }
-    img {
-        display: inline-block;
-        filter: invert(46%) sepia(12%) saturate(2012%) hue-rotate(72deg) brightness(91%) contrast(88%);
-    }
+  }
+  img {
+    display: inline-block;
+    filter: invert(46%) sepia(12%) saturate(2012%) hue-rotate(72deg) brightness(91%) contrast(88%);
+  }
 }
 @keyframes treesway {
-    0% { transform: rotateX(-2deg) skewX(-3deg) }
-    100% { transform: rotateX(2deg) skewX(3deg) }
+  0% { transform: rotateX(-2deg) skewX(-3deg) }
+  100% { transform: rotateX(2deg) skewX(3deg) }
 }
 
 .cellIcon.icon-plains, .cellPlains {
-    color: #93CD56;
-    background-color: #536c39cc;
+  color: #93CD56;
+  background-color: #536c39cc;
 
-    &.cellIcon > * {
-        //display: inline-block;
-        transform-origin: 50% 100%;
-        animation: plainsSway 2s infinite alternate ease-in-out;
-        width: 70%;
-        height: 70%;
+  &.cellIcon > * {
+    //display: inline-block;
+    transform-origin: 50% 100%;
+    animation: plainsSway 2s infinite alternate ease-in-out;
+    width: 70%;
+    height: 70%;
 
-        path {
-            fill: #9ac364;
-        }
+    path {
+      fill: #9ac364;
     }
-    img {
-        display: inline-block;
-        filter: invert(76%) sepia(42%) saturate(489%) hue-rotate(44deg) brightness(88%) contrast(101%);
-        //filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
-    }
+  }
+  img {
+    display: inline-block;
+    filter: invert(76%) sepia(42%) saturate(489%) hue-rotate(44deg) brightness(88%) contrast(101%);
+    //filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
+  }
 }
 @keyframes plainsSway {
-    0% { transform: rotateZ(-6deg)  }
-    15% { transform: rotateZ(4deg)  }
-    30% { transform: rotateZ(-3deg)  }
-    60% { transform: rotateZ(9deg)  }
-    90% { transform: rotateZ(-5deg)  }
-    100% { transform: rotateZ(2deg)  }
+  0% { transform: rotateZ(-6deg)  }
+  15% { transform: rotateZ(4deg)  }
+  30% { transform: rotateZ(-3deg)  }
+  60% { transform: rotateZ(9deg)  }
+  90% { transform: rotateZ(-5deg)  }
+  100% { transform: rotateZ(2deg)  }
 
-    //0% { transform: rotateZ(-2deg)  }
-    //15% { transform: rotateZ(1deg)  }
-    //30% { transform: rotateZ(-1deg)  }
-    //60% { transform: rotateZ(2deg)  }
-    //90% { transform: rotateZ(-2deg)  }
-    //100% { transform: rotateZ(1deg)  }
+  //0% { transform: rotateZ(-2deg)  }
+  //15% { transform: rotateZ(1deg)  }
+  //30% { transform: rotateZ(-1deg)  }
+  //60% { transform: rotateZ(2deg)  }
+  //90% { transform: rotateZ(-2deg)  }
+  //100% { transform: rotateZ(1deg)  }
 }
 
 .cellSwamp {
-    color: #5a5a5a;
+  color: #5a5a5a;
 }
 
 .cellIcon.icon-beach, .cellBeach {
-    color: #dee399;
-    background-color: #dae263a8;
+  color: #dee399;
+  background-color: #dae263a8;
 
-    &.cellIcon > * {
-        //display: inline-block;
-        transform-origin: 50% 100%;
-        width: 95%;
-        height: 95%;
-        //position: relative;
-        //top: -20%;
-    }
+  &.cellIcon > * {
+    //display: inline-block;
+    transform-origin: 50% 100%;
+    width: 95%;
+    height: 95%;
+    //position: relative;
+    //top: -20%;
+  }
 }
 
 .cellIcon.icon-mountain, .cellMountain {
-    color: #ae7e4c;
-    background-color: #785f2b96;
+  color: #ae7e4c;
+  background-color: #785f2b96;
 
-    &.cellIcon > * {
-        //display: inline-block;
-        transform-origin: 50% 100%;
-        width: 95%;
-        height: 95%;
-        position: relative;
-        top: -20%;
-    }
-    img {
-        filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
-    }
+  &.cellIcon > * {
+    //display: inline-block;
+    transform-origin: 50% 100%;
+    width: 95%;
+    height: 95%;
+    position: relative;
+    top: -20%;
+  }
+  img {
+    filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
+  }
 }
 
 .cellIcon.icon-waves,.cellWater {
-    color: #4679c2;
-    background-color: #4679c266;
-    &.cellIcon {
-        > * {
-            //display: inline-block;
-            color: #4679c2;
-            //fill: #4679c2;
-            width: 100%;
-            height: 100%;
-            transform-origin: 50% 50%;
-            animation: waterSway 2s infinite alternate ease-in-out;
-        }
-        .waves0__stop0 {
-            stop-color: #6f9ad6;
-            stop-opacity: 1;
-        }
-        .waves0__stop1 {
-            stop-color: #6f9ad6;
-            stop-opacity: 0;
-        }
-        .waves1__stop0 {
-            stop-color: #316ab0;
-            stop-opacity: 1;
-        }
-        .waves1__stop1 {
-            stop-color: #316ab0;
-            stop-opacity: 0;
-        }
+  color: #4679c2;
+  background-color: #4679c266;
+  &.cellIcon {
+    > * {
+      //display: inline-block;
+      color: #4679c2;
+      //fill: #4679c2;
+      width: 100%;
+      height: 100%;
+      transform-origin: 50% 50%;
+      animation: waterSway 2s infinite alternate ease-in-out;
     }
+    .waves0__stop0 {
+      stop-color: #6f9ad6;
+      stop-opacity: 1;
+    }
+    .waves0__stop1 {
+      stop-color: #6f9ad6;
+      stop-opacity: 0;
+    }
+    .waves1__stop0 {
+      stop-color: #316ab0;
+      stop-opacity: 1;
+    }
+    .waves1__stop1 {
+      stop-color: #316ab0;
+      stop-opacity: 0;
+    }
+  }
 }
 @keyframes waterSway {
-    0% { transform: skewY(-10deg) translateY(-2px); opacity: 0.5; }
-    50% { transform: translateY(2px); opacity: 1.0; }
-    100% { transform: skewY(10deg) translateY(-2px); opacity: 0.5; }
+  0% { transform: skewY(-10deg) translateY(-2px); opacity: 0.5; }
+  50% { transform: translateY(2px); opacity: 1.0; }
+  100% { transform: skewY(10deg) translateY(-2px); opacity: 0.5; }
 }
 
 .cellEmpty {
-    color: #2b5187;
-    background-color: rgba(43, 73, 119, 0.4);
-    &.cellIcon > * {
-        display: inline-block;
-        transform-origin: 50% 50%;
-        animation: waterSway 2s infinite alternate ease-in-out;
-    }
+  color: #2b5187;
+  background-color: rgba(43, 73, 119, 0.4);
+  &.cellIcon > * {
+    display: inline-block;
+    transform-origin: 50% 50%;
+    animation: waterSway 2s infinite alternate ease-in-out;
+  }
 }
 
 .cellIcon.icon-town, .cellTown {
-    color: #dad64d;
-    background-color: #967d2dc4;
+  color: #dad64d;
+  background-color: #967d2dc4;
 
-    &.cellIcon > * {
-        //display: inline-block;
-        transform-origin: 50% 100%;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        top: -15%;
-    }
-    img {
-        filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
-    }
+  &.cellIcon > * {
+    //display: inline-block;
+    transform-origin: 50% 100%;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: -15%;
+  }
+  img {
+    filter: invert(56%) sepia(58%) saturate(5221%) hue-rotate(14deg) brightness(88%) contrast(81%);
+  }
 }

@@ -13,7 +13,7 @@ import {
 } from "redux/character/character.selectors";
 import { useSelector, useDispatch } from "react-redux";
 import { CraftingRecipes, RecipeKey } from "data/recipes.consts";
-import { getItemDef, ItemDefs } from "data/item.consts";
+import { getItemDef, ItemDefs } from "data/items.consts";
 import { craftRecipe } from "redux/character/character.slice";
 import { CraftingRecipeComponent } from "models/item/recipe";
 import { recipeIsCraftable } from "utilities/item.utilities";

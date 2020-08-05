@@ -7,7 +7,7 @@ import { EffectType } from "models/character/effects";
 import { SKILL_KEY } from "data/skills.consts";
 import { ABILITY_KEY } from "data/abilities.consts";
 import { RECIPE_KEYS } from "data/recipes.consts";
-import { ITEM_KEYS, ItemKey } from "data/item.keys";
+import { ITEM_KEYS, ItemKey } from "data/items.keys";
 
 export interface ItemDefinition {
   config: Partial<Item>;

@@ -12,21 +12,21 @@ import {
 import { playerLeavingFacility } from 'redux/character/character.slice';
 import { getPlayersCurrentFacility } from 'redux/mapAreas/mapAreas.selectors';
 import "./facilityDisplay.scss";
-import { FACILITY_TYPE } from 'data/areas.consts';
 import { TavernDisplay } from 'features/facility/tavernDisplay';
 import { InnDisplay } from 'features/facility/innDisplay';
 import { ShopDisplay } from 'features/facility/shopDisplay';
 import { Card } from 'components/card';
+import { FACILITY_KEYS } from "data/facilities.consts";
 
 export const FacilityDisplay = () => {
   const dispatch = useDispatch();
   const facility = useSelector(getPlayersCurrentFacility);
 
   let facilityContent;
-  switch (facility?.type) {
-    case FACILITY_TYPE.Tavern: facilityContent = (<TavernDisplay />); break;
-    case FACILITY_TYPE.Inn: facilityContent = (<InnDisplay />); break;
-    case FACILITY_TYPE.Shop: facilityContent = (<ShopDisplay />); break;
+  switch (facility?.key) {
+    case FACILITY_KEYS.Tavern: facilityContent = (<TavernDisplay />); break;
+    case FACILITY_KEYS.Inn: facilityContent = (<InnDisplay />); break;
+    case FACILITY_KEYS.Shop: facilityContent = (<ShopDisplay />); break;
   }
 
   return (

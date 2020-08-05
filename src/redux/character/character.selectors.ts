@@ -41,8 +41,6 @@ export const getGameDate = createSelector(
     const dayTicks = ticks % DAY_TICKS;
     const dayPeriod = DayPeriod[Math.floor(dayTicks / 4)];
 
-    console.log(`season: ${season}, week: ${week}, dayPeriod: ${dayPeriod}, totalDays: ${totalDays}, dayOfTheWeek: ${dayOfTheWeek}`);
-
     return {
       totalDays,
       season,

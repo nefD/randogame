@@ -1,38 +1,11 @@
-import { CHARACTER_RACE } from 'data/races.consts';
-import {
-  AREA_CELL_TYPES,
-  FACILITY_TYPE,
-} from 'data/areas.consts';
+import { AREA_CELL_TYPES, } from 'data/areas.consts';
 import { ResourceNode } from 'redux/mapAreas/mapAreas.slice';
 import { uuid } from 'utilities/random.utilities';
 import { Coords } from 'data/commonTypes';
 import { Item } from "models/item";
-
-export interface Facility {
-  id: string;
-  name: string;
-  type: FACILITY_TYPE;
-  shopItems: Item[];
-}
-
-export const FacilityFactory = (config?: Partial<Facility>): Facility => ({
-  id: uuid(),
-  name: 'Unknown Facility',
-  type: FACILITY_TYPE.Inn,
-  shopItems: [],
-  ...config,
-});
-
-export interface Town {
-  race: CHARACTER_RACE;
-  facilities: Facility[];
-}
-
-export const TownFactory = (config?: Partial<Town>): Town => ({
-  race: CHARACTER_RACE.Human,
-  facilities: [],
-  ...config,
-});
+import { Town } from "models/map/town";
+import { SpawnDefinition } from "data/spawns.consts";
+import { Enemy } from "models/enemy";
 
 export interface MapArea {
   id: string;
@@ -41,9 +14,10 @@ export interface MapArea {
   height: number;
   cellTypes: AREA_CELL_TYPES[];
   items: { [key: string]: Item[] };
-  enemies: { [key: string]: string[] };
+  enemies: { [key: string]: Enemy[] };
   towns: { [key: string]: Town };
   resourceNodes: { [key: string]: ResourceNode[] };
+  spawns: { [key: string]: SpawnDefinition[] };
 }
 
 export const MapAreaFactory = (config?: Partial<MapArea>): MapArea => ({
@@ -56,6 +30,7 @@ export const MapAreaFactory = (config?: Partial<MapArea>): MapArea => ({
   enemies: {},
   towns: {},
   resourceNodes: {},
+  spawns: {},
   ...config,
 });
 

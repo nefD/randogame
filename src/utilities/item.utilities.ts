@@ -1,4 +1,4 @@
-import { ItemDefinition } from 'data/item.consts';
+import { ItemDefinition } from 'data/items.consts';
 import { Item } from 'models/item';
 import { between } from "utilities/random.utilities";
 import { CraftingRecipes, RecipeKey } from "data/recipes.consts";

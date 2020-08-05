@@ -26,7 +26,7 @@ import {CharacterSkill, CharacterSkillFactory} from "models/character/skill";
 import {AbilityKey} from "data/abilities.consts";
 import {uniqueArray} from "utilities/array.utilities";
 import { RECIPE_KEYS, RecipeKey } from "data/recipes.consts";
-import { ItemKey } from "data/item.keys";
+import { ItemKey } from "data/items.keys";
 import { rng } from "utilities/random.utilities";
 import { YEAR_TICKS } from "data/gameDate.consts";
 import { DIRECTION } from "data/commonTypes";

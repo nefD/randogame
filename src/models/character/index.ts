@@ -1,5 +1,5 @@
 import {Item} from 'models/item';
-import { ITEM_KEYS, ItemKey } from "data/item.keys";
+import { ITEM_KEYS, ItemKey } from "data/items.keys";
 
 export enum CharacterGameState {
   Travel,

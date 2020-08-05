@@ -2,34 +2,37 @@ import { Action } from "redux";
 import { Epic } from "redux-observable";
 import { RootState } from "app/rootReducer";
 import {
+  addEnemyToMapCell,
   addItemsToMapCell,
   addResourceNodeToMapCell,
   generateMap,
   mapAreaUpdated,
-  spawnMapCell,
+  refreshMapCell, refreshMapCellResources, refreshMapCellSpawns,
 } from "./mapAreas.slice";
 import { filter, map, mergeMap, withLatestFrom } from "rxjs/operators";
 import { fromXY } from "utilities/mapAreas.utilities";
-import { ItemDefs } from "data/item.consts";
+import { ItemDefs } from "data/items.consts";
 import { playerMoved } from "../character/character.slice";
-import { EnemyDefs } from "data/enemies.consts";
-import { enemyCreated } from "../enemies/enemies.slice";
-import { AreaCellResourceDefs, FACILITY_TYPE } from "data/areas.consts";
+import { AreaCellResourceDefs } from "data/areas.consts";
 import { generateMapArea } from "utilities/mapGeneration.utilities";
 import { NullAction, select } from "utilities/redux.utilities";
 import {
-  getCurrentMapArea,
+  getCurrentMapArea, getEnemiesAtPlayerPos,
   getItemsAtPlayerPos,
-  getResourceNodesAtPlayerPos,
+  getResourceNodesAtPlayerPos, getSpawnsAtPlayerPos,
 } from "redux/mapAreas/mapAreas.selectors";
-import { getPlayerMapLocation } from "redux/character/character.selectors";
-import { NODE_KEYS, ResourceNodeDefs } from "data/resources.consts";
+import { getPlayerLevel, getPlayerMapLocation } from "redux/character/character.selectors";
+import { ResourceNodeDefs } from "data/resources.consts";
 import { rng } from "utilities/random.utilities";
 import { ResourceNodeFactory } from "utilities/resources.utilities";
 import { MapLocationFactory } from "models/map";
-import { EnemyFactory } from "models/enemy";
 import { ItemFactory } from "models/item";
-import { ITEM_KEYS } from "data/item.keys";
+import { ITEM_KEYS } from "data/items.keys";
+import { FACILITY_KEYS } from "data/facilities.consts";
+import { getSpawnDefinition, SPAWN_KEYS } from "data/spawns.consts";
+import { EnemyFactory } from "models/enemy";
+import { EnemyDefs, getEnemyDefinition } from "data/enemies.consts";
+import { enemyCreated } from "redux/enemies/enemies.slice";
 
 export const playerMoved$: Epic<Action, Action, RootState> = (
   actions$,
@@ -37,15 +40,47 @@ export const playerMoved$: Epic<Action, Action, RootState> = (
 ) =>
   actions$.pipe(
     filter(playerMoved.match),
-    map(() => spawnMapCell())
+    map(() => refreshMapCell())
   );
 
-export const spawnMapCell$: Epic<Action, Action, RootState> = (
+export const refreshMapCell$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(refreshMapCell.match),
+  mergeMap(() => [
+    refreshMapCellResources(),
+    refreshMapCellSpawns(),
+  ]),
+);
+
+export const refreshMapCellSpawns$: Epic<Action, Action, RootState> = (actions$, state$) => actions$.pipe(
+  filter(refreshMapCellSpawns.match),
+  withLatestFrom(
+    state$.pipe(select(getCurrentMapArea)),
+    state$.pipe(select(getPlayerLevel)),
+    state$.pipe(select(getPlayerMapLocation)),
+    state$.pipe(select(getEnemiesAtPlayerPos)),
+    state$.pipe(select(getSpawnsAtPlayerPos)),
+  ),
+  filter(([, mapArea]) => !!mapArea),
+  mergeMap(([, mapArea, playerLevel, playerLoc, enemies, spawns]) =>
+    spawns
+      .filter(s => !enemies.find(e => e.key === s.enemyKey))
+      .filter(s => playerLevel >= s.minLevel || (!s.maxLevel || playerLevel <= s.maxLevel))
+      .filter(s => rng(100) < s.chance)
+      .map(spawn => addEnemyToMapCell(
+        mapArea!.id,
+        playerLoc.coords.x,
+        playerLoc.coords.y,
+        EnemyFactory(getEnemyDefinition(spawn.enemyKey).config),
+      )),
+  ),
+);
+
+export const refreshMapCellResources$: Epic<Action, Action, RootState> = (
   actions$,
   state$
 ) =>
   actions$.pipe(
-    filter(spawnMapCell.match),
+    filter(refreshMapCellResources.match),
     withLatestFrom(
       state$.pipe(select(getCurrentMapArea)),
       state$.pipe(select(getPlayerMapLocation)),
@@ -115,18 +150,22 @@ export const generateMap$: Epic<Action, Action, RootState> = (actions$) =>
 
       const item = ItemFactory(ItemDefs[ITEM_KEYS.Sand]);
       mapArea.items[fromXY(playerX, playerY, mapWidth)] = [item];
-      const enemy = EnemyFactory(EnemyDefs.TestEnemy.config);
-      mapArea.enemies[fromXY(playerX, playerY, mapWidth)] = [enemy.id];
+
+      // const enemy = EnemyFactory(EnemyDefs.Test.config);
+      // mapArea.enemies[fromXY(playerX, playerY, mapWidth)] = [enemy];
+
+      mapArea.spawns[fromXY(playerX, playerY, mapWidth)] = [getSpawnDefinition(SPAWN_KEYS.Test)];
+
 
       actions = actions.concat(
-        enemyCreated(enemy),
+        // enemyCreated(enemy),
         mapAreaUpdated(mapArea),
         playerMoved(MapLocationFactory(mapArea.id, playerX, playerY))
       );
 
       Object.values(mapArea.towns).forEach((town) => {
         town.facilities
-          .filter((f) => f.type === FACILITY_TYPE.Shop)
+          .filter((f) => f.key === FACILITY_KEYS.Shop)
           .forEach((shop) => {
             const shopItem1 = ItemFactory(ItemDefs[ITEM_KEYS.WoodAxe]);
             shop.shopItems.push(shopItem1);

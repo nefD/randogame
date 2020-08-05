@@ -35,7 +35,7 @@ import { between, rng } from "utilities/random.utilities";
 import { rollWeaponDamage } from "utilities/item.utilities";
 import { LootTableKey, LootTables } from "data/loot.consts";
 import { Item, ItemFactory } from "models/item";
-import { ItemDefs } from "data/item.consts";
+import { ItemDefs } from "data/items.consts";
 
 export const combatPlayerFleeing$: Epic<Action, Action, RootState> = (actions$) => actions$.pipe(
   filter(combatPlayerFleeing.match),

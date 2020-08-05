@@ -36,7 +36,7 @@ export const CharacterOverview = () => {
         </Stack>
         <Flex>
           <Box>
-            {gameDate.dayOfTheWeek} the {getOrdinalNum(gameDate.dayOfSeason)}, Week {gameDate.week}, {gameDate.season}
+            {gameDate.dayPeriod} of {gameDate.dayOfTheWeek} the {getOrdinalNum(gameDate.dayOfSeason)} day of {gameDate.season}
           </Box>
         </Flex>
 

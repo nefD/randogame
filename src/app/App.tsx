@@ -6,7 +6,7 @@ import {
 } from 'react-redux';
 import { CharacterOverview } from 'features/characterOverview/characterOverview';
 import { generateMap } from 'redux/mapAreas/mapAreas.slice';
-import { ItemDefs } from 'data/item.consts';
+import { ItemDefs } from 'data/items.consts';
 import { inventoryAdded } from 'redux/character/character.slice';
 import {
   getCharacterName,
@@ -18,7 +18,7 @@ import { DeathScreen } from 'features/deathScreen/deathScreen';
 import { CharacterGameState } from 'models/character';
 import { ItemFactory } from 'models/item';
 import { useColorMode, Flex, Box, Stack, Tabs, TabList, Tab, TabPanels, TabPanel, Button, useColorModeValue } from '@chakra-ui/core';
-import { ITEM_KEYS } from "data/item.keys";
+import { ITEM_KEYS } from "data/items.keys";
 import { WorldView } from "features/worldView/worldView";
 import { CharacterView } from "features/characterView/characterView";
 import store, { loadState } from 'app/store';
@@ -86,7 +86,7 @@ function App() {
         <Flex
           p={4}
           bg={overlayBg}
-          zIndex={1}
+          zIndex={2}
           direction="row" justify="center" align="center"
           position="absolute" w="100%" h="100%"
         >
@@ -98,7 +98,7 @@ function App() {
         <Flex
           p={4}
           bg={overlayBg}
-          zIndex={1}
+          zIndex={2}
           direction="row" justify="center" align="center"
           position="absolute" w="100%" h="100%"
         >

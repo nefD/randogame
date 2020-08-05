@@ -1,14 +1,14 @@
 import React from 'react';
-import { ItemDefs } from 'data/item.consts';
+import { ItemDefs } from 'data/items.consts';
 import './entityIcon.scss';
 import { ResourceNode } from 'redux/mapAreas/mapAreas.slice';
 import { ResourceNodeIcons } from 'data/resources.consts';
-import { FacilityIcons } from 'data/areas.consts';
-import { Facility } from 'models/map';
 import { Item } from 'models/item';
 import { Icon } from "components/icon/icon";
 import { Skill } from "models/character/skill";
 import { Ability } from "models/character/ability";
+import { getFacilityDefinition } from "data/facilities.consts";
+import { Facility } from "models/map/facility";
 
 type EntityIconProps = {
   item?: Item;
@@ -25,7 +25,8 @@ export function EntityIcon({ item, resourceNode, facility, skill, ability}: Enti
   } else if (resourceNode) {
     icon = ResourceNodeIcons[resourceNode.type];
   } else if (facility) {
-    icon = FacilityIcons[facility.type];
+    const facilityDef = getFacilityDefinition(facility.key);
+    icon = facilityDef.icon;
   } else if (skill) {
     icon = skill.icon;
   } else if (ability) {
