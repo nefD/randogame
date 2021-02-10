@@ -1,6 +1,6 @@
 This is a browser based adventure roguelike game I'm working on here and there built with React and Redux. It's got some pretty neat features but only a bare minimum of content. Here's what's in:
 
-* Procedural world geneation for each new game
+* Procedural world generation for each new game
 * Biomes with their own unique item and creature spawn tables
 * Basic needs; you need to eat and you need to sleep
 * Day and night cycle, including tracking the world date and time
