@@ -8,5 +8,6 @@ This is a browser based adventure roguelike game I'm working on here and there b
 * Skills and abilities
 * Grid/room based world navigation
 * Resource harvesting and crafting
+* Most importantly, dark mode/light mode toggle
 
 When I get around to it, I'll post up the todo list.
